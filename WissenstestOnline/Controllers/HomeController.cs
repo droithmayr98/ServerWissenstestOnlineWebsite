@@ -10,6 +10,7 @@ namespace WissenstestOnline.Controllers
     {
         public IActionResult Index()
         {
+            //Test
             return View();
         }
 
