@@ -9,14 +9,12 @@ namespace WissenstestOnline.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
-            //Test
+        {           
             return View();
         }
 
         public IActionResult About()
-        {  
-            // ABout
+        {       
             return View();
 
         }
