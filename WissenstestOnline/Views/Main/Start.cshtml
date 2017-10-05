@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "FF Wissenstest OÖ";
+}
+<div id="InputValueLogin">
+    <h4>Bezirk</h4><br />
+    <select id="bezirk" class="form-control">
+        <option selected value="Braunau">Braunau</option>
+        <option value="Eferding">Eferding</option>
+        <option value="Freistadt">Freistadt</option>
+        <option value="Gmunden">Gmunden</option>
+        <option value="Grieskirchen">Grieskirchen</option>
+        <option value="Kirchdorf">Kirchdorf</option>
+        <option value="Linz">Linz</option>
+        <option value="Linz_Land">Linz-Land</option>
+        <option value="Perg">Perg</option>
+        <option value="Ried">Ried</option>
+        <option value="Steyr">Steyr</option>
+        <option value="Steyr_Land">Steyr-Land</option>
+        <option value="Rohrbach">Rohrbach</option>
+        <option value="Schärding">Schärding</option>
+        <option value="Urfahr_Umgebung">Urfahr-Umgebung</option>
+        <option value="Vöcklabruck">Vöcklabruck</option>
+        <option value="Wels">Wels</option>
+        <option value="Wels_Land">Wels-Land</option>
+    </select><br />
+
+    <h4>Feuerwehr</h4><br />
+    <input type="text" id="Feuerwehr"/><br />
+
+   <h4>Stufe</h4>
+     <!--<input type="radio" name="stufe" id="Bronze" value="Bronze" />Bronze<br />
+    <input type="radio" name="stufe" id="Silver" value="Silver"/>Silver<br />
+    <input type="radio" name="stufe" id="Gold" value="Gold"/>Gold<br />-->
+
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+            <input type="radio" name="stufe" id="bronze" autocomplete="off" checked>Bronze
+        </label>
+        <label class="btn btn-secondary">
+            <input type="radio" name="stufe" id="silver" autocomplete="off">Silver
+        </label>
+        <label class="btn btn-secondary">
+            <input type="radio" name="stufe" id="gold" autocomplete="off">Gold
+        </label>
+    </div><br />
+
+    <a href="Main/SelectStation" class="btn btn-primary" role="button" aria-pressed="true" id="UserLoginButton">Weiter</a>
+    <!--<input type="button" value="Weiter" id="UserLoginButton" class="btn btn-primary"/>-->
+
+</div>
