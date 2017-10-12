@@ -1,18 +1,62 @@
-﻿@{
+﻿@model WissenstestOnline.Models.Admin
+@{
     ViewData["Title"] = "FF Wissenstest OÖ";
 }
 <div id="InputValueAdminLogin">
-    <h4>Admin Login</h4><br />
-    <h5 class="h5">Benutzername:</h5><br />
-    <input type="text" id="adminUsername"/><br />
-    <h5>Passwort:</h5><br />
-    <input type="password" id="adminPasswort"/><br />
+        <h1>Admin Login</h1><br />
 
-    <!--<input type="button" value="Login" id="AdminLoginButton" class="btn btn-primary"/>-->
-    <a href="AdminOverview" class="btn btn-primary" role="button" aria-pressed="true" id="AdminLoginButton">Login</a>
+        <h3 class="h5">Benutzername:</h3>
+        <input type="text" id="adminUsername"/>
+        <h5>Passwort:</h5><br />
+        <input type="password" id="adminPasswort"/><br />
 
-   
+        <input type="button" value="Login" id="AdminLoginButton" class="btn btn-primary"/>
+        <a href="AdminOverview" class="btn btn-primary" role="button" aria-pressed="true" id="AdminLoginButton">Login</a>
 
-    
 
-</div>
+    </div>
+
+
+
+
+
+@*@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "Login failed. Check your login details.");
+    <div>
+        <fieldset>
+            <legend>Login</legend>
+            <div class="editor-label">
+                @Html.LabelFor(u => u.UserName)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(u => u.UserName)
+                @Html.ValidationMessageFor(u => u.UserName)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(u => u.Password)
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(u => u.Password)
+                @Html.ValidationMessageFor(u => u.Password)
+            </div>
+            
+            <input type="submit" value="Log In" />
+        </fieldset>
+    </div>
+}*@
+
+@*<div style="width: auto; background-color: #728ea7;">
+    @if (Request.IsAuthenticated)
+    {
+        <strong>@Html.Encode(User.Identity.Name)</strong>
+        @Html.ActionLink("Sign Out", "Logout", "User")
+    }
+    else
+    {
+        @Html.ActionLink("Register", "Register", "User")
+        <span> | </span>
+        @Html.ActionLink("Sign In", "Login", "User")
+    }
+</div>*@ 
+

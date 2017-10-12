@@ -6,11 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WissenstestOnline.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : Controller     
     {
-        public IActionResult Login()
+        [HttpPost]
+        public IActionResult Login(Models.Admin admin)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+               if( admin.IsValid(admin.UserName, admin.Password))
+                {
+                    return RedirectToAction("AdminOverview", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Login data is incorrect!");
+                }
+            }
+
+          return View(admin);
         }
 
         public IActionResult AdminOverview() {
@@ -19,6 +32,12 @@ namespace WissenstestOnline.Controllers
 
         public IActionResult CreateNewAdmin() {
             return View();
+        }
+        
+        public IActionResult Logout()
+        {
+            
+            return RedirectToAction("Start", "Main");
         }
 
     }
