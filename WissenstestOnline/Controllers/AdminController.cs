@@ -11,7 +11,7 @@ namespace WissenstestOnline.Controllers
         [HttpPost]
         public IActionResult Login(Models.Admin admin)
         {
-            //Hallo Test
+            
             if (ModelState.IsValid)
             {
                if( admin.IsValid(admin.UserName, admin.Password))
