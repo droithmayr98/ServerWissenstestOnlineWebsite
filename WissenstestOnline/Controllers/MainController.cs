@@ -8,8 +8,7 @@ namespace WissenstestOnline.Controllers
 {
     public class MainController : Controller
     {
-        public IActionResult Start()
-        {
+        public IActionResult Start(){
             return View();
         }
 
@@ -17,11 +16,21 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
-        public IActionResult AufgabeUmgebung() {
+        public IActionResult AufgabeUmgebungLearn() {
             return View();
         }
 
+        public IActionResult AufgabeUmgebungPractise(){
+            return View();
+        }
 
+        public IActionResult ErgebnisOverview() {
+            return View();
+        }
+
+        public IActionResult ZusatzInfo() {
+            return View();
+        }
 
 
         //AllgemeinInfo
