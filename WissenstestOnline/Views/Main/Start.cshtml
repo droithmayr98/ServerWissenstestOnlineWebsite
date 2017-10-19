@@ -2,8 +2,8 @@
     ViewData["Title"] = "FF Wissenstest OÖ";
 }
 <div id="InputValueLogin">
-    <h4>Bezirk</h4><br />
-    <select id="bezirk" class="form-control">   <!--hardcoded -->
+    <h4 id="headingBezirk">Bezirk</h4><br />
+    <select id="bezirkSelect" class="form-control">   <!--hardcoded --><!--von DB generieren lassen -->
         <option selected value="Braunau">Braunau</option>
         <option value="Eferding">Eferding</option>
         <option value="Freistadt">Freistadt</option>
@@ -24,27 +24,26 @@
         <option value="Wels_Land">Wels-Land</option>
     </select><br />
 
-    <h4>Feuerwehr</h4><br />
-    <input type="text" id="Feuerwehr" /><br />
+    <h4 id="headingFeuerwehr">Feuerwehr</h4><br />
+    <input type="text" id="FeuerwehrEingabe" /><br />
 
-    <h4>Stufe</h4>
+    <h4 id="headingStufe">Stufe</h4>
     <!--<input type="radio" name="stufe" id="Bronze" value="Bronze" />Bronze<br />
     <input type="radio" name="stufe" id="Silver" value="Silver"/>Silver<br />
     <input type="radio" name="stufe" id="Gold" value="Gold"/>Gold<br />-->
 
     <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-secondary active">
-            <input type="radio" name="stufe" id="bronze" autocomplete="off" checked>Bronze
+            <input type="radio" name="stufe" id="StufeBronze" autocomplete="off" checked>Bronze
         </label>
         <label class="btn btn-secondary">
-            <input type="radio" name="stufe" id="silver" autocomplete="off">Silver
+            <input type="radio" name="stufe" id="StufeSilver" autocomplete="off">Silver
         </label>
         <label class="btn btn-secondary">
-            <input type="radio" name="stufe" id="gold" autocomplete="off">Gold
+            <input type="radio" name="stufe" id="StufeGold" autocomplete="off">Gold
         </label>
     </div><br />
 
     <a href="Main/SelectStation" class="btn btn-primary" role="button" aria-pressed="true" id="UserLoginButton">Weiter</a>
-    <!--<input type="button" value="Weiter" id="UserLoginButton" class="btn btn-primary"/>-->
 
 </div>

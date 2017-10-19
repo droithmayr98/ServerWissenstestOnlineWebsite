@@ -1,24 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "FF Wissenstest OÖ";
+    ViewData["Title"] = "Stationsauswahl";
 }
 <div id="InputValueSelectStation">
    
-    <h4>Stationen:</h4>
-    <!--<div id="stations">
-        <input type="checkbox" />01 Allgemeinwissen<br />
-        <input type="checkbox" />02<br />
-        <input type="checkbox" />03<br />
-        <input type="checkbox" />04<br />
-        <input type="checkbox" />05<br />
-        <input type="checkbox" />06<br />
-        <input type="checkbox" />07<br />
-        <input type="checkbox" />08<br />
-        <input type="checkbox" />09<br />
-        <input type="checkbox" />10<br />
-        <input type="checkbox" />11<br />
-    </div>-->
+    <h4 id="headingStationen">Stationen:</h4>
+
     <select multiple class="form-control" id="stations">
-        <option>01 Allgemeinwissen</option>
+        <option>01 Allgemeinwissen</option><!--von DB generieren lassen -->
         <option>02</option>
         <option>03</option>
         <option>04</option>
@@ -34,6 +22,8 @@
     <h4>Modus</h4>
     <input type="radio" name="mode" id="lern" value="Lernen" checked/>Lernen<br />
     <input type="radio" name="mode" id="practise" value="Üben" />Üben<br />
-    <input type="button" id="startQuiz" value="Starte Quiz" class="btn btn-primary"/>
+
+    
+    <a href="AufgabeUmgebung" class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
 
 </div>

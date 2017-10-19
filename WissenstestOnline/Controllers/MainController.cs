@@ -17,6 +17,14 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
+        public IActionResult AufgabeUmgebung() {
+            return View();
+        }
+
+
+
+
+        //AllgemeinInfo
         public IActionResult Info() {
             return View();
         }

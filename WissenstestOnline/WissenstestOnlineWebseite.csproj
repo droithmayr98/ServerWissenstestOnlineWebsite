@@ -19,5 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\ParcialViews\" />
+  </ItemGroup>
 
 </Project>
