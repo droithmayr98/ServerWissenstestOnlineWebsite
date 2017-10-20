@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DB_lib;
 
 namespace WissenstestOnline
 {
@@ -28,6 +29,11 @@ namespace WissenstestOnline
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+
+            //TestDB
+            services.AddSingleton<TestDB_Context, TestDB_Context>(serviceProvider => new TestDB_Context());
+
+
             services.AddMvc();
         }
 

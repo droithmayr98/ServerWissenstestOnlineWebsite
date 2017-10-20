@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace DB_lib.Tables
 {
     public class Frage
     {
+        [Key]
         public int Frage_Id { get; set; }
         public string Fragetext { get; set; }
         public string Fragebild { get; set; }

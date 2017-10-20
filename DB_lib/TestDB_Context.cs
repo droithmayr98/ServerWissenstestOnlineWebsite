@@ -26,7 +26,7 @@ namespace DB_lib
         
         public DbSet<Aufgabe> Aufgaben { get; set; }
 
-        public TestDB_Context() : base("TestMdf") {
+        public TestDB_Context() : base("TestDB_Context") {
 
         }
 

@@ -4,15 +4,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DB_lib;
+using Microsoft.Extensions.Logging;
 
 namespace WissenstestOnline.Controllers
 {
     public class MainController : Controller
     {
-        private readonly TestDB_Context test_db = new TestDB_Context();
+        private readonly TestDB_Context test_db;
+        private ILogger<MainController> logger;
+
+        public MainController(TestDB_Context db, ILogger<MainController> logger) {
+            this.test_db = db;
+            this.logger = logger;
+        }
 
         public IActionResult Start(){
+
+            //DB_ConnectionTest
             var test = test_db.Bezirke.Count();
+            ViewBag.test = test;
+
+            logger.LogInformation("Test Log");
 
             return View();
         }
