@@ -48,6 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201710211224532_Initial.cs" />
+    <Compile Include="Migrations\201710211224532_Initial.Designer.cs">
+      <DependentUpon>201710211224532_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -58,7 +63,7 @@
     <Compile Include="Tables\Antwort.cs" />
     <Compile Include="Tables\Antwort_CheckBox.cs" />
     <Compile Include="Tables\Antwort_DatePicker.cs" />
-    <Compile Include="Tables\Antwort_RadioButtons.cs" />
+    <Compile Include="Tables\Antwort_RadioButton.cs" />
     <Compile Include="Tables\Antwort_Text.cs" />
     <Compile Include="Tables\Antwort_Slider.cs" />
     <Compile Include="Tables\Antwort_Verbinden.cs" />
@@ -66,7 +71,7 @@
     <Compile Include="Tables\Frage.cs" />
     <Compile Include="Tables\Bezirk.cs" />
     <Compile Include="Tables\Ort.cs" />
-    <Compile Include="Tables\RadioButtons.cs" />
+    <Compile Include="Tables\RadioButton.cs" />
     <Compile Include="Tables\Paar.cs" />
     <Compile Include="Tables\Aufgabe.cs" />
     <Compile Include="Tables\Station.cs" />
@@ -85,6 +90,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201710211224532_Initial.resx">
+      <DependentUpon>201710211224532_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

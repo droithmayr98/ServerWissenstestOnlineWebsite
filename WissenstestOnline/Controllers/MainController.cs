@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DB_lib;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting.Internal;
+using DB_lib.Tables;
 
 namespace WissenstestOnline.Controllers
 {
@@ -14,8 +16,14 @@ namespace WissenstestOnline.Controllers
         private ILogger<MainController> logger;
 
         public MainController(TestDB_Context db, ILogger<MainController> logger) {
+
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+
             this.test_db = db;
             this.logger = logger;
+
+
         }
 
         public IActionResult Start(){
