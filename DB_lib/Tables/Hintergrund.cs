@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Hintergrundbild_Id { get; set; }
+        [Required]
         public string Bild { get; set; }
+
         public virtual List<Aufgabe> Aufgaben { get; set; }
     }
 }

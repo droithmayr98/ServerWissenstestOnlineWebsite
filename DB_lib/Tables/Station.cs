@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Station_Id { get; set; }
+        [Required]
         public string Stationsname { get; set; }
+
         public virtual List<Aufgabe> Aufgaben { get; set; }
     }
 }

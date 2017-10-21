@@ -26,7 +26,19 @@ namespace DB_lib
         
         public DbSet<Aufgabe> Aufgaben { get; set; }
 
-        public TestDB_Context() : base("TestDB_Context") {
+        public DbSet<InfoContent> InfoContentM { get; set; }
+        public DbSet<Antwort_Text> Antwort_Texte { get; set; }
+        public DbSet<Antwort_CheckBox> Antwort_CheckBoxes { get; set; }
+        public DbSet<Antwort_DatePicker> Antwort_DatePickerM { get; set; }
+        public DbSet<Antwort_RadioButton> Antwort_RadioButtons { get; set; }
+        public DbSet<Antwort_Slider> Antwort_Sliders { get; set; }
+        public DbSet<Antwort_Verbinden> Antwort_VerbindenM { get; set; }
+        public DbSet<CheckBox> CheckBoxes { get; set; }
+        public DbSet<RadioButton> RadioButtons { get; set; }
+        public DbSet<Paar> Paare { get; set; }
+
+
+        public TestDB_Context() : base("TestDB") {
 
         }
 

@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Bezirk_Id { get; set; }
+        [Required]
         public string Bezirksname { get; set; }
+
         public virtual List<Ort> Orte { get; set; }
     }
 }

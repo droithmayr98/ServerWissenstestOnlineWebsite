@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Antwort_Id { get; set; }
+        [Required]
         public virtual Typendefinition Typ { get; set; }
+
         public virtual List<Aufgabe> Aufgaben { get; set; }
     }
 }

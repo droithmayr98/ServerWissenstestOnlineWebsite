@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Stufe_Id { get; set; }
+        [Required]
         public string Stufenname { get; set; }
+
         public virtual List<Aufgabe> Aufgaben { get; set; }
 
     }

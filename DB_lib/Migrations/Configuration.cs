@@ -10,6 +10,8 @@ namespace DB_lib.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
         }
 
         protected override void Seed(DB_lib.TestDB_Context context)
@@ -26,11 +28,6 @@ namespace DB_lib.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-
-
-            //context.SaveChanges();
-
-
         }
     }
 }

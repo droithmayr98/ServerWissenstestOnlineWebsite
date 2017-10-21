@@ -29,8 +29,8 @@ namespace WissenstestOnline.Controllers
         public IActionResult Start(){
 
             //DB_ConnectionTest
-            var test = test_db.Bezirke.Count();
-            ViewBag.test = test;
+            //var test = test_db.Bezirke.Count();
+            //ViewBag.test = test;
 
             logger.LogInformation("Test Log");
 

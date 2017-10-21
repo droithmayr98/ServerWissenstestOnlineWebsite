@@ -13,7 +13,9 @@ namespace DB_lib.Tables
     {
         [Key]
         public int Typ_Id { get; set; }
+        [Required]
         public string Typ { get; set; }
+
         public virtual List<Zusatzinfo> Zusatzinfos { get; set; }
         public virtual List<Frage> Fragen { get; set; }
         public virtual List<Antwort> Antworten { get; set; }
