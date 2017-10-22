@@ -17,7 +17,7 @@ namespace DB_lib.Tables
         public string Fragetext { get; set; }
         public string Fragebild { get; set; }
         public string Fragevideo { get; set; }
-        //[Required]
+        [Required]
         public virtual Typendefinition Typ { get; set; }
 
         public virtual List<Aufgabe> Aufgaben { get; set; }

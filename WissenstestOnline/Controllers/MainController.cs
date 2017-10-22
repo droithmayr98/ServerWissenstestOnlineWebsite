@@ -16,10 +16,6 @@ namespace WissenstestOnline.Controllers
         private ILogger<MainController> logger;
 
         public MainController(TestDB_Context db, ILogger<MainController> logger) {
-
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            AppDomain.CurrentDomain.SetData("DataDirectory", path);
-
             this.test_db = db;
             this.logger = logger;
 
@@ -29,8 +25,8 @@ namespace WissenstestOnline.Controllers
         public IActionResult Start(){
 
             //DB_ConnectionTest
-            //var test = test_db.Bezirke.Count();
-            //ViewBag.test = test;
+            var test = test_db.Bezirke.Count();
+            ViewBag.test = test;
 
             logger.LogInformation("Test Log");
 
