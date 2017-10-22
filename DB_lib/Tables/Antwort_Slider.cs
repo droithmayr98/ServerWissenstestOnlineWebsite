@@ -19,6 +19,8 @@ namespace DB_lib.Tables
         public int Max_val { get; set; }
         [Required]
         public int Sprungweite { get; set; }
+        [Required]
+        public int RightVal { get; set; }
         public string Slider_text { get; set; }
     }
 }

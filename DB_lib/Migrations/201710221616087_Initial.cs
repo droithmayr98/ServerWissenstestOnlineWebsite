@@ -3,7 +3,7 @@ namespace DB_lib.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initial : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -81,6 +81,7 @@ namespace DB_lib.Migrations
                         Min_val = c.Int(nullable: false),
                         Max_val = c.Int(nullable: false),
                         Sprungweite = c.Int(nullable: false),
+                        RightVal = c.Int(nullable: false),
                         Slider_text = c.String(),
                     })
                 .PrimaryKey(t => t.Inhalt_Id);
