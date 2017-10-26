@@ -7,13 +7,13 @@ namespace DB_lib.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class AddHeadingInfo : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddHeadingInfo));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710251033537_Initial"; }
+            get { return "201710260816221_AddHeadingInfo"; }
         }
         
         string IMigrationMetadata.Source

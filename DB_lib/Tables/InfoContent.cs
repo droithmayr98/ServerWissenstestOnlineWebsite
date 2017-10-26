@@ -15,6 +15,7 @@ namespace DB_lib.Tables
         public int Inhalt_Id { get; set; }
         [Required]
         public string Info_Content { get; set; }
+        public string Heading { get; set; }
         [Required]
         public virtual Zusatzinfo Zusatzinfo{ get; set; }
     }
