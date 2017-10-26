@@ -7,6 +7,8 @@ using DB_lib;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting.Internal;
 using DB_lib.Tables;
+using DB_lib.Migrations;
+using System.Data.Entity;
 
 namespace WissenstestOnline.Controllers
 {
@@ -16,6 +18,8 @@ namespace WissenstestOnline.Controllers
         private ILogger<MainController> logger;
 
         public MainController(TestDB_Context db, ILogger<MainController> logger) {
+            var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
+            Database.SetInitializer(migration);
             this.test_db = db;
             this.logger = logger;
 
@@ -27,7 +31,7 @@ namespace WissenstestOnline.Controllers
             //DB_ConnectionTest
             var test = test_db.Bezirke.Count();
             ViewBag.test = test;
-
+            //LoggerTest
             logger.LogInformation("Test Log");
 
             return View();

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WissenstestOnline.Models;
 
 namespace WissenstestOnline.Controllers
 {
     public class AdminController : Controller     
     {
         [HttpPost]
-        public IActionResult Login(Models.Admin admin)
+        public IActionResult Login(Admin admin)
         {
             
             if (ModelState.IsValid)

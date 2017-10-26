@@ -40,7 +40,7 @@ function UserCheck() {
     } else {
         //Ajax Call Daten überprüfen
         //je nach Resultat Weiterlinken order Fehlermeldung Alert
-
+        const url = "";
         window.open('Main/SelectStation');
 
     }
