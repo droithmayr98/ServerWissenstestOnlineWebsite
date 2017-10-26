@@ -3,7 +3,7 @@ namespace DB_lib.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class TestDB_V1 : DbMigration
     {
         public override void Up()
         {
@@ -122,6 +122,7 @@ namespace DB_lib.Migrations
                 c => new
                     {
                         Antwort_Id = c.Int(nullable: false, identity: true),
+                        Inhalt_Id = c.Int(nullable: false),
                         Typ_Typ_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Antwort_Id)
@@ -134,7 +135,6 @@ namespace DB_lib.Migrations
                     {
                         Aufgabe_Id = c.Int(nullable: false, identity: true),
                         Pflichtaufgabe = c.Boolean(nullable: false),
-                        TeilaufgabeVon = c.Int(nullable: false),
                         AufgabeBezirk = c.String(),
                         AufgabeOrt = c.String(),
                         Antwort_Antwort_Id = c.Int(nullable: false),
@@ -142,6 +142,7 @@ namespace DB_lib.Migrations
                         Hintergrundbild_Hintergrundbild_Id = c.Int(),
                         Station_Station_Id = c.Int(nullable: false),
                         Stufe_Stufe_Id = c.Int(nullable: false),
+                        TeilaufgabeVon_Aufgabe_Id = c.Int(),
                         Zusatzinfo_Zusatzinfo_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Aufgabe_Id)
@@ -150,12 +151,14 @@ namespace DB_lib.Migrations
                 .ForeignKey("dbo.Hintergrundbilder", t => t.Hintergrundbild_Hintergrundbild_Id)
                 .ForeignKey("dbo.Stationen", t => t.Station_Station_Id)
                 .ForeignKey("dbo.Stufen", t => t.Stufe_Stufe_Id)
+                .ForeignKey("dbo.Aufgaben", t => t.TeilaufgabeVon_Aufgabe_Id)
                 .ForeignKey("dbo.Zusatzinfos", t => t.Zusatzinfo_Zusatzinfo_Id)
                 .Index(t => t.Antwort_Antwort_Id)
                 .Index(t => t.Frage_Frage_Id)
                 .Index(t => t.Hintergrundbild_Hintergrundbild_Id)
                 .Index(t => t.Station_Station_Id)
                 .Index(t => t.Stufe_Stufe_Id)
+                .Index(t => t.TeilaufgabeVon_Aufgabe_Id)
                 .Index(t => t.Zusatzinfo_Zusatzinfo_Id);
             
             CreateTable(
@@ -198,6 +201,7 @@ namespace DB_lib.Migrations
                     {
                         Inhalt_Id = c.Int(nullable: false, identity: true),
                         Info_Content = c.String(nullable: false),
+                        Heading = c.String(),
                         Zusatzinfo_Zusatzinfo_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Inhalt_Id)
@@ -259,6 +263,7 @@ namespace DB_lib.Migrations
             DropForeignKey("dbo.Orte", "Bezirk_Bezirk_Id", "dbo.Bezirke");
             DropForeignKey("dbo.Antworten", "Typ_Typ_Id", "dbo.Typendefinitionen");
             DropForeignKey("dbo.Aufgaben", "Zusatzinfo_Zusatzinfo_Id", "dbo.Zusatzinfos");
+            DropForeignKey("dbo.Aufgaben", "TeilaufgabeVon_Aufgabe_Id", "dbo.Aufgaben");
             DropForeignKey("dbo.Aufgaben", "Stufe_Stufe_Id", "dbo.Stufen");
             DropForeignKey("dbo.Aufgaben", "Station_Station_Id", "dbo.Stationen");
             DropForeignKey("dbo.Aufgaben", "Hintergrundbild_Hintergrundbild_Id", "dbo.Hintergrundbilder");
@@ -275,6 +280,7 @@ namespace DB_lib.Migrations
             DropIndex("dbo.Zusatzinfos", new[] { "Typ_Typ_Id" });
             DropIndex("dbo.Fragen", new[] { "Typ_Typ_Id" });
             DropIndex("dbo.Aufgaben", new[] { "Zusatzinfo_Zusatzinfo_Id" });
+            DropIndex("dbo.Aufgaben", new[] { "TeilaufgabeVon_Aufgabe_Id" });
             DropIndex("dbo.Aufgaben", new[] { "Stufe_Stufe_Id" });
             DropIndex("dbo.Aufgaben", new[] { "Station_Station_Id" });
             DropIndex("dbo.Aufgaben", new[] { "Hintergrundbild_Hintergrundbild_Id" });

@@ -154,6 +154,121 @@ namespace DB_lib.Migrations
             InfoContent info1_zusatzinfoText4 = new InfoContent { Zusatzinfo = zusatzinfoText4, Heading = "Feuerwehrfahrzeuge", Info_Content = "Ein Feuerwehrfahrzeug ist ein Kraftfahrzeug, das die Feuerwehr im Rahmen ihrer Einsatztätigkeit verwendet. Auch Anhänger, die für Feuerwehrzwecke verwendet werden, fallen in diese Kategorie. Um im Straßenverkehr besondere Rechte in Anspruch nehmen zu können, sind die Feuerwehrfahrzeuge speziell gekennzeichnet und mit Sondersignalen ausgestattet. In Kontinentaleuropa sind die Fahrzeuge meist rot (zum Beispiel RAL 3000) bzw. leuchtrot (zum Beispiel RAL 3024, RAL 3026) lackiert." };
             #endregion---------------------------------------------
 
+            #region------------------------------Antwort_Text erzeugen
+            Antwort_Text a_text1 = new Antwort_Text {Text = "Schärding" };
+            Antwort_Text a_text2 = new Antwort_Text { Text = "Verwalter" };
+            #endregion--------------------------------------------------
+
+            #region------------------------------Antwort_DatePicker erzeugen
+            Antwort_DatePicker a_DP1 = new Antwort_DatePicker{ Date = new DateTime(1998, 11, 06) };
+            Antwort_DatePicker a_DP2 = new Antwort_DatePicker { Date = new DateTime(2017, 12, 24) };
+            #endregion--------------------------------------------------
+
+            #region------------------------------Antwort_Slider erzeugen
+            Antwort_Slider a_s1 = new Antwort_Slider { Min_val = 5, Max_val = 40, Sprungweite = 5, RightVal = 15, Slider_text = "C-Druckschlauch" };
+            Antwort_Slider a_s2 = new Antwort_Slider { Min_val = 5, Max_val = 40, Sprungweite = 5, RightVal = 20 };
+            #endregion--------------------------------------------------
+
+            #region---------------------------------------Antwort_RB erzeugen
+            Antwort_RadioButton a_rb1 = new Antwort_RadioButton { Anzahl = 4 };
+            Antwort_RadioButton a_rb2 = new Antwort_RadioButton { Anzahl = 5 };
+            Antwort_RadioButton a_rb3 = new Antwort_RadioButton { Anzahl = 3 };
+            Antwort_RadioButton a_rb4 = new Antwort_RadioButton { Anzahl = 6 };
+            Antwort_RadioButton a_rb5 = new Antwort_RadioButton { Anzahl = 2 };
+            #endregion-----------------------------------------------
+
+            #region---------------------------------------RadioButtons erzeugen
+            RadioButton radioB1_Arb1 = new RadioButton {Content = "Andreas", IsTrue = false, Antwort_RadioButton = a_rb1};
+            RadioButton radioB2_Arb1 = new RadioButton { Content = "Florian", IsTrue = true, Antwort_RadioButton = a_rb1 };
+            RadioButton radioB3_Arb1 = new RadioButton { Content = "Maximilian", IsTrue = false, Antwort_RadioButton = a_rb1 };
+            RadioButton radioB4_Arb1 = new RadioButton { Content = "Johannes", IsTrue = false, Antwort_RadioButton = a_rb1 };
+
+            RadioButton radioB1_Arb2 = new RadioButton { Content = "21", IsTrue = false, Antwort_RadioButton = a_rb2 };
+            RadioButton radioB2_Arb2 = new RadioButton { Content = "18", IsTrue = true, Antwort_RadioButton = a_rb2 };
+            RadioButton radioB3_Arb2 = new RadioButton { Content = "13", IsTrue = false, Antwort_RadioButton = a_rb2 };
+            RadioButton radioB4_Arb2 = new RadioButton { Content = "17", IsTrue = false, Antwort_RadioButton = a_rb2 };
+            RadioButton radioB5_Arb2 = new RadioButton { Content = "16", IsTrue = false, Antwort_RadioButton = a_rb2 };
+            #endregion-----------------------------------------------
+
+            #region--------------------------------------Antwort_CheckBox erzeugen
+            Antwort_CheckBox a_cb1 = new Antwort_CheckBox {Anzahl = 4 };
+            Antwort_CheckBox a_cb2 = new Antwort_CheckBox { Anzahl = 5 };
+            Antwort_CheckBox a_cb3 = new Antwort_CheckBox { Anzahl = 3 };
+            Antwort_CheckBox a_cb4 = new Antwort_CheckBox { Anzahl = 6 };
+            Antwort_CheckBox a_cb5 = new Antwort_CheckBox { Anzahl = 2 };
+            #endregion-------------------------------------------
+
+            #region--------------------------------------------CheckBoxes erzeugen
+            CheckBox checkB1_aCb1 = new CheckBox { Content = "TLF", CheckBoxVal = true, Antwort_CheckBox = a_cb1};
+            CheckBox checkB2_aCb1 = new CheckBox { Content = "RLF", CheckBoxVal = false, Antwort_CheckBox = a_cb1 };
+            CheckBox checkB3_aCb1 = new CheckBox { Content = "KLF", CheckBoxVal = true, Antwort_CheckBox = a_cb1 };
+            CheckBox checkB4_aCb1 = new CheckBox { Content = "KDO", CheckBoxVal = false, Antwort_CheckBox = a_cb1 };
+
+            CheckBox checkB1_aCb2 = new CheckBox { Content = "TestR", CheckBoxVal = true, Antwort_CheckBox = a_cb2 };
+            CheckBox checkB2_aCb2 = new CheckBox { Content = "TestF", CheckBoxVal = false, Antwort_CheckBox = a_cb2 };
+            CheckBox checkB3_aCb2 = new CheckBox { Content = "TestF", CheckBoxVal = false, Antwort_CheckBox = a_cb2 };
+            CheckBox checkB4_aCb2 = new CheckBox { Content = "TestR", CheckBoxVal = true, Antwort_CheckBox = a_cb2 };
+            CheckBox checkB5_aCb2 = new CheckBox { Content = "TestR", CheckBoxVal = true, Antwort_CheckBox = a_cb2 };
+            #endregion----------------------------------------------------
+
+            #region--------------------------------------------Antwort_Verbinden erzeugen
+            Antwort_Verbinden a_V1 = new Antwort_Verbinden { Anzahl = 4 };
+            Antwort_Verbinden a_V2 = new Antwort_Verbinden { Anzahl = 5 };
+            Antwort_Verbinden a_V3 = new Antwort_Verbinden { Anzahl = 3 };
+            Antwort_Verbinden a_V4 = new Antwort_Verbinden { Anzahl = 6 };
+            Antwort_Verbinden a_V5 = new Antwort_Verbinden { Anzahl = 2 };
+            #endregion----------------------------------------------------
+
+            #region--------------------------------------------Paare erzeugen
+            Paar paar1_aV1 = new Paar { Teil1 = "aaaaaaaa", Teil2 = "aaaaaaa", Antwort_Verbinden = a_V1 };
+            Paar paar2_aV1 = new Paar { Teil1 = "bbbbbb", Teil2 = "bbbbbbbbbbb", Antwort_Verbinden = a_V1 };
+            Paar paar3_aV1 = new Paar { Teil1 = "ccccc", Teil2 = "ccccccccccccccc", Antwort_Verbinden = a_V1 };
+            Paar paar4_aV1 = new Paar { Teil1 = "dddd", Teil2 = "ddddddddd", Antwort_Verbinden = a_V1 };
+
+            Paar paar1_aV3 = new Paar { Teil1 = "111111", Teil2 = "11111111111111", Antwort_Verbinden = a_V3 };
+            Paar paar2_aV3 = new Paar { Teil1 = "222222222222222", Teil2 = "22222222", Antwort_Verbinden = a_V3 };
+            Paar paar3_aV3 = new Paar { Teil1 = "333333333", Teil2 = "33333333", Antwort_Verbinden = a_V3 };
+            #endregion----------------------------------------------------
+
+            #region-------------------------------Antworten erzeugen
+            Antwort Antwort_Text1 = new Antwort {Typ = A_T, Inhalt_Id = 1 };
+            Antwort Antwort_Text2 = new Antwort { Typ = A_T, Inhalt_Id = 2 };
+
+            Antwort Antwort_Slider1 = new Antwort { Typ = A_S, Inhalt_Id = 1 };
+            Antwort Antwort_Slider2 = new Antwort { Typ = A_S, Inhalt_Id = 2 };
+
+            Antwort Antwort_DatePicker1 = new Antwort { Typ = A_DP, Inhalt_Id = 1 };
+            Antwort Antwort_DatePicker2 = new Antwort { Typ = A_DP, Inhalt_Id = 2 };
+
+            Antwort Antwort_CheckBox1 = new Antwort { Typ = A_CBxT, Inhalt_Id = 1 };
+            Antwort Antwort_CheckBox2 = new Antwort { Typ = A_CBxT, Inhalt_Id = 2 };
+
+            Antwort Antwort_RadioButtons1 = new Antwort { Typ = A_RBxT, Inhalt_Id = 1 };
+            Antwort Antwort_RadioButtons2 = new Antwort { Typ = A_RBxT, Inhalt_Id = 2 };
+
+            Antwort Antwort_Verbinden1 = new Antwort { Typ = A_VxBBuM, Inhalt_Id = 1 };
+            Antwort Antwort_Verbinden2 = new Antwort { Typ = A_VxBBuV, Inhalt_Id = 2 };
+            #endregion----------------------------------------------------------
+
+            #region------------------------------------------AUFGABEN ERSTELLEN
+            Aufgabe AufgabeText1 = new Aufgabe {Frage = fText1, Antwort = Antwort_Text1, Zusatzinfo = zusatzinfoText1, Pflichtaufgabe = true, Station = Allgemeinwissen, Stufe = Bronze, AufgabeBezirk = "Schärding"};
+            Aufgabe AufgabeText2 = new Aufgabe { Frage = fText2, Antwort = Antwort_Text2, Zusatzinfo = zusatzinfoText2, Pflichtaufgabe = false, Station = Dienstgrade, Stufe = Silver };
+
+            Aufgabe AufgabeSlider1 = new Aufgabe { Frage = fSlider1, Antwort = Antwort_Slider1, Zusatzinfo = zusatzinfoText3, Pflichtaufgabe = false, Station = Allgemeinwissen, Stufe = Bronze };
+            Aufgabe AufgabeSlider2 = new Aufgabe { Frage = fSlider2, Antwort = Antwort_Slider2, Zusatzinfo = zusatzinfoText3, Pflichtaufgabe = false, Station = Allgemeinwissen, Stufe = Bronze, TeilaufgabeVon = AufgabeSlider1};
+
+            Aufgabe AufgabeDatePicker1 = new Aufgabe { Frage = fDatePicker1, Antwort = Antwort_DatePicker1, Zusatzinfo = zusatzinfoText1, Pflichtaufgabe = true, Station = Dienstgrade, Stufe = Gold };
+            Aufgabe AufgabeDatePicker2 = new Aufgabe { Frage = fDatePicker2, Antwort = Antwort_DatePicker2, Zusatzinfo = zusatzinfoText1, Pflichtaufgabe = true, Station = Dienstgrade, Stufe = Bronze, TeilaufgabeVon = AufgabeDatePicker1 };
+
+            Aufgabe AufgabeCheckBox1 = new Aufgabe { Frage = fCheckBox1, Antwort = Antwort_CheckBox1, Zusatzinfo = zusatzinfoText2, Pflichtaufgabe = true, Station = Dienstgrade, Stufe = Bronze, AufgabeBezirk = "Schärding", AufgabeOrt = "Eggerding" };
+            Aufgabe AufgabeCheckBox2 = new Aufgabe { Frage = fCheckBox2, Antwort = Antwort_CheckBox2, Zusatzinfo = zusatzinfoText3, Pflichtaufgabe = true, Station = Dienstgrade, Stufe = Bronze };
+
+            Aufgabe AufgabeRadioButtons1 = new Aufgabe { Frage = fRadioButtons1, Antwort = Antwort_RadioButtons1, Zusatzinfo = zusatzinfoText1, Pflichtaufgabe = true, Station = Allgemeinwissen, Stufe = Silver };
+            Aufgabe AufgabeRadioButtons2 = new Aufgabe { Frage = fRadioButtons2, Antwort = Antwort_RadioButtons2, Zusatzinfo = zusatzinfoText3, Pflichtaufgabe = false, Station = Allgemeinwissen, Stufe = Silver };
+
+            Aufgabe AufgabeVerbinden1 = new Aufgabe { Frage = fVerbinden1, Antwort = Antwort_Verbinden1, Zusatzinfo = zusatzinfoText3, Pflichtaufgabe = false, Station = Allgemeinwissen, Stufe = Bronze };
+            Aufgabe AufgabeVerbinden2 = new Aufgabe { Frage = fVerbinden2, Antwort = Antwort_Verbinden2, Zusatzinfo = zusatzinfoText2, Pflichtaufgabe = false, Station = Allgemeinwissen, Stufe = Bronze };
+            #endregion------------------------------------------------------
 
 
 
@@ -277,6 +392,122 @@ namespace DB_lib.Migrations
 
             context.InfoContentM.AddOrUpdate(info1_zusatzinfoText4);
             #endregion
+
+            #region------------------------------Antwort_Text in DB einfügen
+            context.Antwort_Texte.AddOrUpdate(a_text1);
+            context.Antwort_Texte.AddOrUpdate(a_text2);
+            #endregion--------------------------------------------------
+
+            #region------------------------------Antwort_DatePicker in DB einfügen
+            context.Antwort_DatePickerM.AddOrUpdate(a_DP1);
+            context.Antwort_DatePickerM.AddOrUpdate(a_DP2);
+            #endregion--------------------------------------------------
+
+            #region------------------------------Antwort_Slider in DB einfügen
+            context.Antwort_Sliders.AddOrUpdate(a_s1);
+            context.Antwort_Sliders.AddOrUpdate(a_s2);
+            #endregion--------------------------------------------------
+
+            #region---------------------------------------Antwort_RB in DB einfügen
+            context.Antwort_RadioButtons.AddOrUpdate(a_rb1);
+            context.Antwort_RadioButtons.AddOrUpdate(a_rb2);
+            context.Antwort_RadioButtons.AddOrUpdate(a_rb3);
+            context.Antwort_RadioButtons.AddOrUpdate(a_rb4);
+            context.Antwort_RadioButtons.AddOrUpdate(a_rb5);
+            #endregion-----------------------------------------------
+
+            #region---------------------------------------RadioButtons in DB einfügen
+            context.RadioButtons.AddOrUpdate(radioB1_Arb1);
+            context.RadioButtons.AddOrUpdate(radioB2_Arb1);
+            context.RadioButtons.AddOrUpdate(radioB3_Arb1);
+            context.RadioButtons.AddOrUpdate(radioB4_Arb1);
+
+            context.RadioButtons.AddOrUpdate(radioB1_Arb2);
+            context.RadioButtons.AddOrUpdate(radioB2_Arb2);
+            context.RadioButtons.AddOrUpdate(radioB3_Arb2);
+            context.RadioButtons.AddOrUpdate(radioB4_Arb2);
+            context.RadioButtons.AddOrUpdate(radioB5_Arb2);
+            #endregion-----------------------------------------------
+
+            #region--------------------------------------------Antwort_CheckBox in DB einfügen
+            context.Antwort_CheckBoxes.AddOrUpdate(a_cb1);
+            context.Antwort_CheckBoxes.AddOrUpdate(a_cb2);
+            context.Antwort_CheckBoxes.AddOrUpdate(a_cb3);
+            context.Antwort_CheckBoxes.AddOrUpdate(a_cb4);
+            context.Antwort_CheckBoxes.AddOrUpdate(a_cb5);
+            #endregion----------------------------------------------------
+
+            #region--------------------------------------------CheckBoxes in DB einfügen
+            context.CheckBoxes.AddOrUpdate(checkB1_aCb1);
+            context.CheckBoxes.AddOrUpdate(checkB2_aCb1);
+            context.CheckBoxes.AddOrUpdate(checkB3_aCb1);
+            context.CheckBoxes.AddOrUpdate(checkB4_aCb1);
+
+            context.CheckBoxes.AddOrUpdate(checkB1_aCb2);
+            context.CheckBoxes.AddOrUpdate(checkB2_aCb2);
+            context.CheckBoxes.AddOrUpdate(checkB3_aCb2);
+            context.CheckBoxes.AddOrUpdate(checkB4_aCb2);
+            context.CheckBoxes.AddOrUpdate(checkB5_aCb2);
+            #endregion----------------------------------------------------
+
+            #region--------------------------------------------Antwort_Verbinden in DB einfügen
+            context.Antwort_VerbindenM.AddOrUpdate(a_V1);
+            context.Antwort_VerbindenM.AddOrUpdate(a_V2);
+            context.Antwort_VerbindenM.AddOrUpdate(a_V3);
+            context.Antwort_VerbindenM.AddOrUpdate(a_V4);
+            context.Antwort_VerbindenM.AddOrUpdate(a_V5);
+            #endregion----------------------------------------------------
+
+            #region--------------------------------------------Paare in DB einfügen
+            context.Paare.AddOrUpdate(paar1_aV1);
+            context.Paare.AddOrUpdate(paar2_aV1);
+            context.Paare.AddOrUpdate(paar3_aV1);
+            context.Paare.AddOrUpdate(paar4_aV1);
+
+            context.Paare.AddOrUpdate(paar1_aV3);
+            context.Paare.AddOrUpdate(paar2_aV3);
+            context.Paare.AddOrUpdate(paar3_aV3);
+            #endregion----------------------------------------------------
+
+            #region---------------------------------------------Antworten in DB einfügen
+            context.Antworten.AddOrUpdate(Antwort_Text1);
+            context.Antworten.AddOrUpdate(Antwort_Text2);
+
+            context.Antworten.AddOrUpdate(Antwort_Slider1);
+            context.Antworten.AddOrUpdate(Antwort_Slider2);
+
+            context.Antworten.AddOrUpdate(Antwort_DatePicker1);
+            context.Antworten.AddOrUpdate(Antwort_DatePicker2);
+
+            context.Antworten.AddOrUpdate(Antwort_CheckBox1);
+            context.Antworten.AddOrUpdate(Antwort_CheckBox2);
+
+            context.Antworten.AddOrUpdate(Antwort_RadioButtons1);
+            context.Antworten.AddOrUpdate(Antwort_RadioButtons2);
+
+            context.Antworten.AddOrUpdate(Antwort_Verbinden1);
+            context.Antworten.AddOrUpdate(Antwort_Verbinden2);
+            #endregion--------------------------------------------
+
+            #region------------------------------------------AUFGABEN IN DB EINFÜGEN
+            context.Aufgaben.AddOrUpdate(AufgabeText1);
+            context.Aufgaben.AddOrUpdate(AufgabeText2);
+
+            context.Aufgaben.AddOrUpdate(AufgabeSlider1);
+            context.Aufgaben.AddOrUpdate(AufgabeSlider2);
+
+            context.Aufgaben.AddOrUpdate(AufgabeDatePicker1);
+            context.Aufgaben.AddOrUpdate(AufgabeDatePicker2);
+
+            context.Aufgaben.AddOrUpdate(AufgabeCheckBox1);
+            context.Aufgaben.AddOrUpdate(AufgabeCheckBox2);
+
+            context.Aufgaben.AddOrUpdate(AufgabeRadioButtons1);
+            context.Aufgaben.AddOrUpdate(AufgabeRadioButtons2);
+
+            context.Aufgaben.AddOrUpdate(AufgabeVerbinden1);
+            context.Aufgaben.AddOrUpdate(AufgabeVerbinden2);
+            #endregion------------------------------------------------------
 
 
             context.SaveChanges();

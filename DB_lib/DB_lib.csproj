@@ -48,13 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201710260731337_Initial.cs" />
-    <Compile Include="Migrations\201710260731337_Initial.Designer.cs">
-      <DependentUpon>201710260731337_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710260816221_AddHeadingInfo.cs" />
-    <Compile Include="Migrations\201710260816221_AddHeadingInfo.Designer.cs">
-      <DependentUpon>201710260816221_AddHeadingInfo.cs</DependentUpon>
+    <Compile Include="Migrations\201710261140013_TestDB_V1.cs" />
+    <Compile Include="Migrations\201710261140013_TestDB_V1.Designer.cs">
+      <DependentUpon>201710261140013_TestDB_V1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,11 +91,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710260731337_Initial.resx">
-      <DependentUpon>201710260731337_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710260816221_AddHeadingInfo.resx">
-      <DependentUpon>201710260816221_AddHeadingInfo.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710261140013_TestDB_V1.resx">
+      <DependentUpon>201710261140013_TestDB_V1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

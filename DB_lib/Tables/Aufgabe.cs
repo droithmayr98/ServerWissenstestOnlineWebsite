@@ -15,7 +15,7 @@ namespace DB_lib.Tables
         public int Aufgabe_Id { get; set; }
         [Required]
         public bool Pflichtaufgabe { get; set; }
-        public int TeilaufgabeVon { get; set; }
+        public Aufgabe TeilaufgabeVon { get; set; }
         public string AufgabeBezirk { get; set; }
         public string AufgabeOrt { get; set; }
 
