@@ -18,8 +18,8 @@ namespace WissenstestOnline.Controllers
         private ILogger<MainController> logger;
 
         public MainController(TestDB_Context db, ILogger<MainController> logger) {
-            var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
-            Database.SetInitializer(migration);
+            //var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
+            //Database.SetInitializer(migration);
             this.test_db = db;
             this.logger = logger;
 
@@ -66,6 +66,19 @@ namespace WissenstestOnline.Controllers
         public IActionResult Kontakt() {
             return View();
         }
+
+
+        //Ajax Calls
+
+        public string CheckUserInfo(string bezirk, string ort) {
+
+            
+
+            return "test";
+        }
+
+
+
 
 
 

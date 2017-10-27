@@ -40,7 +40,12 @@ function UserCheck() {
     } else {
         //Ajax Call Daten überprüfen
         //je nach Resultat Weiterlinken order Fehlermeldung Alert
-        const url = "";
+        const url = "/Main/CheckUserInfo";
+        $.post(url, { bezirk: selectedBezirk, ort: ff })
+            .then(reply =>{
+                console.log(`ServerReply CheckUserInfo: ${reply}`);
+                
+            });
         window.open('Main/SelectStation');
 
     }
