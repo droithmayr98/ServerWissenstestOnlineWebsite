@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting.Internal;
 using DB_lib.Tables;
 using DB_lib.Migrations;
 using System.Data.Entity;
+using System.Text.RegularExpressions;
 
 namespace WissenstestOnline.Controllers
 {
@@ -72,7 +73,16 @@ namespace WissenstestOnline.Controllers
 
         public string CheckUserInfo(string bezirk, string ort) {
 
-            
+            if (Regex.IsMatch(ort, "\b[a-zA-ZÄÖÜäöü ]+\b")) {    //\b[a-zA-ZÄÖÜäöü\-\. ]+\b     //überarbeiten
+                
+            }
+
+
+            List<Ort> alle_orte_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
+            foreach (Ort o in alle_orte_vom_bezirk) {
+                
+                
+            }
 
             return "test";
         }
