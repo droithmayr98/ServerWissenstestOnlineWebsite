@@ -1,29 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Stationsauswahl";
 }
-<div id="InputValueSelectStation">
-   
-    <h4 id="headingStationen">Stationen:</h4>
 
-    <select multiple class="form-control" id="stations">
-        <option>01 Allgemeinwissen</option><!--von DB generieren lassen -->
-        <option>02</option>
-        <option>03</option>
-        <option>04</option>
-        <option>05</option>
-        <option>06</option>
-        <option>07</option>
-        <option>08</option>
-        <option>09</option>
-        <option>10</option>
-        <option>11</option>
-    </select>
+<form asp-controller="Main" asp-action="SelectedStation" method="post">
 
-    <h4>Modus</h4>
-    <input type="radio" name="mode" id="lern" value="learn" checked/>Lernen<br />
-    <input type="radio" name="mode" id="practise" value="practise" />Üben<br />
 
-    
-    <a class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
+    <div id="InputValueSelectStation">
 
-</div>
+        <h4 id="headingStationen">Stationen:</h4>
+
+        <select multiple class="form-control" id="stations" asp-items="@ViewBag.Stationen">
+        </select>
+
+        <h4>Modus</h4>
+        <input type="radio" name="mode" id="lern" value="learn" checked />Lernen<br />
+        <input type="radio" name="mode" id="practise" value="practise" />Üben<br />
+
+
+        <a class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
+
+    </div>
+    <p id="StationSelectError" style="color: red"></p>
+
+</form>

@@ -1,5 +1,22 @@
-﻿$(document).ready(() => {
+﻿var global_bezirk = "";  //Globale Variablen über das gesamte Prpject sichtbar machen
+var global_ort = "";
+var global_stufe = "";
+var global_mode = "";
+var global_selectedStations = "";
+
+var start_mode = 0;
+
+
+$(document).ready(() => {
+
+    
+
     console.log('jQuery ready');
+
+    //Start Testeingaben
+    $('#bezirkSelect').val('Schärding');
+    $('#FeuerwehrEingabe').val('Eggerding');
+    //EndeTesteingaben
 
     $('#UserLoginButton').on('click', UserCheck);
     $('#SelectStationButton').on('click', StationInput);
@@ -19,7 +36,26 @@
     $('#closeResults').on('click', CloseResults);
     $('#closeZusatzinfo').on('click', CloseZusatzinfo);
 
+
+
+    console.log(`Start Mode: ${$.mynamespace.global_bezirk}`);
+    //Aufgaben laden
+    if (start_mode === 1) {
+        $('#headingLearn').html('Drücke \'Weiter\' um den Lernmodus zu starten!');
+    }
+    else {
+        $('#headingLearn').html('Du bist hier falsch!');
+    }
+
+
+
+
+
+
+
 });
+
+
 
 function UserCheck() {
     console.log('enter UserCheck');
@@ -36,17 +72,22 @@ function UserCheck() {
 
 
     if (ff == "") {
-        alert('Bitte geben Sie ihre Feuerwehr an!');
+        $('#UserLoginError').html('Bitte geben Sie ihre Feuerwehr an!');
     } else {
-        //Ajax Call Daten überprüfen
-        //je nach Resultat Weiterlinken order Fehlermeldung Alert
         const url = "/Main/CheckUserInfo";
-        $.post(url, { bezirk: selectedBezirk, ort: ff })
+        $.post(url, { bezirk: selectedBezirk, ort: ff, stufe: selectedStufe })
             .then(reply =>{
                 console.log(`ServerReply CheckUserInfo: ${reply}`);
-                
+                if (reply === 'ok') {
+                    global_bezirk = selectedBezirk;
+                    global_ort = ff;
+                    global_stufe = selectedStufe;
+                    $('#UserLoginError').html('');
+                    window.open('Main/SelectStation');
+                } else {
+                    $('#UserLoginError').html('Bitte überprüfen Sie ihre Eingabedaten!');
+                }
             });
-        window.open('Main/SelectStation');
 
     }
     
@@ -55,22 +96,29 @@ function UserCheck() {
 function StationInput() {
     console.log('enter StationInput');
 
-    var selectedStations;
     try {
-        selectedStations = $('#stations').val();
+        var selectedStations = $('#stations').val();
         var selectedMode = $('input[name=mode]:checked').val();
 
         //Testausgaben
         console.log(`StationsCount: ${selectedStations.length}`);
         console.log(`Modus: ${selectedMode}`);
 
+        global_mode = selectedMode;
+        global_selectedStations = selectedStations;
+
         if (selectedMode == "learn") {
+            $('#StationSelectError').html('');
             window.open('AufgabeUmgebungLearn');
+            start_mode = 1;
+
         } else {
+            $('#StationSelectError').html('');
             window.open('AufgabeUmgebungPractise');
         }
+
     } catch(err){
-        alert('Bitte wähle Sie mindestens eine Station aus!');
+        $('#StationSelectError').html('Bitte wähle Sie mindestens eine Station aus!');
     }
    
 
