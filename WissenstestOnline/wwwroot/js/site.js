@@ -1,8 +1,8 @@
-﻿var global_bezirk = "";  //Globale Variablen über das gesamte Prpject sichtbar machen
+﻿var global_bezirk = "";
 var global_ort = "";
 var global_stufe = "";
 var global_mode = "";
-var global_selectedStations = "";
+var global_stations = "";
 
 var start_mode = 0;
 
@@ -10,14 +10,14 @@ var start_mode = 0;
 $(document).ready(() => {
 
     
-
     console.log('jQuery ready');
 
     //Start Testeingaben
     $('#bezirkSelect').val('Schärding');
     $('#FeuerwehrEingabe').val('Eggerding');
-    //EndeTesteingaben
+    //Ende Testeingaben
 
+    //Click Events
     $('#UserLoginButton').on('click', UserCheck);
     $('#SelectStationButton').on('click', StationInput);
 
@@ -37,8 +37,21 @@ $(document).ready(() => {
     $('#closeZusatzinfo').on('click', CloseZusatzinfo);
 
 
+    const url = '/Main/GetGlobalData';
+    $.getJSON(url).then(map => {
+        global_bezirk = map.bezirk;
+        global_ort = map.ort;
+        global_stufe = map.stufe;
+        global_mode = map.mode;
+    });
 
-    console.log(`Start Mode: ${$.mynamespace.global_bezirk}`);
+
+
+    //Testausgabe
+    console.log(`Bezirk: ${global_bezirk}`);
+    console.log(`Mode: ${global_mode}`);
+
+
     //Aufgaben laden
     if (start_mode === 1) {
         $('#headingLearn').html('Drücke \'Weiter\' um den Lernmodus zu starten!');
@@ -79,9 +92,6 @@ function UserCheck() {
             .then(reply =>{
                 console.log(`ServerReply CheckUserInfo: ${reply}`);
                 if (reply === 'ok') {
-                    global_bezirk = selectedBezirk;
-                    global_ort = ff;
-                    global_stufe = selectedStufe;
                     $('#UserLoginError').html('');
                     window.open('Main/SelectStation');
                 } else {
@@ -104,13 +114,16 @@ function StationInput() {
         console.log(`StationsCount: ${selectedStations.length}`);
         console.log(`Modus: ${selectedMode}`);
 
-        global_mode = selectedMode;
-        global_selectedStations = selectedStations;
+        const url = '/Main/GlobalStationData';
+        $.post(url, {
+            stations: selectedStations,
+            mode: selectedMode
+        });
+
 
         if (selectedMode == "learn") {
             $('#StationSelectError').html('');
             window.open('AufgabeUmgebungLearn');
-            start_mode = 1;
 
         } else {
             $('#StationSelectError').html('');

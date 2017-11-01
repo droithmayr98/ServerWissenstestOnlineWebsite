@@ -11,14 +11,21 @@ using DB_lib.Migrations;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WissenstestOnlineWebseite.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace WissenstestOnline.Controllers
 {
     public class MainController : Controller
     {
+
         private string global_bezirk;
         private string global_ort;
         private string global_stufe;
+        private string global_mode;
+        private List<string> global_stations;
+        private UserData userData;
 
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
@@ -28,11 +35,11 @@ namespace WissenstestOnline.Controllers
             //Database.SetInitializer(migration);
             this.test_db = db;
             this.logger = logger;
-
-
         }
 
         public IActionResult Start(){
+
+            
 
             //DB_ConnectionTest
             var test = test_db.Bezirke.Count();
@@ -89,7 +96,7 @@ namespace WissenstestOnline.Controllers
 
             List<Ort> alle_orte_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
 
-            if (Regex.IsMatch(ort, "[a-zA-ZÄÖÜäöü ]+"))   //\b[a-zA-ZÄÖÜäöü\-\. ]+\b     //überarbeiten
+            if (Regex.IsMatch(ort, @"^[A-ZÄÖÜ][a-zA-ZÄÖÜäöü\-\. ]+$"))
             {    
                 foreach (Ort o in alle_orte_vom_bezirk)
                 {
@@ -106,6 +113,24 @@ namespace WissenstestOnline.Controllers
             return "wrong";
         }
 
+        public void GlobalStationData(List<string> stations,string mode) {
+            global_mode = mode;
+            global_stations = stations;
+
+            userData = new UserData {Bezirk = global_bezirk, Ort = global_ort, Stufe = global_stufe, Stations = global_stations };
+        }
+
+
+        public IActionResult GetGlobalData() {
+            var data = new Dictionary<string, string>()
+            {
+                ["bezirk"] = userData.Bezirk,
+                ["ort"] = userData.Ort,
+                ["stufe"] = userData.Stufe,
+                ["mode"] = userData.Mode
+            };
+            return Json(data);
+        }
 
 
 
