@@ -26,6 +26,8 @@ namespace WissenstestOnline.Controllers
         private string global_mode = "";
         private List<string> global_stations = new List<string>();*/
 
+        
+
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
@@ -120,7 +122,16 @@ namespace WissenstestOnline.Controllers
 
             UserData.Mode = mode;
             UserData.Stations = stationsString;
-            return "success";
+
+            //Aufgaben selektieren grob
+            for (int i = 0; i < stations.Count; i++) {
+                int selected_stationId = Convert.ToInt32(stations[i]);
+                List<Aufgabe> stationsteil =  test_db.Aufgaben.Where(x => x.Station.Station_Id == selected_stationId).ToList();
+                UserData.Aufgaben.AddRange(stationsteil);
+            }
+
+
+            return "ok";
         }
 
 
@@ -131,9 +142,23 @@ namespace WissenstestOnline.Controllers
                 ["ort"] = UserData.Ort,
                 ["stufe"] = UserData.Stufe,
                 ["mode"] = UserData.Mode,
-                ["stations"] = UserData.Stations
+                ["stations"] = UserData.Stations,
+                ["aufgabenNr"] = UserData.AufgabeNr.ToString()
             };
             return Json(data);
+        }
+
+
+        public IActionResult LoadFrageLearn(string aufgabenNr) {
+
+            int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
+
+            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+
+
+            
+
+            return PartialView();
         }
 
     }

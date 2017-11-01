@@ -6,8 +6,7 @@
     var global_stufe = "";
     var global_mode = "";
     var global_stations = "";
-
-    var start_mode = 0;
+    var global_aufgabenNr = "";
 
 
     //Start Testeingaben
@@ -42,31 +41,35 @@
         global_stufe = map.stufe;
         global_mode = map.mode;
         global_stations = map.stations;
+        global_aufgabenNr = map.aufgabenNr;
 
         //Datenzugriff nur hier
         //Methoden hier drinnen
+
+        //Global Testlogs
+        console.log('Global Data Testlogs:');
         console.log(`Bezirk: ${global_bezirk}`);
+        console.log(`Ort: ${global_ort}`);
+        console.log(`Stufe: ${global_stufe}`);
         console.log(`Mode: ${global_mode}`);
         console.log(`Stations: ${global_stations}`);
+        console.log(`AufgabenNr: ${global_aufgabenNr}`);
+
+
+        //Aufgaben laden
+        if (global_mode === "learn") {
+            $('#headingLearn').html('Drücke \'Weiter\' um den Lernmodus zu starten!');
+
+            const url_aufgabe = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            $('#FrageLearn').load(url_aufgabe);
+
+        }
+        else {
+            $('#headingLearn').html('Du bist hier falsch!');
+        }
+
 
     });
-
-
-
-    //Testausgabe
-
-
-    //Aufgaben laden
-    if (start_mode === 1) {
-        $('#headingLearn').html('Drücke \'Weiter\' um den Lernmodus zu starten!');
-    }
-    else {
-        $('#headingLearn').html('Du bist hier falsch!');
-    }
-
-
-
-
 
 
 
@@ -83,6 +86,7 @@ function UserCheck() {
 
 
     //Testausgaben
+    console.log('EingabeWerte Testlogs:');
     console.log(`Bezirk: ${selectedBezirk}`);
     console.log(`FF: ${ff}`);
     console.log(`Stufe: ${selectedStufe}`);
@@ -115,6 +119,7 @@ function StationInput() {
         var selectedMode = $('input[name=mode]:checked').val();
 
         //Testausgaben
+        console.log('EingabeWerte Testlogs:');
         console.log(`StationsCount: ${selectedStations.length}`);
         console.log(`Modus: ${selectedMode}`);
 
@@ -122,7 +127,7 @@ function StationInput() {
         $.post(url, {
             stations: selectedStations,
             mode: selectedMode
-        }).then(result => console.log(`Result: ${result}`));
+        }).then(result => console.log(`ServerReply StationInput: ${result}`));
 
 
         if (selectedMode == "learn") {
