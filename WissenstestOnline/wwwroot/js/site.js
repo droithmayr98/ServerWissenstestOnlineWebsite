@@ -1,16 +1,14 @@
-﻿var global_bezirk = "";
-var global_ort = "";
-var global_stufe = "";
-var global_mode = "";
-var global_stations = "";
-
-var start_mode = 0;
-
-
-$(document).ready(() => {
-
-    
+﻿$(document).ready(() => {  
     console.log('jQuery ready');
+
+    var global_bezirk = "";
+    var global_ort = "";
+    var global_stufe = "";
+    var global_mode = "";
+    var global_stations = "";
+
+    var start_mode = 0;
+
 
     //Start Testeingaben
     $('#bezirkSelect').val('Schärding');
@@ -43,13 +41,19 @@ $(document).ready(() => {
         global_ort = map.ort;
         global_stufe = map.stufe;
         global_mode = map.mode;
+        global_stations = map.stations;
+
+        //Datenzugriff nur hier
+        //Methoden hier drinnen
+        console.log(`Bezirk: ${global_bezirk}`);
+        console.log(`Mode: ${global_mode}`);
+        console.log(`Stations: ${global_stations}`);
+
     });
 
 
 
     //Testausgabe
-    console.log(`Bezirk: ${global_bezirk}`);
-    console.log(`Mode: ${global_mode}`);
 
 
     //Aufgaben laden
@@ -118,7 +122,7 @@ function StationInput() {
         $.post(url, {
             stations: selectedStations,
             mode: selectedMode
-        });
+        }).then(result => console.log(`Result: ${result}`));
 
 
         if (selectedMode == "learn") {

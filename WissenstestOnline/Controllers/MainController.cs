@@ -20,12 +20,11 @@ namespace WissenstestOnline.Controllers
     public class MainController : Controller
     {
 
-        private string global_bezirk;
-        private string global_ort;
-        private string global_stufe;
-        private string global_mode;
-        private List<string> global_stations;
-        private UserData userData;
+        /*private string global_bezirk = "";
+        private string global_ort = "";
+        private string global_stufe = "";
+        private string global_mode = "";
+        private List<string> global_stations = new List<string>();*/
 
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
@@ -35,6 +34,7 @@ namespace WissenstestOnline.Controllers
             //Database.SetInitializer(migration);
             this.test_db = db;
             this.logger = logger;
+
         }
 
         public IActionResult Start(){
@@ -102,9 +102,10 @@ namespace WissenstestOnline.Controllers
                 {
                     if (o.Ortsname.Equals(ort))
                     {
-                        global_bezirk = bezirk;
-                        global_ort = ort;
-                        global_stufe = stufe;
+                        UserData.Bezirk = bezirk;
+                        UserData.Ort = ort;
+                        UserData.Stufe = stufe;
+
                         return "ok";
                     }
 
@@ -113,28 +114,27 @@ namespace WissenstestOnline.Controllers
             return "wrong";
         }
 
-        public void GlobalStationData(List<string> stations,string mode) {
-            global_mode = mode;
-            global_stations = stations;
+        public string GlobalStationData(List<string> stations,string mode) {
 
-            userData = new UserData {Bezirk = global_bezirk, Ort = global_ort, Stufe = global_stufe, Stations = global_stations };
+            string stationsString = string.Join(",", stations.ToArray());
+
+            UserData.Mode = mode;
+            UserData.Stations = stationsString;
+            return "success";
         }
 
 
         public IActionResult GetGlobalData() {
             var data = new Dictionary<string, string>()
             {
-                ["bezirk"] = userData.Bezirk,
-                ["ort"] = userData.Ort,
-                ["stufe"] = userData.Stufe,
-                ["mode"] = userData.Mode
+                ["bezirk"] = UserData.Bezirk,
+                ["ort"] = UserData.Ort,
+                ["stufe"] = UserData.Stufe,
+                ["mode"] = UserData.Mode,
+                ["stations"] = UserData.Stations
             };
             return Json(data);
         }
-
-
-
-
 
     }
 }

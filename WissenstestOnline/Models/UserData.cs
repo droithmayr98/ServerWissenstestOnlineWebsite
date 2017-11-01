@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace WissenstestOnlineWebseite.Models
 {
-    public class UserData
+    public static class UserData
     {
-        public string Bezirk { get; set; }
-        public string Ort{ get; set; }
-        public string Stufe { get; set; }
-        public string Mode { get; set; }
-        public List<string> Stations { get; set; }
+        public static string Bezirk { get; set; } = "";
+        public static string Ort { get; set; } = "";
+        public static string Stufe { get; set; } = "";
+        public static string Mode { get; set; } = "";
+        public static string Stations { get; set; } = "";
 
     }
 }
