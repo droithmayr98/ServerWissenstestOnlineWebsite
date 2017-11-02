@@ -70,6 +70,26 @@ namespace WissenstestOnline.Controllers
         }
 
         public IActionResult ZusatzInfo() {
+            int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
+            aufgabenNr_Int--;
+
+            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+
+            string info_typ = aufgabe.Zusatzinfo.Typ.Typ;
+
+            string[] splitInfo_ = info_typ.Split('_');
+
+            if (splitInfo_[1].Contains('+')) {
+                //gehört noch gemacht
+            }
+            else {
+                if (splitInfo_[1].Contains('T')) {
+                    int anzahl_textfelder = splitInfo_[1].Length;
+                    int zusatzinfo_id = aufgabe.Zusatzinfo.Zusatzinfo_Id;
+                    List<InfoContent> infoContent = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == zusatzinfo_id).Select(x => x).ToList();
+                }
+            }
+
             return View();
         }
 
@@ -190,7 +210,7 @@ namespace WissenstestOnline.Controllers
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
             }
 
-            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == 12) {
+            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount) {
                 if (UserData.pressedButtonLearn.Equals("zurueck")){
                     UserData.AufgabeNr = UserData.AufgabeNr + 1;
                 }
@@ -206,9 +226,48 @@ namespace WissenstestOnline.Controllers
             
         }
 
-        public IActionResult LoadAntwortLearn(string aufgabenNr) {
-            return PartialView();
+        public IActionResult LoadAntwortLearn(string aufgabenNr) {  //Antwort ODER Frage funktioniert, beides aber nicht???
+
+            int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
+            aufgabenNr_Int--;
+
+            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+
+            string antwort_typ = aufgabe.Antwort.Typ.Typ;
+            int inhalt_id = aufgabe.Antwort.Inhalt_Id;
+
+            switch (antwort_typ) {
+                case "A_T":                    
+                    Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
+                    string antwortText = antwortTextObject.Text;
+                    var antwortText_model = new AntwortText_Model();
+                    antwortText_model.Antwort_text = antwortText;
+                    return PartialView("LoadAntwortText", antwortText_model);
+                case "A_S":
+                    Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
+                    var antwortSlider_Model = new AntwortSlider_Model();
+                    antwortSlider_Model.Min = antwortSliderObject.Min_val;
+                    antwortSlider_Model.Max = antwortSliderObject.Max_val;
+                    antwortSlider_Model.RightVal = antwortSliderObject.RightVal;
+                    antwortSlider_Model.Sprungweite = antwortSliderObject.Sprungweite;
+                    antwortSlider_Model.Slider_Text = antwortSliderObject.Slider_text;
+                    return PartialView();
+                case "A_DP":
+
+                    break;
+            }
+
+
+            return null;
         }
+
+        public string CancelAufgabeLearn() {
+            UserData.Aufgaben = new List<Aufgabe>();
+            UserData.AufgabeNr = 0;
+            UserData.AufgabenCount = 0;
+            return "ok";
+        }
+
 
 
 

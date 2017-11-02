@@ -73,11 +73,13 @@
             $('#aktuelleFrageCounterLearn').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
             $('#aktuelleStationLearn').html(global_aktuelleStation);
 
+            //Problem: Beides kann nicht aufgerufen werden
 
-            //global_aufgabenNr - 1
-            //var aufgabenNrList = parseInt(global_aufgabenNr) - 1;
-            const url_aufgabe = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
-            $('#FrageLearn').load(url_aufgabe);
+            //const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            //$('#FrageLearn').load(url_frage);
+
+            const url_Antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
+            $('#AntwortLearn').load(url_Antwort);
 
         }
         else {
@@ -164,8 +166,13 @@ function StationInput() {
 
 function CancelAufgabeLearn() {
     console.log('enter CancelAufgabeLearn');
-    window.open('SelectStation');
-    self.close();
+    const url = '/Main/CancelAufgabeLearn';
+    $.post(url).then(result => {
+        console.log(`ServerReply CancelAufgabeLearn: ${result}`);
+        window.open('SelectStation');
+        self.close();
+    });
+    
     
 }
 
