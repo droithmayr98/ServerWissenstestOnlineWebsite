@@ -7,6 +7,8 @@
     var global_mode = "";
     var global_stations = "";
     var global_aufgabenNr = "";
+    var global_aufgabenCount = "";
+    var global_aktuelleStation = "";
 
 
     //Start Testeingaben
@@ -26,6 +28,9 @@
     $('#checkAufgabeLearn').on('click', WeiterAufgabeLearn);
     $('#checkAufgabePractise').on('click', WeiterAufgabePractise);
 
+    //Zurück
+    $('#lastAufgabeLearn').on('click', ZurueckAufgabeLearn);
+
     //Zusatzinfo Click
     $('#zusatzinfoLearn').on('click', ShowZusatzinfo);
     $('#zusatzinfoPractise').on('click', ShowZusatzinfo);
@@ -42,6 +47,9 @@
         global_mode = map.mode;
         global_stations = map.stations;
         global_aufgabenNr = map.aufgabenNr;
+        global_aufgabenCount = map.aufgabenCount;
+        global_aktuelleStation = map.aktuelleStation;
+
 
         //Datenzugriff nur hier
         //Methoden hier drinnen
@@ -54,12 +62,20 @@
         console.log(`Mode: ${global_mode}`);
         console.log(`Stations: ${global_stations}`);
         console.log(`AufgabenNr: ${global_aufgabenNr}`);
+        console.log(`AufgabenCount: ${global_aufgabenCount}`);
+        console.log(`AktuelleStation: ${global_aktuelleStation}`);
 
 
         //Aufgaben laden
         if (global_mode === "learn") {
-            $('#headingLearn').html('Drücke \'Weiter\' um den Lernmodus zu starten!');
 
+            //Update AufgabeUmgebungLearn
+            $('#aktuelleFrageCounterLearn').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
+            $('#aktuelleStationLearn').html(global_aktuelleStation);
+
+
+            //global_aufgabenNr - 1
+            //var aufgabenNrList = parseInt(global_aufgabenNr) - 1;
             const url_aufgabe = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
             $('#FrageLearn').load(url_aufgabe);
 
@@ -92,7 +108,7 @@ function UserCheck() {
     console.log(`Stufe: ${selectedStufe}`);
 
 
-    if (ff == "") {
+    if (ff === "") {
         $('#UserLoginError').html('Bitte geben Sie ihre Feuerwehr an!');
     } else {
         const url = "/Main/CheckUserInfo";
@@ -130,7 +146,7 @@ function StationInput() {
         }).then(result => console.log(`ServerReply StationInput: ${result}`));
 
 
-        if (selectedMode == "learn") {
+        if (selectedMode === "learn") {
             $('#StationSelectError').html('');
             window.open('AufgabeUmgebungLearn');
 
@@ -172,7 +188,15 @@ function CloseResults() {
 
 function WeiterAufgabeLearn() {
     console.log('enter WeiterAufgabeLearn');
-    
+    const url = '/Main/PressedButtonLearn';
+    $.post(url, {
+        pressedButtonLearn: "weiter"
+    }).then(result => {
+        console.log(`ServerReply WeiterAufgabeLearn: ${result}`);
+        location.reload();
+        //window.open('AufgabeUmgebungLearn');
+        //self.close();
+        });
 }
 
 function WeiterAufgabePractise() {
@@ -181,4 +205,18 @@ function WeiterAufgabePractise() {
 
 function CloseZusatzinfo() {
     self.close();
+}
+
+function ZurueckAufgabeLearn() {
+    console.log('enter ZurueckAufgabeLearn');
+    const url = '/Main/PressedButtonLearn';
+    $.post(url, {
+        pressedButtonLearn: "zurueck"
+    }).then(result => {
+        console.log(`ServerReply ZurueckAufgabeLearn: ${result}`);
+        location.reload();
+        //window.open('AufgabeUmgebungLearn');
+        //self.close();
+        });
+    
 }

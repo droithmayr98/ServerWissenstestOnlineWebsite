@@ -20,14 +20,6 @@ namespace WissenstestOnline.Controllers
     public class MainController : Controller
     {
 
-        /*private string global_bezirk = "";
-        private string global_ort = "";
-        private string global_stufe = "";
-        private string global_mode = "";
-        private List<string> global_stations = new List<string>();*/
-
-        
-
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
@@ -128,14 +120,27 @@ namespace WissenstestOnline.Controllers
                 int selected_stationId = Convert.ToInt32(stations[i]);
                 List<Aufgabe> stationsteil =  test_db.Aufgaben.Where(x => x.Station.Station_Id == selected_stationId).ToList();
                 UserData.Aufgaben.AddRange(stationsteil);
+                if (i == 0) {
+                    UserData.AktuelleStation = stationsteil[0].Station.Stationsname;
+                }
             }
-
+            UserData.AufgabenCount = UserData.Aufgaben.Count;
 
             return "ok";
         }
 
 
         public IActionResult GetGlobalData() {
+
+            var RightAufgabeNr = UserData.AufgabeNr + 1;
+            var RightAufgabenCount = UserData.AufgabenCount;
+
+            if (UserData.AufgabenCount > 0) {
+                Aufgabe nexteAufgabe = UserData.Aufgaben[UserData.AufgabeNr];
+                UserData.AktuelleStation = nexteAufgabe.Station.Stationsname;
+            }
+            
+
             var data = new Dictionary<string, string>()
             {
                 ["bezirk"] = UserData.Bezirk,
@@ -143,7 +148,9 @@ namespace WissenstestOnline.Controllers
                 ["stufe"] = UserData.Stufe,
                 ["mode"] = UserData.Mode,
                 ["stations"] = UserData.Stations,
-                ["aufgabenNr"] = UserData.AufgabeNr.ToString()
+                ["aufgabenNr"] = RightAufgabeNr.ToString(),
+                ["aufgabenCount"] = RightAufgabenCount.ToString(),
+                ["aktuelleStation"] = UserData.AktuelleStation
             };
             return Json(data);
         }
@@ -152,14 +159,58 @@ namespace WissenstestOnline.Controllers
         public IActionResult LoadFrageLearn(string aufgabenNr) {
 
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
+            aufgabenNr_Int--;
 
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
 
-
+            string fragetyp = aufgabe.Frage.Typ.Typ;
+            string fragetext = aufgabe.Frage.Fragetext;
             
 
+            if (fragetyp.Equals("F_T")) {
+                var frageText_model = new FrageText_Model();
+                frageText_model.FrageText = fragetext;
+                return PartialView("LoadFrageText", frageText_model);
+            } else if (fragetyp.Equals("F_T+B")) {
+                //gehört noch gemacht
+            } else if (fragetyp.Equals("F_T+V")) {
+                //gehört noch gemacht
+            }
+
+            return null;
+        }
+
+        public string PressedButtonLearn(string pressedButtonLearn) {
+            UserData.pressedButtonLearn = pressedButtonLearn;
+
+            if (UserData.pressedButtonLearn.Equals("zurueck")){
+                UserData.AufgabeNr = UserData.AufgabeNr - 1;
+            }
+            else if (UserData.pressedButtonLearn.Equals("weiter")){
+                UserData.AufgabeNr = UserData.AufgabeNr + 1;
+            }
+
+            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == 12) {
+                if (UserData.pressedButtonLearn.Equals("zurueck")){
+                    UserData.AufgabeNr = UserData.AufgabeNr + 1;
+                }
+                else if (UserData.pressedButtonLearn.Equals("weiter")){
+                    UserData.AufgabeNr = UserData.AufgabeNr - 1;
+                }
+                return "ok";
+            }
+            else {
+                //maybe alert?
+                return "ok";
+            }
+            
+        }
+
+        public IActionResult LoadAntwortLearn(string aufgabenNr) {
             return PartialView();
         }
+
+
 
     }
 }

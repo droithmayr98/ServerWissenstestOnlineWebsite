@@ -14,7 +14,9 @@ namespace WissenstestOnlineWebseite.Models
         public static string Mode { get; set; } = "";
         public static string Stations { get; set; } = "";
         public static int AufgabeNr { get; set; } = 0;
-        public static List<Aufgabe> Aufgaben = new List<Aufgabe>();
-
+        public static List<Aufgabe> Aufgaben { get; set; } = new List<Aufgabe>();
+        public static int AufgabenCount { get; set; } = 0;
+        public static string AktuelleStation { get; set; } = "";
+        public static string pressedButtonLearn { get; set; } = "";
     }
 }

@@ -1,9 +1,8 @@
 ﻿@{
     ViewData["Title"] = "AufgabeUmgebung";
 }
-<h3 id="headingLearn">AufgabeUmgebungLearn</h3>
 
-<div><div id="FrageLearn"></div></div>
+<div><h3 id="FrageLearn">Hier steht die Frage?</h3></div>
 <hr />
 <div id="AntwortLearn"></div>
 
@@ -25,7 +24,18 @@
         </td>
         <td></td>
         <td>
-            <input type="button" id="checkAufgabeLearn" value="Weiter" class="btn btn-success" />
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" id="lastAufgabeLearn" value="Zurück" class="btn btn-warning" />
+                    </td>
+                    <td>
+                        <input type="button" id="checkAufgabeLearn" value="Weiter" class="btn btn-success" />
+                    </td>
+                </tr>
+            </table>
+            
+            
         </td>
     </tr>
 </table>
