@@ -70,26 +70,6 @@ namespace WissenstestOnline.Controllers
         }
 
         public IActionResult ZusatzInfo() {
-            int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
-            aufgabenNr_Int--;
-
-            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-
-            string info_typ = aufgabe.Zusatzinfo.Typ.Typ;
-
-            string[] splitInfo_ = info_typ.Split('_');
-
-            if (splitInfo_[1].Contains('+')) {
-                //gehört noch gemacht
-            }
-            else {
-                if (splitInfo_[1].Contains('T')) {
-                    int anzahl_textfelder = splitInfo_[1].Length;
-                    int zusatzinfo_id = aufgabe.Zusatzinfo.Zusatzinfo_Id;
-                    List<InfoContent> infoContent = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == zusatzinfo_id).Select(x => x).ToList();
-                }
-            }
-
             return View();
         }
 
@@ -190,7 +170,7 @@ namespace WissenstestOnline.Controllers
             if (fragetyp.Equals("F_T")) {
                 var frageText_model = new FrageText_Model();
                 frageText_model.FrageText = fragetext;
-                return PartialView("LoadFrageText", frageText_model);
+                return PartialView("PartialViews/LoadFrageText", frageText_model);
             } else if (fragetyp.Equals("F_T+B")) {
                 //gehört noch gemacht
             } else if (fragetyp.Equals("F_T+V")) {
@@ -242,7 +222,7 @@ namespace WissenstestOnline.Controllers
                     string antwortText = antwortTextObject.Text;
                     var antwortText_model = new AntwortText_Model();
                     antwortText_model.Antwort_text = antwortText;
-                    return PartialView("LoadAntwortText", antwortText_model);
+                    return PartialView("PartialViews/LoadAntwortText", antwortText_model);
                 case "A_S":
                     Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
                     var antwortSlider_Model = new AntwortSlider_Model();
@@ -251,14 +231,15 @@ namespace WissenstestOnline.Controllers
                     antwortSlider_Model.RightVal = antwortSliderObject.RightVal;
                     antwortSlider_Model.Sprungweite = antwortSliderObject.Sprungweite;
                     antwortSlider_Model.Slider_Text = antwortSliderObject.Slider_text;
-                    return PartialView();
+                    return PartialView("PartialViews/LoadAntwortSlider", antwortSlider_Model);
                 case "A_DP":
-
-                    break;
+                    Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
+                    var antwortDatePicker_Model = new AntwortDatePicker_Model();
+                    antwortDatePicker_Model.Datum = antwortDatePickerObject.Date;
+                    return PartialView("PartialViews/LoadAntwortDatePicker", antwortDatePicker_Model);
+                default:
+                    return PartialView();
             }
-
-
-            return null;
         }
 
         public string CancelAufgabeLearn() {
@@ -266,6 +247,36 @@ namespace WissenstestOnline.Controllers
             UserData.AufgabeNr = 0;
             UserData.AufgabenCount = 0;
             return "ok";
+        }
+
+        public IActionResult LoadZusatzinfo() {
+
+            int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
+            logger.LogInformation("AufgabeNr: " + aufgabenNr_Int);
+            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+
+            string info_typ = aufgabe.Zusatzinfo.Typ.Typ;
+
+            string[] splitInfo_ = info_typ.Split('_');
+
+            if (splitInfo_[1].Contains('+')) {
+                //gehört noch gemacht
+            }
+            else {
+                if (splitInfo_[1].Contains('T')) {
+                    int zusatzinfo_id = aufgabe.Zusatzinfo.Zusatzinfo_Id;
+                    List<InfoContent> infoContent = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == zusatzinfo_id).Select(x => x).ToList();
+                    var zusatzInfoTextOnly_Model = new ZusatzInfoTextOnly_Model();
+                    foreach (InfoContent ic in infoContent) {
+                        var zit = new ZusatzInfoTextblock {Heading = ic.Heading, Text = ic.Info_Content };
+                        zusatzInfoTextOnly_Model.Texte.Add(zit);
+                    }
+                    return PartialView("PartialViews/LoadZusatzinfoTextOnly", zusatzInfoTextOnly_Model);
+
+                }
+            }
+
+            return PartialView();
         }
 
 

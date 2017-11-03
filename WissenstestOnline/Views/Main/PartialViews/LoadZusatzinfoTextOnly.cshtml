@@ -1,0 +1,7 @@
+@model WissenstestOnlineWebseite.Models.ZusatzInfoTextOnly_Model
+
+@foreach(var text in @Model.Texte){
+<h3>@text.Heading</h3>
+<p>@text.Text</p>
+
+}

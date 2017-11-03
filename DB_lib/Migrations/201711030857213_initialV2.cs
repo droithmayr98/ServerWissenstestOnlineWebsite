@@ -3,7 +3,7 @@ namespace DB_lib.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class TestDB_V1 : DbMigration
+    public partial class initialV2 : DbMigration
     {
         public override void Up()
         {

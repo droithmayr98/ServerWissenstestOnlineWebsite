@@ -25,12 +25,9 @@
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Views\Main\LoadFrageText.cshtml">
+    <Content Update="Views\Main\PartialViews\LoadFrageText.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Main\ParcialViews\" />
   </ItemGroup>
 
 </Project>

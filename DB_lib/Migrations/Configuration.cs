@@ -65,9 +65,12 @@ namespace DB_lib.Migrations
             Typendefinition F_TV = new Typendefinition { Typ = "F_T+V" };
             //Info
             Typendefinition I_T = new Typendefinition { Typ = "I_T" };
+            Typendefinition I_TT = new Typendefinition { Typ = "I_TT" };
+            Typendefinition I_TTT = new Typendefinition { Typ = "I_TTT" };
+            Typendefinition I_TTTT = new Typendefinition { Typ = "I_TTTT" };
+            Typendefinition I_TTTTT = new Typendefinition { Typ = "I_TTTTT" };
             Typendefinition I_TB = new Typendefinition { Typ = "I_T+B" };
             Typendefinition I_TV = new Typendefinition { Typ = "I_T+V" };
-            Typendefinition I_TT = new Typendefinition { Typ = "I_TT" };
             Typendefinition I_TBB = new Typendefinition { Typ = "I_T+BB" };
             Typendefinition I_TTVV = new Typendefinition { Typ = "I_TT+VV" };
             Typendefinition I_TBBV = new Typendefinition { Typ = "I_T+BB+V" };
@@ -130,9 +133,9 @@ namespace DB_lib.Migrations
             #endregion----------------------------------------------
 
             #region-----------------------------------Zusatzinfo erzeugen
-            Zusatzinfo zusatzinfoText1 = new Zusatzinfo { Typ = I_T};
-            Zusatzinfo zusatzinfoText2 = new Zusatzinfo { Typ = I_T };
-            Zusatzinfo zusatzinfoText3 = new Zusatzinfo { Typ = I_T };
+            Zusatzinfo zusatzinfoText1 = new Zusatzinfo { Typ = I_TTTTT};
+            Zusatzinfo zusatzinfoText2 = new Zusatzinfo { Typ = I_TTT };
+            Zusatzinfo zusatzinfoText3 = new Zusatzinfo { Typ = I_TT };
             Zusatzinfo zusatzinfoText4 = new Zusatzinfo { Typ = I_T };
             Zusatzinfo zusatzinfoText5 = new Zusatzinfo { Typ = I_T };
             #endregion---------------------------------------------
