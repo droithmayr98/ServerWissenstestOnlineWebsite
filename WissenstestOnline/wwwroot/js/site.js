@@ -75,11 +75,11 @@
 
             //Problem: Beides kann nicht aufgerufen werden
 
-            const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
-            $('#FrageLearn').load(url_frage);
+            //const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            //$('#FrageLearn').load(url_frage);
 
-            //const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
-            //$('#AntwortLearn').load(url_antwort);
+            const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
+            $('#AntwortLearn').load(url_antwort);
 
             const url = '/Main/LoadZusatzinfo';
             $('#loadZusatzinfo').load(url);
