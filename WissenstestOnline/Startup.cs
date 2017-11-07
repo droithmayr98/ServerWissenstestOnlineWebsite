@@ -25,6 +25,7 @@ namespace WissenstestOnline
 
         public IConfigurationRoot Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,7 +33,7 @@ namespace WissenstestOnline
 
             //TestDB
             services.AddSingleton<TestDB_Context, TestDB_Context>(serviceProvider => new TestDB_Context());
-
+            //Globale Variablen über Singelton und co
 
             services.AddMvc();
         }
@@ -50,7 +51,7 @@ namespace WissenstestOnline
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Main/Error");
             }
 
             app.UseStaticFiles();

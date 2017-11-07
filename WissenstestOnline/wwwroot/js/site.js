@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {  
+﻿$(document).ready(() => {
     console.log('jQuery ready');
 
     var global_bezirk = "";
@@ -75,14 +75,25 @@
 
             //Problem: Beides kann nicht aufgerufen werden
 
-            //const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
-            //$('#FrageLearn').load(url_frage);
+            //funktioniert
+            const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            $('#FrageLearn').load(url_frage, () => {
+                const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
+                $('#AntwortLearn').load(url_antwort);
+            }
+            );
+
+            //soll mit include funktionieren
+            //INCLUDE selektiert nicht die FroreignKeys der FroreignKeys
+
+            /*const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            $('#FrageLearn').load(url_frage);
 
             const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
-            $('#AntwortLearn').load(url_antwort);
+            $('#AntwortLearn').load(url_antwort);*/
 
-            const url = '/Main/LoadZusatzinfo';
-            $('#loadZusatzinfo').load(url);
+            const url_info = '/Main/LoadZusatzinfo';
+            $('#loadZusatzinfo').load(url_info);
 
         }
         else {
@@ -118,7 +129,7 @@ function UserCheck() {
     } else {
         const url = "/Main/CheckUserInfo";
         $.post(url, { bezirk: selectedBezirk, ort: ff, stufe: selectedStufe })
-            .then(reply =>{
+            .then(reply => {
                 console.log(`ServerReply CheckUserInfo: ${reply}`);
                 if (reply === 'ok') {
                     $('#UserLoginError').html('');
@@ -129,7 +140,7 @@ function UserCheck() {
             });
 
     }
-    
+
 }
 
 function StationInput() {
@@ -160,10 +171,10 @@ function StationInput() {
             window.open('AufgabeUmgebungPractise');
         }
 
-    } catch(err){
+    } catch (err) {
         $('#StationSelectError').html('Bitte wähle Sie mindestens eine Station aus!');
     }
-   
+
 
 }
 
@@ -175,8 +186,8 @@ function CancelAufgabeLearn() {
         window.open('SelectStation');
         self.close();
     });
-    
-    
+
+
 }
 
 function CancelAufgabePractise() {
@@ -206,7 +217,7 @@ function WeiterAufgabeLearn() {
         location.reload();
         //window.open('AufgabeUmgebungLearn');
         //self.close();
-        });
+    });
 }
 
 function WeiterAufgabePractise() {
@@ -227,6 +238,6 @@ function ZurueckAufgabeLearn() {
         location.reload();
         //window.open('AufgabeUmgebungLearn');
         //self.close();
-        });
-    
+    });
+
 }

@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using System.Data.Entity;
+
 
 namespace WissenstestOnline.Controllers
 {
@@ -23,6 +25,8 @@ namespace WissenstestOnline.Controllers
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
+        //public MainController(TestDB_Context db, ILogger<MainController> logger, MyImplTest myClass)
+        
         public MainController(TestDB_Context db, ILogger<MainController> logger) {
             //var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
             //Database.SetInitializer(migration);
@@ -83,6 +87,10 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
+        public IActionResult Error() {
+            return View();
+        }
+
 
         //Ajax Calls
 
@@ -118,7 +126,15 @@ namespace WissenstestOnline.Controllers
             //Aufgaben selektieren grob
             for (int i = 0; i < stations.Count; i++) {
                 int selected_stationId = Convert.ToInt32(stations[i]);
-                List<Aufgabe> stationsteil =  test_db.Aufgaben.Where(x => x.Station.Station_Id == selected_stationId).ToList();
+                List<Aufgabe> stationsteil =  test_db.Aufgaben
+                    //.Include(x => x.Frage)
+                    //.Include(x => x.Antwort)
+                    //.Include(x => x.Zusatzinfo)
+                    //.Include(x => x.Station)
+                    //.Include(x => x.Stufe)
+                    //.Include(x => x.Hintergrundbild)
+                    .Where(x => x.Station.Station_Id == selected_stationId)
+                    .ToList();
                 UserData.Aufgaben.AddRange(stationsteil);
                 if (i == 0) {
                     UserData.AktuelleStation = stationsteil[0].Station.Stationsname;
