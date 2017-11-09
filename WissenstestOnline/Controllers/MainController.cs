@@ -253,6 +253,16 @@ namespace WissenstestOnline.Controllers
                     var antwortDatePicker_Model = new AntwortDatePicker_Model();
                     antwortDatePicker_Model.Datum = antwortDatePickerObject.Date;
                     return PartialView("PartialViews/LoadAntwortDatePicker", antwortDatePicker_Model);
+                case "A_CB:T":
+                    Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
+                    var antwortCheckBox_Model = new AntwortCheckBox_Model();
+                    antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();                   
+                    return PartialView("PartialViews/LoadAntwortCheckBox", antwortCheckBox_Model);
+                case "A_RB:T":
+                    Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
+                    var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
+                    antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
+                    return PartialView("PartialViews/LoadAntwortRadioButtons", antwortRadioButtons_Model);
                 default:
                     return PartialView();
             }
