@@ -249,8 +249,7 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult LoadAntwortLearn(string aufgabenNr)
-        {  //Antwort ODER Frage funktioniert, beides aber nicht???
+        public IActionResult LoadAntwortLearn(string aufgabenNr){
 
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
@@ -341,9 +340,6 @@ namespace WissenstestOnline.Controllers
         }
 
 
-
-
-
         public string PressedButtonPractise()
         {
             UserData.AufgabeNr = UserData.AufgabeNr + 1;
@@ -360,8 +356,29 @@ namespace WissenstestOnline.Controllers
 
         }
 
+        //LoadAntwortPractise
+        public IActionResult LoadAntwortPractise(string aufgabenNr) {
+            logger.LogInformation("Enter LoadAntwortPractise");
 
+            int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
+            aufgabenNr_Int--;
 
+            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+
+            string antwort_typ = aufgabe.Antwort.Typ.Typ;
+            int inhalt_id = aufgabe.Antwort.Inhalt_Id;
+
+            switch (antwort_typ)
+            {
+                case "A_T":
+
+                    break;
+                default:
+                    return PartialView();
+            }
+
+            return null;
+        }
 
 
 

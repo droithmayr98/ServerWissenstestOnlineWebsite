@@ -22,18 +22,15 @@
 
     //Cancel
     $('.cancel').on('click', CancelAufgabe);
-    //$('.cancel').on('click', CancelAufgabe);
 
     //Weiter
     $('#checkAufgabeLearn').on('click', WeiterAufgabeLearn);
     $('#checkAufgabePractise').on('click', WeiterAufgabePractise);
-
     //Zurück
     $('#lastAufgabeLearn').on('click', ZurueckAufgabeLearn);
 
     //Zusatzinfo Click
-    $('#zusatzinfoLearn').on('click', ShowZusatzinfo);
-    $('#zusatzinfoPractise').on('click', ShowZusatzinfo);
+    $('.showZusatzinfo').on('click', ShowZusatzinfo);
 
     $('#closeResults').on('click', CloseResults);
     $('#closeZusatzinfo').on('click', CloseZusatzinfo);
@@ -104,6 +101,9 @@
 
             const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
             $('#FragePractise').load(url_frage);
+
+            const url_antwort = `/Main/LoadAntwortPractise?aufgabenNr=${global_aufgabenNr}`;
+            $('#AntwortPractise').load(url_antwort);
 
 
             const url_info = '/Main/LoadZusatzinfo';
