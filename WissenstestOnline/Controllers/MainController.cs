@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System.Data.Entity;
 
 
 namespace WissenstestOnline.Controllers
@@ -325,7 +324,7 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public string PressedButtonPractise()
+        public string PressedButtonPractise()//Hier überfrüfen ob Antwort richtig ist, Was zu tun ist, Ajax Call
         {
             UserData.AufgabeNr = UserData.AufgabeNr + 1;
 
