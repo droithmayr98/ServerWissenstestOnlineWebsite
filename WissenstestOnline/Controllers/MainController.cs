@@ -249,7 +249,8 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult LoadAntwortLearn(string aufgabenNr){
+        public IActionResult LoadAntwortLearn(string aufgabenNr)
+        {
 
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
@@ -262,34 +263,19 @@ namespace WissenstestOnline.Controllers
             switch (antwort_typ)
             {
                 case "A_T":
-                    Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
-                    string antwortText = antwortTextObject.Text;
-                    var antwortText_model = new AntwortText_Model();
-                    antwortText_model.Antwort_text = antwortText;
+                    var antwortText_model = FillTextModel(inhalt_id);
                     return PartialView("PartialViews/LoadAntwortText", antwortText_model);
                 case "A_S":
-                    Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
-                    var antwortSlider_Model = new AntwortSlider_Model();
-                    antwortSlider_Model.Min = antwortSliderObject.Min_val;
-                    antwortSlider_Model.Max = antwortSliderObject.Max_val;
-                    antwortSlider_Model.RightVal = antwortSliderObject.RightVal;
-                    antwortSlider_Model.Sprungweite = antwortSliderObject.Sprungweite;
-                    antwortSlider_Model.Slider_Text = antwortSliderObject.Slider_text;
+                    var antwortSlider_Model = FillSliderModel(inhalt_id);
                     return PartialView("PartialViews/LoadAntwortSlider", antwortSlider_Model);
                 case "A_DP":
-                    Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
-                    var antwortDatePicker_Model = new AntwortDatePicker_Model();
-                    antwortDatePicker_Model.Datum = antwortDatePickerObject.Date;
+                    var antwortDatePicker_Model = FillDatePickerModel(inhalt_id);
                     return PartialView("PartialViews/LoadAntwortDatePicker", antwortDatePicker_Model);
                 case "A_CB:T":
-                    Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
-                    var antwortCheckBox_Model = new AntwortCheckBox_Model();
-                    antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
+                    var antwortCheckBox_Model = FillCheckBoxTextModel(inhalt_id);
                     return PartialView("PartialViews/LoadAntwortCheckBox", antwortCheckBox_Model);
                 case "A_RB:T":
-                    Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
-                    var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
-                    antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
+                    var antwortRadioButtons_Model = FillRadioButtonsTextModel(inhalt_id);
                     return PartialView("PartialViews/LoadAntwortRadioButtons", antwortRadioButtons_Model);
                 default:
                     return PartialView();
@@ -306,7 +292,6 @@ namespace WissenstestOnline.Controllers
 
         public IActionResult LoadZusatzinfo()
         {
-
             int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
             logger.LogInformation("AufgabeNr: " + aufgabenNr_Int);
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
@@ -355,32 +340,88 @@ namespace WissenstestOnline.Controllers
             }
 
         }
-
         //LoadAntwortPractise
-        public IActionResult LoadAntwortPractise(string aufgabenNr) {
-            logger.LogInformation("Enter LoadAntwortPractise");
-
+        public IActionResult LoadAntwortPractise(string aufgabenNr)
+        {
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
-
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-
             string antwort_typ = aufgabe.Antwort.Typ.Typ;
             int inhalt_id = aufgabe.Antwort.Inhalt_Id;
 
             switch (antwort_typ)
             {
                 case "A_T":
-
-                    break;
+                    var antwortText_model = FillTextModel(inhalt_id);
+                    return PartialView("PartialViews/LoadAntwortTextPractice", antwortText_model);
+                case "A_S":
+                    var antwortSlider_Model = FillSliderModel(inhalt_id);
+                    return PartialView("PartialViews/LoadAntwortSliderPractice", antwortSlider_Model);
+                case "A_DP":
+                    var antwortDatePicker_Model = FillDatePickerModel(inhalt_id);
+                    return PartialView("PartialViews/LoadAntwortDatePickerPractice", antwortDatePicker_Model);
+                case "A_CB:T":
+                    var antwortCheckBox_Model = FillCheckBoxTextModel(inhalt_id);
+                    return PartialView("PartialViews/LoadAntwortCheckBoxPractice", antwortCheckBox_Model);
+                case "A_RB:T":
+                    var antwortRadioButtons_Model = FillRadioButtonsTextModel(inhalt_id);
+                    return PartialView("PartialViews/LoadAntwortRadioButtonsPractice", antwortRadioButtons_Model);
                 default:
                     return PartialView();
             }
 
-            return null;
         }
 
 
 
+
+
+
+
+        //ModelFüllMethoden
+        public AntwortText_Model FillTextModel(int inhalt_id)
+        {
+            Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
+            string antwortText = antwortTextObject.Text;
+            var antwortText_model = new AntwortText_Model();
+            antwortText_model.Antwort_text = antwortText;
+            return antwortText_model;
+        }
+
+        public AntwortSlider_Model FillSliderModel(int inhalt_id)
+        {
+            Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
+            var antwortSlider_Model = new AntwortSlider_Model();
+            antwortSlider_Model.Min = antwortSliderObject.Min_val;
+            antwortSlider_Model.Max = antwortSliderObject.Max_val;
+            antwortSlider_Model.RightVal = antwortSliderObject.RightVal;
+            antwortSlider_Model.Sprungweite = antwortSliderObject.Sprungweite;
+            antwortSlider_Model.Slider_Text = antwortSliderObject.Slider_text;
+            return antwortSlider_Model;
+        }
+
+        public AntwortDatePicker_Model FillDatePickerModel(int inhalt_id)
+        {
+            Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
+            var antwortDatePicker_Model = new AntwortDatePicker_Model();
+            antwortDatePicker_Model.Datum = antwortDatePickerObject.Date;
+            return antwortDatePicker_Model;
+        }
+
+        public AntwortCheckBox_Model FillCheckBoxTextModel(int inhalt_id)
+        {
+            Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
+            var antwortCheckBox_Model = new AntwortCheckBox_Model();
+            antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
+            return antwortCheckBox_Model;
+        }
+
+        public AntwortRadioButtons_Model FillRadioButtonsTextModel(int inhalt_id)
+        {
+            Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
+            var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
+            antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
+            return antwortRadioButtons_Model;
+        }
     }
 }

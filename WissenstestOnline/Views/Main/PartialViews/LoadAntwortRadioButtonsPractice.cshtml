@@ -1,0 +1,10 @@
+@model WissenstestOnlineWebseite.Models.AntwortRadioButtons_Model
+
+<script src="~/js/otherFunctions.js"></script>
+
+<h4>Hier sollen RadioButtons sein!!</h4>
+
+@foreach (var radioButton in @Model.RadioButtons)
+{
+    <input type="radio" name="gruppe" id="@radioButton.Radio_Id" />@radioButton.Content<br />
+}

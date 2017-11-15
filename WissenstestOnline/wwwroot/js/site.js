@@ -100,10 +100,10 @@
 
 
             const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
-            $('#FragePractise').load(url_frage);
-
-            const url_antwort = `/Main/LoadAntwortPractise?aufgabenNr=${global_aufgabenNr}`;
-            $('#AntwortPractise').load(url_antwort);
+            $('#FragePractise').load(url_frage, () => {
+                const url_antwort = `/Main/LoadAntwortPractise?aufgabenNr=${global_aufgabenNr}`;
+                $('#AntwortPractise').load(url_antwort);
+            });
 
 
             const url_info = '/Main/LoadZusatzinfo';

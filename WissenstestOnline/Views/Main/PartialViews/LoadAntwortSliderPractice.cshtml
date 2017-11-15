@@ -1,0 +1,21 @@
+@model WissenstestOnlineWebseite.Models.AntwortSlider_Model
+
+<script src="~/js/otherFunctions.js"></script>
+
+<h4>Hier soll Slider sein!!</h4>
+
+
+<div>
+    <table>
+        <tr>
+            <td>
+                <input type="range" id="sliderBar" min="@Model.Min" max="@Model.Max" step="@Model.Sprungweite" value="5" oninput="changeSlider(this.value, @Model.RightVal);">
+            </td>
+            <td>
+                <input style="background-color: green" type="text" id="textfield_slider" value="@Model.RightVal" oninput="changeTextField(this.value, @Model.RightVal)" />
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
