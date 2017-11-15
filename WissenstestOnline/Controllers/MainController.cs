@@ -26,8 +26,9 @@ namespace WissenstestOnline.Controllers
         private ILogger<MainController> logger;
 
         //public MainController(TestDB_Context db, ILogger<MainController> logger, MyImplTest myClass)
-        
-        public MainController(TestDB_Context db, ILogger<MainController> logger) {
+
+        public MainController(TestDB_Context db, ILogger<MainController> logger)
+        {
             //var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
             //Database.SetInitializer(migration);
             this.test_db = db;
@@ -35,9 +36,8 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult Start(){
-
-            
+        public IActionResult Start()
+        {
 
             //DB_ConnectionTest
             var test = test_db.Bezirke.Count();
@@ -48,7 +48,8 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
-        public IActionResult SelectStation() {
+        public IActionResult SelectStation()
+        {
             List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
             foreach (Station s in stations)
@@ -61,45 +62,53 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
-        public IActionResult AufgabeUmgebungLearn() {
+        public IActionResult AufgabeUmgebungLearn()
+        {
             return View();
         }
 
-        public IActionResult AufgabeUmgebungPractise(){
+        public IActionResult AufgabeUmgebungPractise()
+        {
             return View();
         }
 
-        public IActionResult ErgebnisOverview() {
+        public IActionResult ErgebnisOverview()
+        {
             return View();
         }
 
-        public IActionResult ZusatzInfo() {
+        public IActionResult ZusatzInfo()
+        {
             return View();
         }
 
 
         //AllgemeinInfo
-        public IActionResult Info() {
+        public IActionResult Info()
+        {
             return View();
         }
 
-        public IActionResult Kontakt() {
+        public IActionResult Kontakt()
+        {
             return View();
         }
 
-        public IActionResult Error() {
+        public IActionResult Error()
+        {
             return View();
         }
 
 
         //Ajax Calls
 
-        public string CheckUserInfo(string bezirk, string ort, string stufe) {
+        public string CheckUserInfo(string bezirk, string ort, string stufe)
+        {
 
             List<Ort> alle_orte_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
 
             if (Regex.IsMatch(ort, @"^[A-ZÄÖÜ][a-zA-ZÄÖÜäöü\-\. ]+$"))
-            {    
+            {
                 foreach (Ort o in alle_orte_vom_bezirk)
                 {
                     if (o.Ortsname.Equals(ort))
@@ -116,7 +125,8 @@ namespace WissenstestOnline.Controllers
             return "wrong";
         }
 
-        public string GlobalStationData(List<string> stations,string mode) {
+        public string GlobalStationData(List<string> stations, string mode)
+        {
 
             string stationsString = string.Join(",", stations.ToArray());
 
@@ -124,9 +134,10 @@ namespace WissenstestOnline.Controllers
             UserData.Stations = stationsString;
 
             //Aufgaben selektieren grob
-            for (int i = 0; i < stations.Count; i++) {
+            for (int i = 0; i < stations.Count; i++)
+            {
                 int selected_stationId = Convert.ToInt32(stations[i]);
-                List<Aufgabe> stationsteil =  test_db.Aufgaben
+                List<Aufgabe> stationsteil = test_db.Aufgaben
                     //.Include(x => x.Frage)
                     //.Include(x => x.Antwort)
                     //.Include(x => x.Zusatzinfo)
@@ -136,7 +147,8 @@ namespace WissenstestOnline.Controllers
                     .Where(x => x.Station.Station_Id == selected_stationId)
                     .ToList();
                 UserData.Aufgaben.AddRange(stationsteil);
-                if (i == 0) {
+                if (i == 0)
+                {
                     UserData.AktuelleStation = stationsteil[0].Station.Stationsname;
                 }
             }
@@ -146,16 +158,18 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public IActionResult GetGlobalData() {
+        public IActionResult GetGlobalData()
+        {
 
             var RightAufgabeNr = UserData.AufgabeNr + 1;
             var RightAufgabenCount = UserData.AufgabenCount;
 
-            if (UserData.AufgabenCount > 0) {
+            if (UserData.AufgabenCount > 0)
+            {
                 Aufgabe nexteAufgabe = UserData.Aufgaben[UserData.AufgabeNr];
                 UserData.AktuelleStation = nexteAufgabe.Station.Stationsname;
             }
-            
+
 
             var data = new Dictionary<string, string>()
             {
@@ -172,7 +186,8 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public IActionResult LoadFrageLearn(string aufgabenNr) {
+        public IActionResult LoadFrage(string aufgabenNr)
+        {
 
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
@@ -181,48 +196,61 @@ namespace WissenstestOnline.Controllers
 
             string fragetyp = aufgabe.Frage.Typ.Typ;
             string fragetext = aufgabe.Frage.Fragetext;
-            
 
-            if (fragetyp.Equals("F_T")) {
+
+            if (fragetyp.Equals("F_T"))
+            {
                 var frageText_model = new FrageText_Model();
                 frageText_model.FrageText = fragetext;
                 return PartialView("PartialViews/LoadFrageText", frageText_model);
-            } else if (fragetyp.Equals("F_T+B")) {
+            }
+            else if (fragetyp.Equals("F_T+B"))
+            {
                 //gehört noch gemacht
-            } else if (fragetyp.Equals("F_T+V")) {
+            }
+            else if (fragetyp.Equals("F_T+V"))
+            {
                 //gehört noch gemacht
             }
 
             return null;
         }
 
-        public string PressedButtonLearn(string pressedButtonLearn) {
+        public string PressedButtonLearn(string pressedButtonLearn)
+        {
             UserData.pressedButtonLearn = pressedButtonLearn;
 
-            if (UserData.pressedButtonLearn.Equals("zurueck")){
+            if (UserData.pressedButtonLearn.Equals("zurueck"))
+            {
                 UserData.AufgabeNr = UserData.AufgabeNr - 1;
             }
-            else if (UserData.pressedButtonLearn.Equals("weiter")){
+            else if (UserData.pressedButtonLearn.Equals("weiter"))
+            {
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
             }
 
-            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount) {
-                if (UserData.pressedButtonLearn.Equals("zurueck")){
+            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
+            {
+                if (UserData.pressedButtonLearn.Equals("zurueck"))
+                {
                     UserData.AufgabeNr = UserData.AufgabeNr + 1;
                 }
-                else if (UserData.pressedButtonLearn.Equals("weiter")){
+                else if (UserData.pressedButtonLearn.Equals("weiter"))
+                {
                     UserData.AufgabeNr = UserData.AufgabeNr - 1;
                 }
                 return "ok";
             }
-            else {
+            else
+            {
                 //maybe alert?
                 return "ok";
             }
-            
+
         }
 
-        public IActionResult LoadAntwortLearn(string aufgabenNr) {  //Antwort ODER Frage funktioniert, beides aber nicht???
+        public IActionResult LoadAntwortLearn(string aufgabenNr)
+        {  //Antwort ODER Frage funktioniert, beides aber nicht???
 
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
@@ -232,8 +260,9 @@ namespace WissenstestOnline.Controllers
             string antwort_typ = aufgabe.Antwort.Typ.Typ;
             int inhalt_id = aufgabe.Antwort.Inhalt_Id;
 
-            switch (antwort_typ) {
-                case "A_T":                    
+            switch (antwort_typ)
+            {
+                case "A_T":
                     Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
                     string antwortText = antwortTextObject.Text;
                     var antwortText_model = new AntwortText_Model();
@@ -256,7 +285,7 @@ namespace WissenstestOnline.Controllers
                 case "A_CB:T":
                     Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
                     var antwortCheckBox_Model = new AntwortCheckBox_Model();
-                    antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();                   
+                    antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
                     return PartialView("PartialViews/LoadAntwortCheckBox", antwortCheckBox_Model);
                 case "A_RB:T":
                     Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
@@ -268,14 +297,16 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-        public string CancelAufgabeLearn() {
+        public string CancelAufgabe()
+        {
             UserData.Aufgaben = new List<Aufgabe>();
             UserData.AufgabeNr = 0;
             UserData.AufgabenCount = 0;
             return "ok";
         }
 
-        public IActionResult LoadZusatzinfo() {
+        public IActionResult LoadZusatzinfo()
+        {
 
             int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
             logger.LogInformation("AufgabeNr: " + aufgabenNr_Int);
@@ -285,16 +316,20 @@ namespace WissenstestOnline.Controllers
 
             string[] splitInfo_ = info_typ.Split('_');
 
-            if (splitInfo_[1].Contains('+')) {
+            if (splitInfo_[1].Contains('+'))
+            {
                 //gehört noch gemacht
             }
-            else {
-                if (splitInfo_[1].Contains('T')) {
+            else
+            {
+                if (splitInfo_[1].Contains('T'))
+                {
                     int zusatzinfo_id = aufgabe.Zusatzinfo.Zusatzinfo_Id;
                     List<InfoContent> infoContent = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == zusatzinfo_id).Select(x => x).ToList();
                     var zusatzInfoTextOnly_Model = new ZusatzInfoTextOnly_Model();
-                    foreach (InfoContent ic in infoContent) {
-                        var zit = new ZusatzInfoTextblock {Heading = ic.Heading, Text = ic.Info_Content };
+                    foreach (InfoContent ic in infoContent)
+                    {
+                        var zit = new ZusatzInfoTextblock { Heading = ic.Heading, Text = ic.Info_Content };
                         zusatzInfoTextOnly_Model.Texte.Add(zit);
                     }
                     return PartialView("PartialViews/LoadZusatzinfoTextOnly", zusatzInfoTextOnly_Model);
@@ -304,6 +339,28 @@ namespace WissenstestOnline.Controllers
 
             return PartialView();
         }
+
+
+
+
+
+        public string PressedButtonPractise()
+        {
+            UserData.AufgabeNr = UserData.AufgabeNr + 1;
+
+            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
+            {
+                UserData.AufgabeNr = UserData.AufgabeNr - 1;
+                return "ok";
+            }
+            else
+            {
+                return "ok";
+            }
+
+        }
+
+
 
 
 

@@ -21,8 +21,8 @@
     $('#SelectStationButton').on('click', StationInput);
 
     //Cancel
-    $('#cancelAufgabeLearn').on('click', CancelAufgabeLearn);
-    $('#cancelAufgabePractise').on('click', CancelAufgabePractise);
+    $('.cancel').on('click', CancelAufgabe);
+    //$('.cancel').on('click', CancelAufgabe);
 
     //Weiter
     $('#checkAufgabeLearn').on('click', WeiterAufgabeLearn);
@@ -73,20 +73,19 @@
             $('#aktuelleFrageCounterLearn').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
             $('#aktuelleStationLearn').html(global_aktuelleStation);
 
-            //Problem: Beides kann nicht aufgerufen werden
-
             //funktioniert
-            const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
             $('#FrageLearn').load(url_frage, () => {
                 const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
                 $('#AntwortLearn').load(url_antwort);
             }
             );
 
+            //Problem: Beides kann nicht aufgerufen werden
             //soll mit include funktionieren
             //INCLUDE selektiert nicht die FroreignKeys der FroreignKeys
 
-            /*const url_frage = `/Main/LoadFrageLearn?aufgabenNr=${global_aufgabenNr}`;
+            /*const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
             $('#FrageLearn').load(url_frage);
 
             const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
@@ -96,8 +95,19 @@
             $('#loadZusatzinfo').load(url_info);
 
         }
-        else {
-            $('#headingLearn').html('Du bist hier falsch!');
+        else if (global_mode === "practise"){
+            //Übungsmodus
+
+            $('#aktuelleFrageCounterPractise').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
+            $('#aktuelleStationPractise').html(global_aktuelleStation);
+
+
+            const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
+            $('#FragePractise').load(url_frage);
+
+
+            const url_info = '/Main/LoadZusatzinfo';
+            $('#loadZusatzinfo').load(url_info);
         }
 
 
@@ -178,22 +188,16 @@ function StationInput() {
 
 }
 
-function CancelAufgabeLearn() {
-    console.log('enter CancelAufgabeLearn');
-    const url = '/Main/CancelAufgabeLearn';
+function CancelAufgabe() {
+    console.log('enter CancelAufgabe');
+    const url = '/Main/CancelAufgabe';
     $.post(url).then(result => {
-        console.log(`ServerReply CancelAufgabeLearn: ${result}`);
+        console.log(`ServerReply CancelAufgabe: ${result}`);
         window.open('SelectStation');
         self.close();
     });
 
 
-}
-
-function CancelAufgabePractise() {
-    console.log('enter CancelAufgabePractise');
-    window.open('ErgebnisOverview');
-    self.close();
 }
 
 function ShowZusatzinfo() {
@@ -222,6 +226,13 @@ function WeiterAufgabeLearn() {
 
 function WeiterAufgabePractise() {
     console.log('enter WeiterAufgabePractise');
+    const url = '/Main/PressedButtonPractise';
+    $.post(url).then(result => {
+        console.log(`ServerReply WeiterAufgabePractise: ${result}`);
+        location.reload();
+        //window.open('AufgabeUmgebungLearn');
+        //self.close();
+    });
 }
 
 function CloseZusatzinfo() {
