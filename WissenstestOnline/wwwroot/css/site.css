@@ -35,3 +35,43 @@ textarea {
         display: none;
     }
 }
+
+
+/*My CSS code*/
+#stufen {
+    background-color: dimgray;
+    color: white;
+}
+
+.active {
+    background-color: red;
+    color: white;
+}
+
+#headingWissenstest {
+    font-weight: bold;
+    color: #FC0A1C;
+}
+
+#kurzinfos {
+    margin-top: 20px;
+}
+
+#stations {
+    height: 200px;
+    width: 350px;
+}
+
+#SelectStationButton {
+    margin-top: 10px;
+}
+
+#aktuelleStationAnzeige {
+    text-align: center;
+}
+
+#aktuelleFrageCounterLearn {
+    text-align: right;
+}
+
+/*Nav Bar Design*/
