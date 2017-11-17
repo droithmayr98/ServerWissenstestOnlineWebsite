@@ -66,11 +66,12 @@ textarea {
     margin-top: 10px;
 }
 
-#aktuelleStationAnzeige {
+/*Modus Design*/
+#aktuelleStationLearn, #aktuelleStationPractise {
     text-align: center;
 }
 
-#aktuelleFrageCounterLearn {
+#aktuelleFrageCounterLearn, #aktuelleFrageCounterPractise {
     text-align: right;
 }
 
