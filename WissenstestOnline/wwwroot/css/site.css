@@ -59,12 +59,13 @@ textarea {
 
 #stations {
     height: 200px;
-    width: 350px;
+    max-width: 400px;
 }
 
 #SelectStationButton {
     margin-top: 10px;
 }
+
 
 /*Modus Design*/
 #aktuelleStationLearn, #aktuelleStationPractise {
@@ -73,6 +74,19 @@ textarea {
 
 #aktuelleFrageCounterLearn, #aktuelleFrageCounterPractise {
     text-align: right;
+}
+
+
+/*dynamisches Layout*/
+@media (max-width: 768px) {
+    #aktuelleStationLearn, #aktuelleStationPractise, #aktuelleFrageCounterLearn, #aktuelleFrageCounterPractise {
+        text-align: left;
+        margin-top: 5px;
+    }
+    #checkAufgabePractise, #buttonsLernmodus {
+        float: left !important;
+        margin-top: 5px;
+    }
 }
 
 /*Nav Bar Design*/
