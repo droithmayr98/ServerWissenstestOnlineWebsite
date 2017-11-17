@@ -18,7 +18,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace WissenstestOnline.Controllers
 {
-    public class MainController : Controller
+    public class MainController : Controller //StationSelectError
     {
 
         private readonly TestDB_Context test_db;
