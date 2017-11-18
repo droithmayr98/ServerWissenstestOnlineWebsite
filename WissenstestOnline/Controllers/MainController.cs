@@ -132,7 +132,7 @@ namespace WissenstestOnline.Controllers
             UserData.Mode = mode;
             UserData.Stations = stationsString;
 
-            //Aufgaben selektieren grob
+            //Aufgaben selektieren grob //gehört noch genauer
             for (int i = 0; i < stations.Count; i++)
             {
                 int selected_stationId = Convert.ToInt32(stations[i]);

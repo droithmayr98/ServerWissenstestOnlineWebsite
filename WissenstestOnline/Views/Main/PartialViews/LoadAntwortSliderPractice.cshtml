@@ -2,10 +2,21 @@
 
 <script src="~/js/otherFunctions.js"></script>
 
-<h4>Hier soll Slider sein!!</h4>
+<div class="container">
+    <div class="row form-group">
+        <div class="col-md-3">
+            <input type="range" class="form-control" id="sliderBar" min="@Model.Min" max="@Model.Max" step="@Model.Sprungweite" value="@Model.Min" oninput="changeSliderPractice(this.value, @Model.RightVal);">
+        </div>
+        <div class="col-md-1">
+            <input style="color: black; font-weight: bold" class="form-control" type="text" id="textfield_slider" value="@Model.Min" oninput="changeTextFieldPractice(this.value, @Model.RightVal)" />
+        </div>
+    </div>
+    
+</div>
 
 
-<div>
+<!--
+    
     <table>
         <tr>
             <td>
@@ -16,6 +27,5 @@
             </td>
         </tr>
     </table>
-    
-</div>
 
+-->

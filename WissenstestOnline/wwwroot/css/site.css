@@ -89,4 +89,10 @@ textarea {
     }
 }
 
+.datepicker {
+    color: black;
+    font-weight: bold;
+    width: 150px;
+}
+
 /*Nav Bar Design*/

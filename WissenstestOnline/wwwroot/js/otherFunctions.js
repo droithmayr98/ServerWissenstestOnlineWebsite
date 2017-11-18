@@ -26,3 +26,20 @@ function changeTextField(input, rightVal) {
     
 
 }
+
+function changeSliderPractice(input, rightVal) {
+    console.log('enter changeSliderPractice');
+    var textfield = document.getElementById('textfield_slider');
+    console.log("Slider Val: " + input);
+    textfield.value = input;
+
+}
+
+function changeTextFieldPractice(input, rightVal) {
+    console.log('enter changeTextField');
+    var textfield = document.getElementById('textfield_slider');
+    var slider = document.getElementById('sliderBar');
+    slider.value = input;
+
+
+}

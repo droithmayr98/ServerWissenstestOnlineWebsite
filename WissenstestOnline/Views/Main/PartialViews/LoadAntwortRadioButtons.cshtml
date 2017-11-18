@@ -1,18 +1,23 @@
 @model WissenstestOnlineWebseite.Models.AntwortRadioButtons_Model
 
-<script src="~/js/otherFunctions.js"></script>
+<div class="container">
 
-<h4>Hier sollen RadioButtons sein!!</h4>
-
-@foreach (var radioButton in @Model.RadioButtons)
-{
-    if (radioButton.IsTrue)
+    @foreach (var radioButton in @Model.RadioButtons)
     {
-        <input type="radio" name="gruppe" id="@radioButton.Radio_Id" checked/><label style="background-color:green">@radioButton.Content</label><br />
-    }
-    else
-    {
-        <input type="radio" name="gruppe" id="@radioButton.Radio_Id" />@radioButton.Content<br />
+        if (radioButton.IsTrue)
+        {
+            <div class="radio">
+                <label style="background-color:green"><input type="radio" name="gruppe" id="@radioButton.Radio_Id" checked /> @radioButton.Content</label>
+            </div>
+        }
+        else
+        {
+            <div class="radio">
+                <label><input type="radio" name="gruppe" id="@radioButton.Radio_Id" /> @radioButton.Content</label>
+            </div>
+        }
+
     }
 
-}
+
+</div>

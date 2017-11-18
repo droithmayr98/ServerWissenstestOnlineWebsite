@@ -1,18 +1,22 @@
 @model WissenstestOnlineWebseite.Models.AntwortCheckBox_Model
 
-<script src="~/js/otherFunctions.js"></script>
+<div class="container">
 
-<h4>Hier sollen CheckBoxen sein!!</h4>
-
-@foreach (var checkBox in @Model.CheckBoxen)
-{
-    if (checkBox.CheckBoxVal)
+    @foreach (var checkBox in @Model.CheckBoxen)
     {
-        <input type="checkbox" id="@checkBox.CheckBox_Id" checked /><label style="background-color:green">@checkBox.Content</label><br />
-    }
-    else
-    {
-        <input type="checkbox" id="@checkBox.CheckBox_Id" />@checkBox.Content<br />
+        if (checkBox.CheckBoxVal)
+        {
+            <div class="checkbox">
+                <label style="background-color:green"><input type="checkbox" id="@checkBox.CheckBox_Id" checked />@checkBox.Content</label>
+            </div>
+        }
+        else
+        {
+            <div class="checkbox">
+                <label><input type="checkbox" id="@checkBox.CheckBox_Id"/>@checkBox.Content</label>
+            </div>
+        }
+
     }
 
-}
+</div>

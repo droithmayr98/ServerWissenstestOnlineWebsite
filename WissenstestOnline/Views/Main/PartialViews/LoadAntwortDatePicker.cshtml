@@ -1,5 +1,33 @@
 @model WissenstestOnlineWebseite.Models.AntwortDatePicker_Model
 
-<script src="~/js/otherFunctions.js"></script>
+<script src="~/js/date.js"></script>
 
-<h4>Hier soll ein DatePicker sein!!</h4>
+<div class="container">
+    <h4>Datum:</h4>
+
+    @if (@Model.Datum.Month < 10)
+    {
+        if (@Model.Datum.Day < 10)
+        {
+            var monat = "0" + @Model.Datum.Month;
+            var tag = "0" + @Model.Datum.Day;
+            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Datum.Year-@monat-@tag" onchange="changeDatum(this.value, @Model.Datum.Day, @Model.Datum.Month, @Model.Datum.Year);" />
+        }
+        else
+        {
+            var monat = "0" + @Model.Datum.Month;
+            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Datum.Year-@monat-@Model.Datum.Day" onchange="changeDatum(this.value, @Model.Datum.Day, @Model.Datum.Month, @Model.Datum.Year);" />
+        }
+    }
+    else if (@Model.Datum.Day < 10)
+    {
+        var tag = "0" + @Model.Datum.Day;
+        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Datum.Year-@Model.Datum.Month-@tag" onchange="changeDatum(this.value, @Model.Datum.Day, @Model.Datum.Month, @Model.Datum.Year);" />
+    }
+    else
+    {
+        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Datum.Year-@Model.Datum.Month-@Model.Datum.Day" onchange="changeDatum(this.value, @Model.Datum.Day, @Model.Datum.Month, @Model.Datum.Year);" />
+    }
+
+
+</div>
