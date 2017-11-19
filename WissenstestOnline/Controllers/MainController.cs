@@ -162,11 +162,14 @@ namespace WissenstestOnline.Controllers
 
             var RightAufgabeNr = UserData.AufgabeNr + 1;
             var RightAufgabenCount = UserData.AufgabenCount;
+            var aktuellerTyp = "";
 
             if (UserData.AufgabenCount > 0)
             {
                 Aufgabe nexteAufgabe = UserData.Aufgaben[UserData.AufgabeNr];
                 UserData.AktuelleStation = nexteAufgabe.Station.Stationsname;
+                aktuellerTyp = UserData.Aufgaben[UserData.AufgabeNr].Antwort.Typ.Typ;
+                UserData.Aufgabe = nexteAufgabe;
             }
 
 
@@ -179,7 +182,8 @@ namespace WissenstestOnline.Controllers
                 ["stations"] = UserData.Stations,
                 ["aufgabenNr"] = RightAufgabeNr.ToString(),
                 ["aufgabenCount"] = RightAufgabenCount.ToString(),
-                ["aktuelleStation"] = UserData.AktuelleStation
+                ["aktuelleStation"] = UserData.AktuelleStation,
+                ["antwortTypPractice"] = aktuellerTyp
             };
             return Json(data);
         }
@@ -324,19 +328,28 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public string PressedButtonPractise()//Hier überfrüfen ob Antwort richtig ist, Was zu tun ist, Ajax Call
+        public string PressedButtonPractise(string buttonActionPractice)//Hier überfrüfen ob Antwort richtig ist, Was zu tun ist, Ajax Call
         {
-            UserData.AufgabeNr = UserData.AufgabeNr + 1;
+            if (buttonActionPractice.Equals("Weiter"))
+            {
+                UserData.AufgabeNr = UserData.AufgabeNr + 1;
 
-            if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
-            {
-                UserData.AufgabeNr = UserData.AufgabeNr - 1;
-                return "ok";
+                if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
+                {
+                    UserData.AufgabeNr = UserData.AufgabeNr - 1;
+                    return "Weiter";
+                }
+                else
+                {
+                    return "Weiter";
+                }
             }
-            else
-            {
-                return "ok";
+            else {
+                
+                return "Check";
             }
+
+            
 
         }
         //LoadAntwortPractise
@@ -422,5 +435,24 @@ namespace WissenstestOnline.Controllers
             antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
             return antwortRadioButtons_Model;
         }
+
+        public bool CheckAntwortText(string texteingabe) {
+            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
+            if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper())){
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        public string CheckAntwortSlider(string slidervalue) {
+
+            return "test2";
+        }
+
+
     }
 }

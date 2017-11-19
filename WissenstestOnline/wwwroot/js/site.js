@@ -1,14 +1,15 @@
-﻿$(document).ready(() => {
-    console.log('jQuery ready');
+﻿var global_bezirk = "";
+var global_ort = "";
+var global_stufe = "";
+var global_mode = "";
+var global_stations = "";
+var global_aufgabenNr = "";
+var global_aufgabenCount = "";
+var global_aktuelleStation = "";
+var global_antwortTypPractice = "";
 
-    var global_bezirk = "";
-    var global_ort = "";
-    var global_stufe = "";
-    var global_mode = "";
-    var global_stations = "";
-    var global_aufgabenNr = "";
-    var global_aufgabenCount = "";
-    var global_aktuelleStation = "";
+$(document).ready(() => {
+    console.log('jQuery ready');
 
 
     //Start Testeingaben
@@ -46,6 +47,7 @@
         global_aufgabenNr = map.aufgabenNr;
         global_aufgabenCount = map.aufgabenCount;
         global_aktuelleStation = map.aktuelleStation;
+        global_antwortTypPractice = map.antwortTypPractice;
 
 
         //Datenzugriff nur hier
@@ -61,6 +63,7 @@
         console.log(`AufgabenNr: ${global_aufgabenNr}`);
         console.log(`AufgabenCount: ${global_aufgabenCount}`);
         console.log(`AktuelleStation: ${global_aktuelleStation}`);
+        console.log(`AktuellerAntwortTypPractice: ${global_antwortTypPractice}`);
 
 
         //Aufgaben laden
@@ -92,7 +95,7 @@
             $('#loadZusatzinfo').load(url_info);
 
         }
-        else if (global_mode === "practise"){
+        else if (global_mode === "practise") {
             //Übungsmodus
 
             $('#aktuelleFrageCounterPractise').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
@@ -226,10 +229,67 @@ function WeiterAufgabeLearn() {
 
 function WeiterAufgabePractise() {
     console.log('enter WeiterAufgabePractise');
+    var buttonAction = $('#checkAufgabePractise').val();
+
     const url = '/Main/PressedButtonPractise';
-    $.post(url).then(result => {
+    $.post(url, {
+        buttonActionPractice: buttonAction
+    }).then(result => {
         console.log(`ServerReply WeiterAufgabePractise: ${result}`);
-        location.reload();
+        if (result == "Weiter") {
+            $('#checkAufgabePractise').val("Check");
+            location.reload();
+        } else {
+            //Check is Pressed
+            //Switch with a lot of ajax
+            switch (global_antwortTypPractice) {
+                case "A_T":
+                    var texteingabe = $('#textantwort').val();
+                    console.log(`Eingabe Text: ${texteingabe}`);
+                    //Ajax
+                    const url = '/Main/CheckAntwortText';
+                    $.post(url, {
+                        texteingabe: texteingabe
+                    }).then(result => {
+                        if (result) {
+                            $('#antwortTextEingabe').addClass('has-success');
+                            $('#antwortTextEingabe').addClass('has-feedback');
+                            $('#textantwort').attr("disabled", "true");
+                        } else {
+                            $('#antwortTextEingabe').addClass('has-error');
+                            $('#antwortTextEingabe').addClass('has-feedback');
+                            $('#textantwort').attr("disabled", "true");
+                        }
+                    });
+                    break;
+                case "A_S":
+                    var sliderTextEingabe = $('#textfield_slider').val();
+                    console.log(`Eingabe Slider: ${sliderTextEingabe}`);
+                    //Ajax
+                    const url2 = '/Main/CheckAntwortSlider';
+                    $.post(url2, {
+                        slidervalue: sliderTextEingabe
+                    }).then(result => {
+                        console.log(`Server CheckAntwortSlider: ${result}`);
+                    });
+                    break;
+                case "A_DP":
+                    var dateEingabe = $('#datepickerLearn').val();
+                    console.log(`Eingabe DatePicker: ${dateEingabe}`);
+                    //Ajax
+                    break;
+                case "A_CB:T":
+                    break;
+                case "A_RB:T":
+                    var rbEingabe = $('input[name=gruppe]:checked').val();
+                    console.log(`Eingabe RadioButton: ${rbEingabe}`);
+                    //Ajax
+                    break;
+                default:
+                    console.log("Noch nicht gemacht!");
+            }
+            $('#checkAufgabePractise').val("Weiter");
+        }
         //window.open('AufgabeUmgebungLearn');
         //self.close();
     });
