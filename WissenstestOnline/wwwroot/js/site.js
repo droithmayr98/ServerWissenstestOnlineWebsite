@@ -159,33 +159,31 @@ function UserCheck() {
 function StationInput() {
     console.log('enter StationInput');
 
-    try {
-        var selectedStations = $('#stations').val();
-        var selectedMode = $('input[name=mode]:checked').val();
+    var selectedStations = $('#stations').val();
+    var selectedMode = $('input[name=mode]:checked').val();
 
-        //Testausgaben
-        console.log('EingabeWerte Testlogs:');
-        console.log(`StationsCount: ${selectedStations.length}`);
-        console.log(`Modus: ${selectedMode}`);
+    //Testausgaben
+    console.log('EingabeWerte Testlogs:');
+    console.log(`StationsCount: ${selectedStations.length}`);
+    console.log(`Modus: ${selectedMode}`);
 
-        const url = '/Main/GlobalStationData';
-        $.post(url, {
-            stations: selectedStations,
-            mode: selectedMode
-        }).then(result => console.log(`ServerReply StationInput: ${result}`));
+    const url = '/Main/GlobalStationData';
+    $.post(url, {
+        stations: selectedStations,
+        mode: selectedMode
+    }).then(result => console.log(`ServerReply StationInput: ${result}`));
 
-
-        if (selectedMode === "learn") {
-            $('#StationSelectError').html('');
-            window.open('AufgabeUmgebungLearn');
-
-        } else {
-            $('#StationSelectError').html('');
-            window.open('AufgabeUmgebungPractise');
-        }
-
-    } catch (err) {
+    if (selectedStations == '') {
+        //Errormeldung
         $('#StationSelectError').html('Bitte wähle Sie mindestens eine Station aus!');
+    }
+    else if (selectedMode === "learn") {
+        $('#StationSelectError').html('');
+        window.open('AufgabeUmgebungLearn');
+
+    } else {
+        $('#StationSelectError').html('');
+        window.open('AufgabeUmgebungPractise');
     }
 
 
@@ -299,6 +297,8 @@ function WeiterAufgabePractise() {
                     });
                     break;
                 case "A_CB:T":
+                    //gehört noch gemacht
+                    //CheckBoxes holen für makieren und WERTE
 
                     const url4 = '/Main/CheckAntwortCheckBoxes';
                     $.post(url4, {
@@ -312,21 +312,20 @@ function WeiterAufgabePractise() {
                     });
                     break;
                 case "A_RB:T":
+
                     var rbEingabe = $('input[name=gruppe]:checked').val();
                     console.log(`Eingabe RadioButton: ${rbEingabe}`);
+                    //RadioButtons holen und markieren
+
                     //Ajax
                     const url5 = '/Main/CheckAntwortRadioButtons';
                     $.post(url5, {
                         rbValue: rbEingabe
                     }).then(result => {
                         if (result) {
-
                             $('#radioButtons').css("background-color", "green");
-                            $('#radioButtons').attr("disabled", "true");
                         } else {
-
                             $('#radioButtons').css("background-color", "red");
-                            $('#radioButtons').attr("disabled", "true");
                         }
                     });
                     break;

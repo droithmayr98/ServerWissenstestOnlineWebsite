@@ -442,7 +442,10 @@ namespace WissenstestOnline.Controllers
         {
             int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
             Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
-            if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
+            if (texteingabe == null) {
+                return false;
+            }
+            else if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
             {
                 return true;
             }
