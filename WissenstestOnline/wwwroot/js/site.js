@@ -247,8 +247,8 @@ function WeiterAufgabePractise() {
                     var texteingabe = $('#textantwort').val();
                     console.log(`Eingabe Text: ${texteingabe}`);
                     //Ajax
-                    const url = '/Main/CheckAntwortText';
-                    $.post(url, {
+                    const url1 = '/Main/CheckAntwortText';
+                    $.post(url1, {
                         texteingabe: texteingabe
                     }).then(result => {
                         if (result) {
@@ -270,20 +270,65 @@ function WeiterAufgabePractise() {
                     $.post(url2, {
                         slidervalue: sliderTextEingabe
                     }).then(result => {
-                        console.log(`Server CheckAntwortSlider: ${result}`);
+                        if (result) {
+                            $('#textfield_slider').css("background-color", "green");
+                            $('#textfield_slider').attr("disabled", "true");
+                            $('#sliderBar').attr("disabled", "true");
+                        } else {
+                            $('#textfield_slider').css("background-color", "red");
+                            $('#textfield_slider').attr("disabled", "true");
+                            $('#sliderBar').attr("disabled", "true");
+                        }
                     });
                     break;
                 case "A_DP":
-                    var dateEingabe = $('#datepickerLearn').val();
+                    var dateEingabe = $('#datepickerPractice').val();
                     console.log(`Eingabe DatePicker: ${dateEingabe}`);
                     //Ajax
+                    const url3 = '/Main/CheckAntwortDate';
+                    $.post(url3, {
+                        date: dateEingabe
+                    }).then(result => {
+                        if (result) {
+                            $('#datepickerPractice').css("background-color", "green");
+                            $('#datepickerPractice').attr("disabled", "true");
+                        } else {
+                            $('#datepickerPractice').css("background-color", "red");
+                            $('#datepickerPractice').attr("disabled", "true");
+                        }
+                    });
                     break;
                 case "A_CB:T":
+
+                    const url4 = '/Main/CheckAntwortCheckBoxes';
+                    $.post(url4, {
+                        rbValue: rbEingabe
+                    }).then(result => {
+                        if (result) {
+
+                        } else {
+
+                        }
+                    });
                     break;
                 case "A_RB:T":
                     var rbEingabe = $('input[name=gruppe]:checked').val();
                     console.log(`Eingabe RadioButton: ${rbEingabe}`);
                     //Ajax
+                    const url5 = '/Main/CheckAntwortRadioButtons';
+                    $.post(url5, {
+                        rbValue: rbEingabe
+                    }).then(result => {
+                        if (result) {
+
+                            $('#radioButtons').css("background-color", "green");
+                            $('#radioButtons').attr("disabled", "true");
+                        } else {
+
+                            $('#radioButtons').css("background-color", "red");
+                            $('#radioButtons').attr("disabled", "true");
+                        }
+                    });
                     break;
                 default:
                     console.log("Noch nicht gemacht!");

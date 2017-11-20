@@ -4,12 +4,15 @@
     <TargetFramework>net462</TargetFramework>
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
   </PropertyGroup>
-
+  
+  <!--
   <ItemGroup>
     <Content Include="wwwroot\js\date.js">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+  -->
+  
 <!--
   <ItemGroup>
     <Content Include="wwwroot\js\OtherFunctions.js" />

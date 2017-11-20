@@ -344,12 +344,13 @@ namespace WissenstestOnline.Controllers
                     return "Weiter";
                 }
             }
-            else {
-                
+            else
+            {
+
                 return "Check";
             }
 
-            
+
 
         }
         //LoadAntwortPractise
@@ -436,21 +437,73 @@ namespace WissenstestOnline.Controllers
             return antwortRadioButtons_Model;
         }
 
-        public bool CheckAntwortText(string texteingabe) {
+        //Überprüfen der Antwort im Übungsmodus
+        public bool CheckAntwortText(string texteingabe)
+        {
             int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
             Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
-            if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper())){
+            if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
 
         }
 
-        public string CheckAntwortSlider(string slidervalue) {
+        public bool CheckAntwortSlider(string slidervalue)
+        {
+            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == id_antwort);
+            if (antwortSliderObject.RightVal.ToString().Equals(slidervalue))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
-            return "test2";
+
+        }
+
+        public bool CheckAntwortRadioButtons(string rbValue)
+        {
+            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == id_antwort);
+            RadioButton rb = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
+            if (rb.Content.Equals(rbValue))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool CheckAntwortCheckBoxes()
+        {
+
+            return false;
+        }
+
+        public bool CheckAntwortDate(DateTime date)
+        {
+            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == id_antwort);
+            if (antwortDatePickerObject.Date.Equals(date))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
 
