@@ -1,11 +1,11 @@
 @model WissenstestOnlineWebseite.Models.AntwortCheckBox_Model
 
-<div class="container">
+<div class="container" id="checkBoxes">
 
     @foreach (var checkBox in @Model.CheckBoxen)
     {
         <div class="checkbox">
-            <label><input type="checkbox" id="@checkBox.CheckBox_Id" />@checkBox.Content</label>
+            <label id="cb_@checkBox.CheckBox_Id"><input type="checkbox" id="@checkBox.CheckBox_Id" class="checkboxInput" />@checkBox.Content</label>
         </div>
     }
 

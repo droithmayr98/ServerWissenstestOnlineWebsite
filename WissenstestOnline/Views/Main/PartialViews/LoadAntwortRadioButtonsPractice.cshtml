@@ -5,7 +5,7 @@
     @foreach (var radioButton in @Model.RadioButtons)
     {
         <div class="radio" id="radioButtons">
-            <label><input type="radio" name="gruppe" id="@radioButton.Radio_Id" value="@radioButton.Content" /> @radioButton.Content</label>
+            <label id="rb_@radioButton.Radio_Id"><input type="radio" name="gruppe" id="@radioButton.Radio_Id" value="@radioButton.Content" class="radioButtonInput" /> @radioButton.Content</label>
         </div>
     }
 

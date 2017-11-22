@@ -488,10 +488,40 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public bool CheckAntwortCheckBoxes()
+        public bool CheckAntwortCheckBoxes(string[] cbValue)
         {
+            bool erg = false;
 
-            return false;
+            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == id_antwort);
+            List<CheckBox> cb_List = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
+
+            for (int i = 0; i < cbValue.Length; i++) {
+                if (cbValue[i] == null)
+                {
+                    CheckBox cb_NOTchecked = cb_List[i];
+                    if (!cb_NOTchecked.CheckBoxVal)
+                    {
+                        erg = true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                }
+                else {
+                    CheckBox cb_checked = cb_List[i];
+                    if (cb_checked.CheckBoxVal)
+                    {
+                        erg = true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+
+            return erg;
         }
 
         public bool CheckAntwortDate(DateTime date)

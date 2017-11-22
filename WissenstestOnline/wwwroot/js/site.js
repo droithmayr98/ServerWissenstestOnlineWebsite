@@ -297,35 +297,77 @@ function WeiterAufgabePractise() {
                     });
                     break;
                 case "A_CB:T":
-                    //gehört noch gemacht
-                    //CheckBoxes holen für makieren und WERTE
+
+                    var input_cb = $('.checkboxInput');
+                    var checkedBoxes = new Array();
+                    for (var i = 0; i < input_cb.length; i++){
+                        var id_cb = input_cb.eq(i).attr('id');
+                        console.log(`CheckBox ID: ${id_cb}`);
+                        if ($(`#${id_cb}`).is(":checked")) {
+                            checkedBoxes[i] = input_cb.eq(i).attr('id');
+                        } else {
+                            checkedBoxes[i] = null;
+                        }
+
+                    }
 
                     const url4 = '/Main/CheckAntwortCheckBoxes';
                     $.post(url4, {
-                        rbValue: rbEingabe
+                        cbValue: checkedBoxes
                     }).then(result => {
                         if (result) {
 
+                            for (var i = 0; i < input_cb.length; i++) {
+                                var id_cb = input_cb.eq(i).attr('id');
+                                if ($(`#${id_cb}`).is(":checked")) {
+                                    $(`#cb_${id_cb}`).css("background-color", "green");
+                                }
+                                $(`#${id_cb}`).attr("disabled", "true");
+                            }
+
                         } else {
+
+                            for (var i = 0; i < input_cb.length; i++) {
+                                var id_cb = input_cb.eq(i).attr('id');
+                                if ($(`#${id_cb}`).is(":checked")) {
+                                    $(`#cb_${id_cb}`).css("background-color", "red");
+                                }
+                                $(`#${id_cb}`).attr("disabled", "true");
+                            }
 
                         }
                     });
                     break;
                 case "A_RB:T":
 
+                    var input_rb = $('.radioButtonInput');
+
+                    var id_selectedRB = $('input[name=gruppe]:checked').attr('id');
+                    console.log(`Selected RadioButton ID: ${id_selectedRB}`);
+
                     var rbEingabe = $('input[name=gruppe]:checked').val();
                     console.log(`Eingabe RadioButton: ${rbEingabe}`);
-                    //RadioButtons holen und markieren
-
                     //Ajax
                     const url5 = '/Main/CheckAntwortRadioButtons';
                     $.post(url5, {
                         rbValue: rbEingabe
                     }).then(result => {
                         if (result) {
-                            $('#radioButtons').css("background-color", "green");
+                            $(`#rb_${id_selectedRB}`).css("background-color", "green");
+
+                            for (var i = 0; i < input_rb.length; i++) {
+                                var id_rb = input_rb.eq(i).attr('id');
+                                $(`#${id_rb}`).attr("disabled", "true");
+                            }
+
                         } else {
-                            $('#radioButtons').css("background-color", "red");
+                            $(`#rb_${id_selectedRB}`).css("background-color", "red");
+
+                            for (var i = 0; i < input_rb.length; i++) {
+                                var id_rb = input_rb.eq(i).attr('id');
+                                $(`#${id_rb}`).attr("disabled", "true");
+                            }
+
                         }
                     });
                     break;
