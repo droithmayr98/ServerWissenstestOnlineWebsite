@@ -257,6 +257,8 @@ function WeiterAufgabePractise() {
                             $('#antwortTextEingabe').addClass('has-error');
                             $('#antwortTextEingabe').addClass('has-feedback');
                             $('#textantwort').attr("disabled", "true");
+
+                            $('#rightValText').show();
                         }
                     });
                     break;
@@ -276,6 +278,8 @@ function WeiterAufgabePractise() {
                             $('#textfield_slider').css("background-color", "red");
                             $('#textfield_slider').attr("disabled", "true");
                             $('#sliderBar').attr("disabled", "true");
+
+                            $('#rightValSlider').show();
                         }
                     });
                     break;
@@ -293,6 +297,8 @@ function WeiterAufgabePractise() {
                         } else {
                             $('#datepickerPractice').css("background-color", "red");
                             $('#datepickerPractice').attr("disabled", "true");
+
+                            $('#rightValDatePicker').show();
                         }
                     });
                     break;
@@ -335,6 +341,7 @@ function WeiterAufgabePractise() {
                                 $(`#${id_cb}`).attr("disabled", "true");
                             }
 
+                            $('#rightValCheckBox').show();
                         }
                     });
                     break;
@@ -367,6 +374,8 @@ function WeiterAufgabePractise() {
                                 var id_rb = input_rb.eq(i).attr('id');
                                 $(`#${id_rb}`).attr("disabled", "true");
                             }
+
+                            $('#rightValRadioButton').show();
 
                         }
                     });

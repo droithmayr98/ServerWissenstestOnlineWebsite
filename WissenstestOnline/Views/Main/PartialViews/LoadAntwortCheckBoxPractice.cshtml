@@ -9,4 +9,14 @@
         </div>
     }
 
+    <div style="display: none;" id="rightValCheckBox">
+        <h5><span style="font-weight: bold">Richtige Antwort: </span></h5>
+        <ul>
+            @foreach (var checkBox_rightVal in Model.CheckBoxen_RightVal)
+            {
+                <li>@checkBox_rightVal.Content</li>
+            }
+        </ul>
+    </div>
+
 </div>

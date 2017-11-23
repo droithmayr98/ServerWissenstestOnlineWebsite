@@ -9,5 +9,6 @@ namespace WissenstestOnlineWebseite.Models
     public class AntwortRadioButtons_Model
     {
         public List<RadioButton> RadioButtons { get; set; }
+        public RadioButton RadioButton_rightVal { get; set; }
     }
 }

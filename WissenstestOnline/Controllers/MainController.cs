@@ -426,6 +426,7 @@ namespace WissenstestOnline.Controllers
             Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
             var antwortCheckBox_Model = new AntwortCheckBox_Model();
             antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
+            antwortCheckBox_Model.CheckBoxen_RightVal = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id && x.CheckBoxVal == true).ToList();
             return antwortCheckBox_Model;
         }
 
@@ -434,6 +435,8 @@ namespace WissenstestOnline.Controllers
             Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
             var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
             antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
+            RadioButton rb_rightVal = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
+            antwortRadioButtons_Model.RadioButton_rightVal = rb_rightVal;
             return antwortRadioButtons_Model;
         }
 

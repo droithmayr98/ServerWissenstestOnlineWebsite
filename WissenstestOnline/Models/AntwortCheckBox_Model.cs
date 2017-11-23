@@ -9,5 +9,6 @@ namespace WissenstestOnlineWebseite.Models
     public class AntwortCheckBox_Model
     {
         public List<CheckBox> CheckBoxen { get; set; }
+        public List<CheckBox> CheckBoxen_RightVal { get; set; }
     }
 }

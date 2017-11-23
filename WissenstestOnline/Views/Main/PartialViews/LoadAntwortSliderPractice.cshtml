@@ -11,6 +11,10 @@
             <input style="color: black; font-weight: bold" class="form-control" type="text" id="textfield_slider" value="@Model.Min" oninput="changeTextFieldPractice(this.value, @Model.RightVal)" />
         </div>
     </div>
+
+    <div style="display: none;" id="rightValSlider">
+        <h5><span style="font-weight: bold">Richtige Antwort: </span>@Model.RightVal</h5>
+    </div>
     
 </div>
 
