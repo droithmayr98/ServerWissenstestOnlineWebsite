@@ -391,8 +391,7 @@ function WeiterAufgabePractise() {
             }
 
         }
-        //window.open('AufgabeUmgebungLearn');
-        //self.close();
+
     });
 }
 
