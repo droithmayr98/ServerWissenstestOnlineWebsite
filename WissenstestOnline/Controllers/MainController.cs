@@ -328,13 +328,13 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public string PressedButtonPractise(string buttonActionPractice)//Hier überfrüfen ob Antwort richtig ist, Was zu tun ist, Ajax Call
+        public string PressedButtonPractise(string buttonActionPractice)
         {
             if (buttonActionPractice.Equals("Weiter"))
             {
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
 
-                if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
+                if (UserData.AufgabeNr == UserData.AufgabenCount)
                 {
                     UserData.AufgabeNr = UserData.AufgabeNr - 1;
                     return "Weiter";
@@ -344,9 +344,12 @@ namespace WissenstestOnline.Controllers
                     return "Weiter";
                 }
             }
+            else if (buttonActionPractice.Equals("Auswertung"))
+            {
+                return "Auswertung";
+            }
             else
             {
-
                 return "Check";
             }
 
@@ -445,7 +448,8 @@ namespace WissenstestOnline.Controllers
         {
             int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
             Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
-            if (texteingabe == null) {
+            if (texteingabe == null)
+            {
                 return false;
             }
             else if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
@@ -499,7 +503,8 @@ namespace WissenstestOnline.Controllers
             Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == id_antwort);
             List<CheckBox> cb_List = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
 
-            for (int i = 0; i < cbValue.Length; i++) {
+            for (int i = 0; i < cbValue.Length; i++)
+            {
                 if (cbValue[i] == null)
                 {
                     CheckBox cb_NOTchecked = cb_List[i];
@@ -507,18 +512,21 @@ namespace WissenstestOnline.Controllers
                     {
                         erg = true;
                     }
-                    else {
+                    else
+                    {
                         return false;
                     }
 
                 }
-                else {
+                else
+                {
                     CheckBox cb_checked = cb_List[i];
                     if (cb_checked.CheckBoxVal)
                     {
                         erg = true;
                     }
-                    else {
+                    else
+                    {
                         return false;
                     }
                 }

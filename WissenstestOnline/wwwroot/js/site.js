@@ -237,9 +237,10 @@ function WeiterAufgabePractise() {
         if (result == "Weiter") {
             $('#checkAufgabePractise').val("Check");
             location.reload();
+        } else if (result == "Auswertung") {
+            window.open('ErgebnisOverview');
+            self.close();
         } else {
-            //Check is Pressed
-            //Switch with a lot of ajax
             switch (global_antwortTypPractice) {
                 case "A_T":
                     var texteingabe = $('#textantwort').val();
@@ -306,9 +307,8 @@ function WeiterAufgabePractise() {
 
                     var input_cb = $('.checkboxInput');
                     var checkedBoxes = new Array();
-                    for (var i = 0; i < input_cb.length; i++){
+                    for (var i = 0; i < input_cb.length; i++) {
                         var id_cb = input_cb.eq(i).attr('id');
-                        console.log(`CheckBox ID: ${id_cb}`);
                         if ($(`#${id_cb}`).is(":checked")) {
                             checkedBoxes[i] = input_cb.eq(i).attr('id');
                         } else {
@@ -383,7 +383,13 @@ function WeiterAufgabePractise() {
                 default:
                     console.log("Noch nicht gemacht!");
             }
-            $('#checkAufgabePractise').val("Weiter");
+
+            if (global_aufgabenNr == global_aufgabenCount) {
+                $('#checkAufgabePractise').val("Auswertung");
+            } else {
+                $('#checkAufgabePractise').val("Weiter");
+            }
+
         }
         //window.open('AufgabeUmgebungLearn');
         //self.close();
