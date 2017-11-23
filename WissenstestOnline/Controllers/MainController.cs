@@ -73,7 +73,9 @@ namespace WissenstestOnline.Controllers
 
         public IActionResult ErgebnisOverview()
         {
-            return View();
+            var ergebnis_Model = new Ergebnis_Model();
+            ergebnis_Model.Punkte = UserData.PracticePoints.ToString();
+            return View(ergebnis_Model);
         }
 
         public IActionResult ZusatzInfo()
@@ -389,11 +391,6 @@ namespace WissenstestOnline.Controllers
         }
 
 
-
-
-
-
-
         //ModelFüllMethoden
         public AntwortText_Model FillTextModel(int inhalt_id)
         {
@@ -454,6 +451,7 @@ namespace WissenstestOnline.Controllers
             }
             else if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
             {
+                UserData.PracticePoints++;
                 return true;
             }
             else
@@ -469,6 +467,7 @@ namespace WissenstestOnline.Controllers
             Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == id_antwort);
             if (antwortSliderObject.RightVal.ToString().Equals(slidervalue))
             {
+                UserData.PracticePoints++;
                 return true;
             }
             else
@@ -486,6 +485,7 @@ namespace WissenstestOnline.Controllers
             RadioButton rb = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
             if (rb.Content.Equals(rbValue))
             {
+                UserData.PracticePoints++;
                 return true;
             }
             else
@@ -531,7 +531,7 @@ namespace WissenstestOnline.Controllers
                     }
                 }
             }
-
+            UserData.PracticePoints++;
             return erg;
         }
 
@@ -541,6 +541,7 @@ namespace WissenstestOnline.Controllers
             Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == id_antwort);
             if (antwortDatePickerObject.Date.Equals(date))
             {
+                UserData.PracticePoints++;
                 return true;
             }
             else

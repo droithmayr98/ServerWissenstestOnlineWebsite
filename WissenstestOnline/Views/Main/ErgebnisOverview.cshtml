@@ -1,10 +1,12 @@
-﻿@{
+﻿@model WissenstestOnlineWebseite.Models.Ergebnis_Model
+
+@{
     ViewData["Title"] = "Ergebnis";
 }
 
 <div id="results" class="container">
     <h3>Egebnis Übersicht</h3>
-    <span>Punkte:</span>
+    <span>Punkte: @Model.Punkte</span><br />
     <a class="btn btn-primary" role="button" aria-pressed="true" id="closeResults">Zurück zur Stationsauswahl</a>
 </div>
 

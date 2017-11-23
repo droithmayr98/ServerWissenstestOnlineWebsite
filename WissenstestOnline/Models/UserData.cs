@@ -20,5 +20,6 @@ namespace WissenstestOnlineWebseite.Models
         public static string pressedButtonLearn { get; set; } = "";
         public static string AntwortTyp { get; set; } = "";
         public static Aufgabe Aufgabe { get; set; } = new Aufgabe();
+        public static int PracticePoints { get; set; } = 0;
     }
 }
