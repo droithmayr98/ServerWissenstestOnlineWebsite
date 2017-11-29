@@ -95,4 +95,11 @@ textarea {
     width: 150px;
 }
 
+#footer {
+    position: absolute;
+    bottom: 50px;
+    width: inherit;
+}
+
+
 /*Nav Bar Design*/

@@ -75,6 +75,9 @@ namespace WissenstestOnline.Controllers
         {
             var ergebnis_Model = new Ergebnis_Model();
             ergebnis_Model.Punkte = UserData.PracticePoints.ToString();
+            ergebnis_Model.Max_Punkte = UserData.AufgabenCount.ToString();
+            int percentRight = (int)Math.Round((double)(100 * UserData.PracticePoints) / UserData.AufgabenCount);
+            ergebnis_Model.ProzentRichtig = percentRight.ToString();
             return View(ergebnis_Model);
         }
 
