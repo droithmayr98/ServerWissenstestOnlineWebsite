@@ -1,62 +1,28 @@
-﻿@model WissenstestOnline.Models.Admin
-@{
+﻿@{
     ViewData["Title"] = "FF Wissenstest OÖ";
 }
-<div id="InputValueAdminLogin">
-        <h1>Admin Login</h1><br />
-
-        <h3 class="h5">Benutzername:</h3>
-        <input type="text" id="adminUsername"/>
-        <h5>Passwort:</h5><br />
-        <input type="password" id="adminPasswort"/><br />
-
-        <input type="button" value="Login" id="AdminLoginButton" class="btn btn-primary"/>
-        <a href="AdminOverview" class="btn btn-primary" role="button" aria-pressed="true" id="AdminLoginButton">Login</a>
 
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">    <!-- col-md-offset-4 -->
+            <form id="login" action="index.html" class="well">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" placeholder="Enter Username" id="adminUsername">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Enter Passowrd" id="adminPasswort">
+                </div>
+                <button type="button" class="btn btn-default" id="adminLoginButton">Login</button>
+            </form>
+            <p id="LoginError" style="color: red"></p>
+        </div>
     </div>
+</div>
 
+@section scripts{
 
-
-
-
-@*@using (Html.BeginForm())
-{
-    @Html.ValidationSummary(true, "Login failed. Check your login details.");
-    <div>
-        <fieldset>
-            <legend>Login</legend>
-            <div class="editor-label">
-                @Html.LabelFor(u => u.UserName)
-            </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(u => u.UserName)
-                @Html.ValidationMessageFor(u => u.UserName)
-            </div>
-            <div class="editor-label">
-                @Html.LabelFor(u => u.Password)
-            </div>
-            <div class="editor-field">
-                @Html.PasswordFor(u => u.Password)
-                @Html.ValidationMessageFor(u => u.Password)
-            </div>
-            
-            <input type="submit" value="Log In" />
-        </fieldset>
-    </div>
-}*@
-
-@*<div style="width: auto; background-color: #728ea7;">
-    @if (Request.IsAuthenticated)
-    {
-        <strong>@Html.Encode(User.Identity.Name)</strong>
-        @Html.ActionLink("Sign Out", "Logout", "User")
-    }
-    else
-    {
-        @Html.ActionLink("Register", "Register", "User")
-        <span> | </span>
-        @Html.ActionLink("Sign In", "Login", "User")
-    }
-</div>*@ 
-
+    <script src="~/js/admin.js"></script>
+}
