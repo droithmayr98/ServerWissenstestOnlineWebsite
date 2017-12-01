@@ -4,24 +4,44 @@
 
 
 <div class="container">
-    <form asp-controller="Main" asp-action="SelectedStation" method="post">
+    <div class="col-md-6">
+        <form asp-controller="Main" asp-action="SelectedStation" method="post">
 
+            <div id="InputValueSelectStation">
 
-        <div id="InputValueSelectStation">
+                <h4 id="headingStationen" class="h4">Stationen</h4>
 
-            <h4 id="headingStationen" class="h4">Stationen</h4>
+                <select multiple class="form-control" id="stations" asp-items="@ViewBag.Stationen"></select>
 
-            <select multiple class="form-control" id="stations" asp-items="@ViewBag.Stationen"></select>
+                <h4 class="h4">Modus</h4>
+                <span><input type="radio" name="mode" id="lern" value="learn" checked /> Lernen</span><br />
+                <span><input type="radio" name="mode" id="practise" value="practise" /> Üben</span><br />
 
-            <h4 class="h4">Modus</h4>
-            <span><input type="radio" name="mode" id="lern" value="learn" checked /> Lernen</span><br />
-            <span><input type="radio" name="mode" id="practise" value="practise" /> Üben</span><br />
+                <a class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
 
-            <a class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
+            </div>
 
+            <p id="StationSelectError" style="color: red"></p>
+
+        </form>
+    </div>
+
+    <div class="col-md-6">
+
+        <!--Kurzinfos-->
+        <div class="well" id="kurzinfos">
+            <h3 class="h3" id="headingKurzinfos">Kurzinfos</h3>
+            <ul>
+                <li>Hier steht eine Kurzinformation!</li>
+                <li>Hier steht eine Kurzinformation!</li>
+                <li>Hier steht eine Kurzinformation!</li>
+                <li>Hier steht eine Kurzinformation!</li>
+                <li>Hier steht eine Kurzinformation!</li>
+                <li>Hier steht eine Kurzinformation!</li>
+            </ul>
         </div>
 
-        <p id="StationSelectError" style="color: red"></p>
+    </div>
 
-    </form>
+
 </div>

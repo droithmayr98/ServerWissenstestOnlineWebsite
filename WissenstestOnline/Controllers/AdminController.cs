@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WissenstestOnline.Models;
 using DB_lib;
 using Microsoft.Extensions.Logging;
 using DB_lib.Tables;
+using WissenstestOnlineWebseite.Models;
 
 namespace WissenstestOnline.Controllers
 {
@@ -26,12 +26,18 @@ namespace WissenstestOnline.Controllers
         public IActionResult Login()
         {
             logger.LogInformation("Testlog Admincontroller");
+
             return View();
         }
 
         public IActionResult AdminOverview()
         {
-            return View();
+
+            List<Aufgabe> alle_aufgaben = test_db.Aufgaben.Select(x => x).ToList();
+            var adminOverwiew_model = new AdminOverview_Model();
+            adminOverwiew_model.Aufgaben = alle_aufgaben;
+
+            return View(adminOverwiew_model);
         }
 
         public IActionResult CreateNewAdmin()
