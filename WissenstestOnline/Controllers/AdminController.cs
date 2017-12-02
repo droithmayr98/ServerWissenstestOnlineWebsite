@@ -7,6 +7,7 @@ using DB_lib;
 using Microsoft.Extensions.Logging;
 using DB_lib.Tables;
 using WissenstestOnlineWebseite.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WissenstestOnline.Controllers
 {
@@ -37,7 +38,18 @@ namespace WissenstestOnline.Controllers
             var adminOverwiew_model = new AdminOverview_Model();
             adminOverwiew_model.Aufgaben = alle_aufgaben;
 
+            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<SelectListItem> stationsList = new List<SelectListItem>();
+            stationsList.Add(new SelectListItem { Text = "keine ausgewählt", Value = "noItemSelected"});
+            foreach (Station s in stations)
+            {
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                stationsList.Add(stationItem);
+            }
+            adminOverwiew_model.Stationen = stationsList;
+
             return View(adminOverwiew_model);
+
         }
 
         public IActionResult CreateNewAdmin()
