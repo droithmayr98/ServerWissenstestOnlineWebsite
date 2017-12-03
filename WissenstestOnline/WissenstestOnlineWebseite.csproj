@@ -4,6 +4,10 @@
     <TargetFramework>net462</TargetFramework>
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\css\index.scss" />
+  </ItemGroup>
   
   <!--
   <ItemGroup>
