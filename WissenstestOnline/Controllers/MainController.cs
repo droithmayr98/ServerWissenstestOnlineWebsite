@@ -37,6 +37,7 @@ namespace WissenstestOnline.Controllers
 
         public IActionResult Start()
         {
+            System.Threading.Thread.Sleep(3000);
 
             //DB_ConnectionTest
             var test = test_db.Bezirke.Count();
@@ -447,9 +448,12 @@ namespace WissenstestOnline.Controllers
         public bool CheckAntwortText(string texteingabe)
         {
             int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            
             Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
             if (texteingabe == null)
             {
+
+
                 return false;
             }
             else if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))

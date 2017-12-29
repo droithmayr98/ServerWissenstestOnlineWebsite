@@ -48,6 +48,9 @@ namespace WissenstestOnline.Controllers
             }
             adminOverwiew_model.Stationen = stationsList;
 
+            List<Admintable> alle_admins = test_db.Admins.Select(x => x).ToList();
+            adminOverwiew_model.Admins = alle_admins;
+
             return View(adminOverwiew_model);
 
         }
@@ -79,6 +82,11 @@ namespace WissenstestOnline.Controllers
             else {
                 return "ok";
             }
+        }
+
+        public string StationSelected(string station_nr) {
+
+            return null;
         }
 
 

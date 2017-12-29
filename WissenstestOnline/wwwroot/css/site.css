@@ -101,5 +101,24 @@ textarea {
     width: inherit;
 }
 
+#adminListAufgaben ul {
+    height: 200px;
+    width: 100%;
+}
+
+#adminListAufgaben ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#adminListAdmins ul {
+    height: 200px;
+    width: 100%;
+}
+
+#adminListAdmins ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
 
 /*Nav Bar Design*/

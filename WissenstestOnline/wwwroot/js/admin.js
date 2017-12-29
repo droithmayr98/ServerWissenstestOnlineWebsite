@@ -1,11 +1,15 @@
 ﻿$(document).ready(() => {
     console.log('jQuery Admin ready');
 
+    //Anmeldevorgang
     $('#adminLoginButton').on('click', CheckAdminInfo);
 
     //Testdaten
     $('#adminUsername').val('testadmin1');
     $('#adminPasswort').val('hallo123');
+
+    //Suchtrigger
+    $('#stations_admin').on('click', StationSelected);
 
 
 });
@@ -33,6 +37,18 @@ function CheckAdminInfo() {
             window.open('AdminOverview');
             self.close();
         }
-    });
+        });
 
+}
+
+function StationSelected() {
+    var selectedStation = $('#stations_admin').val();
+    console.log(`Selected Station: ${selectedStation}`);
+
+    if (selectedStation != null) {
+        const url = '/Admin/StationSelected';
+
+
+
+    }
 }

@@ -45,28 +45,30 @@
     </div>
     <hr />
 
-    @section footerPractice{ 
-    <div class="row">
-        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-            <input type="button" id="zusatzinfoPractise" value="?" class="btn btn-info showZusatzinfo" />
+    @section footerPractice{
+        <div class="row">
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+                <input type="button" id="zusatzinfoPractise" value="?" class="btn btn-info showZusatzinfo" />
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+                <p id="aktuelleStationPractise">Station</p>
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-4">
+                <p id="aktuelleFrageCounterPractise">88/88</p>
+            </div>
         </div>
-        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-            <p id="aktuelleStationPractise">Station</p>
-        </div>
-        <div class="col-md-4 col-lg-4 col-sm-4">
-            <p id="aktuelleFrageCounterPractise">88/88</p>
-        </div>
-    </div>
 
-    <div class="row" style="margin-top: 5px">
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
-            <input type="button" id="cancelAufgabePractise" value="Abbrechen" class="btn btn-danger cancel" />
+        <div class="row" style="margin-top: 5px">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                <input type="button" id="cancelAufgabePractise" value="Abbrechen" class="btn btn-danger cancel" />
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                <div class="btn-group" id="buttonsPracticemode" style="float:right;">
+                    <input type="button" id="lastAufgabePractice" value="Zurück" class="btn btn-warning" />
+                    <input type="button" id="checkAufgabePractise" value="Check" class="btn btn-success" />
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
-                <input type="button" id="checkAufgabePractise" value="Check" class="btn btn-success" style="float:right;" />
-
-        </div>
-    </div>
     }
 
 

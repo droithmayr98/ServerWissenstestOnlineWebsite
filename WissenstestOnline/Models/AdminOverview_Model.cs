@@ -11,5 +11,6 @@ namespace WissenstestOnlineWebseite.Models
     {
         public List<Aufgabe> Aufgaben { get; set; }
         public List<SelectListItem> Stationen { get; set; }
+        public List<Admintable> Admins { get; set; }
     }
 }

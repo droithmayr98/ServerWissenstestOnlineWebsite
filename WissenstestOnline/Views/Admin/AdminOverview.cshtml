@@ -5,7 +5,7 @@
 }
 <div class="container">
 
-   <h1>Willkommen</h1>
+    <h1>Willkommen</h1>
 
     <!-- UL LI Struktur Liste-->
     <div class="container well">
@@ -18,26 +18,54 @@
 
 
                 <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;">
-                <span class="input-group-btn">
+                <span class="input-group-btn" style="float:left;">
                     <button class="btn btn-info btn" type="button">
-                        <i class="glyphicon glyphicon-search"></i>
+                        <span class="glyphicon glyphicon-search"></span>
                     </button>
                 </span>
+                <button class="btn btn-success" style="margin-left: 35px">+ neue Aufgabe erstellen</button>    
             </div>
         </form>
 
+        <nav id="adminListAufgaben">
             <ul class="list-group">
                 @foreach (var aufgabe in Model.Aufgaben)
                 {
-                    <li class="list-group-item">@aufgabe.Frage.Fragetext</li>
+                    <li class="list-group-item"><div>@aufgabe.Frage.Fragetext
+                        <button class="btn btn-danger" style="float:right"><span class="glyphicon glyphicon-remove"></span></button>
+                         <button class="btn btn-warning" style="float:right"><span class="glyphicon glyphicon-pencil"></span></button>
+                         <button class="btn btn-info" style="float:right"><span class="glyphicon glyphicon-info-sign"></span></button>
+                         </div></li>    
                 }
+                
             </ul>
-
-</div>
-
-    <div class="container well">
-        <h3>Adminübersicht</h3>
+        </nav>
 
     </div>
 
+    <div class="container well">
+        <h3>Adminübersicht</h3>
+        <nav id="adminListAdmins">
+            <ul class="list-group">
+                @foreach (var admin in Model.Admins)
+                {
+                    <li class="list-group-item">
+                        <div>
+                            @admin.Username
+                        <button class="btn btn-danger" style="float:right"><span class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-warning" style="float:right"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-info" style="float:right"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    </div>
+                </li>
+                }
+
+            </ul>
+        </nav>
 </div>
+
+</div>
+
+@section scripts{
+
+    <script src="~/js/admin.js"></script>
+}

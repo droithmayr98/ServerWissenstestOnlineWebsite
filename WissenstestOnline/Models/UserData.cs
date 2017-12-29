@@ -21,5 +21,7 @@ namespace WissenstestOnlineWebseite.Models
         public static string AntwortTyp { get; set; } = "";
         public static Aufgabe Aufgabe { get; set; } = new Aufgabe();
         public static int PracticePoints { get; set; } = 0;
+
+        public static List<Antwort> AufgabenInputs { get; set; } = new List<Antwort>();
     }
 }
