@@ -33,7 +33,7 @@ $(document).ready(() => {
     //Zurück
     $('#lastAufgabeLearn').on('click', ZurueckAufgabeLearn);
     $('#lastAufgabePractice').on('click', ZurueckAufgabePractice);
-    
+
 
     //Daten von C# Code
     const url = '/Main/GetGlobalData';
@@ -248,8 +248,14 @@ function WeiterAufgabePractise() {
             //Button auf "Check" setzen und neuladen
             $('#checkAufgabePractise').val("Check");
             location.reload();
-            //Auswertung anzeigen
-        } else if (result == "Auswertung") {
+
+        }
+        //zurück zur letzten Aufgabe
+        else if (result == "zurueck") {
+            location.reload();
+        }
+        //Auswertung anzeigen
+        else if (result == "Auswertung") {
             window.open('ErgebnisOverview');
             self.close();
         } else {
@@ -420,12 +426,17 @@ function ZurueckAufgabeLearn() {
     }).then(result => {
         console.log(`ServerReply ZurueckAufgabeLearn: ${result}`);
         location.reload();
-        //window.open('AufgabeUmgebungLearn');
-        //self.close();
     });
 
 }
 
 function ZurueckAufgabePractice() {
-
+    console.log('enter ZurueckAufgabePractice');
+    const url = '/Main/PressedButtonPractise';
+    $.post(url, {
+        buttonActionPractice: "zurueck"
+    }).then(result => {
+        console.log(`ServerReply ZurueckAufgabeLearn: ${result}`);
+        location.reload();
+    });
 }

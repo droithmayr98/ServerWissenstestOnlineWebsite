@@ -368,6 +368,20 @@ namespace WissenstestOnline.Controllers
                 {
                     return "Weiter";
                 }
+
+            }
+            //Bei "Zurück" wird UserData gesenkt
+            else if (buttonActionPractice.Equals("zurueck")) {
+                UserData.AufgabeNr = UserData.AufgabeNr - 1;
+                if (UserData.AufgabeNr < 0)
+                {
+                    UserData.AufgabeNr = UserData.AufgabeNr + 1;
+                    return "zurueck";
+                }
+                else
+                {
+                    return "zurueck";
+                }
             }
             //andere Rückmeldung
             else if (buttonActionPractice.Equals("Auswertung"))
