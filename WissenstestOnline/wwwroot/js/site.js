@@ -215,8 +215,13 @@ function ShowZusatzinfo() {
 
 function CloseResults() {
     console.log('enter CloseResults');
-    window.open('SelectStation');
-    self.close();
+    //Werte werden im C# Code auf Ausgangswert gesetzt, Fenster wird geschlossen
+    const url = '/Main/CancelAufgabe';
+    $.post(url).then(result => {
+        console.log(`ServerReply CloseResults: ${result}`);
+        window.open('SelectStation');
+        self.close();
+    });
 }
 
 function WeiterAufgabeLearn() {

@@ -14,7 +14,6 @@ namespace WissenstestOnline.Controllers
 {
     public class MainController : Controller
     {
-
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
@@ -314,6 +313,8 @@ namespace WissenstestOnline.Controllers
             UserData.Aufgaben = new List<Aufgabe>();
             UserData.AufgabeNr = 0;
             UserData.AufgabenCount = 0;
+            UserData.lastPracticeAufgabeCorrect = false;
+            UserData.PracticePoints = 0;
             return "ok";
         }
 
@@ -358,6 +359,10 @@ namespace WissenstestOnline.Controllers
             if (buttonActionPractice.Equals("Weiter"))
             {
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
+                if (UserData.lastPracticeAufgabeCorrect) {
+                    UserData.PracticePoints++;
+                    UserData.lastPracticeAufgabeCorrect = false;
+                }
                 //ArrayOutOfBounds vermeiden
                 if (UserData.AufgabeNr == UserData.AufgabenCount)
                 {
@@ -499,7 +504,7 @@ namespace WissenstestOnline.Controllers
             }
             else if (antwortTextObject.Text.ToUpper().Equals(texteingabe.ToUpper()))
             {
-                UserData.PracticePoints++;
+                UserData.lastPracticeAufgabeCorrect = true;
                 return true;
             }
             else
@@ -515,7 +520,7 @@ namespace WissenstestOnline.Controllers
             Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == id_antwort);
             if (antwortSliderObject.RightVal.ToString().Equals(slidervalue))
             {
-                UserData.PracticePoints++;
+                UserData.lastPracticeAufgabeCorrect = true;
                 return true;
             }
             else
@@ -533,7 +538,7 @@ namespace WissenstestOnline.Controllers
             RadioButton rb = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
             if (rb.Content.Equals(rbValue))
             {
-                UserData.PracticePoints++;
+                UserData.lastPracticeAufgabeCorrect = true;
                 return true;
             }
             else
@@ -579,7 +584,7 @@ namespace WissenstestOnline.Controllers
                     }
                 }
             }
-            UserData.PracticePoints++;
+            UserData.lastPracticeAufgabeCorrect = true;
             return erg;
         }
 
@@ -589,7 +594,7 @@ namespace WissenstestOnline.Controllers
             Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == id_antwort);
             if (antwortDatePickerObject.Date.Equals(date))
             {
-                UserData.PracticePoints++;
+                UserData.lastPracticeAufgabeCorrect = true;
                 return true;
             }
             else
