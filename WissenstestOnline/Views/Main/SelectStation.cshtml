@@ -2,32 +2,35 @@
     ViewData["Title"] = "Stationsauswahl";
 }
 
+@model WissenstestOnlineWebseite.Models.SelectStation_Model
 
 <div class="container">
+    <!--Left Part of the page-->
     <div class="col-md-6">
         <form asp-controller="Main" asp-action="SelectedStation" method="post">
 
             <div id="InputValueSelectStation">
+                <div class="form-group">
+                    <h4 id="headingStationen">Stationen</h4>
+                    <select multiple class="form-control" id="stations" asp-items="@Model.StationsList"></select>
+                </div>
+                <div class="form-group">
+                    <h4 class="h4">Modus</h4>
+                    <span><input type="radio" name="mode" id="lern" value="learn" checked /> Lernen</span><br />
+                    <span><input type="radio" name="mode" id="practise" value="practise" /> Üben</span><br />
+                </div>
 
-                <h4 id="headingStationen" class="h4">Stationen</h4>
-
-                <select multiple class="form-control" id="stations" asp-items="@ViewBag.Stationen"></select>
-
-                <h4 class="h4">Modus</h4>
-                <span><input type="radio" name="mode" id="lern" value="learn" checked /> Lernen</span><br />
-                <span><input type="radio" name="mode" id="practise" value="practise" /> Üben</span><br />
-
-                <a class="btn btn-primary" role="button" aria-pressed="true" id="SelectStationButton">Starte Quiz</a>
+                <a class="btn btn-primary" role="button" id="SelectStationButton">Starte Quiz</a>
 
             </div>
 
-            <p id="StationSelectError" style="color: red"></p>
+            <p id="StationSelectError" class="errorMsg"></p>
 
         </form>
     </div>
 
+    <!--Right Part of the page-->
     <div class="col-md-6">
-
         <!--Kurzinfos-->
         <div class="well" id="kurzinfos">
             <h3 class="h3" id="headingKurzinfos">Kurzinfos</h3>
@@ -40,7 +43,6 @@
                 <li>Hier steht eine Kurzinformation!</li>
             </ul>
         </div>
-
     </div>
 
 

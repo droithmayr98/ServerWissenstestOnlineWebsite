@@ -1,8 +1,10 @@
-﻿@model WissenstestOnlineWebseite.Models.Ergebnis_Model
-
-@{
+﻿@{
     ViewData["Title"] = "Ergebnis";
 }
+
+@model WissenstestOnlineWebseite.Models.Ergebnis_Model
+
+
 
 <div id="results" class="container">
     <h3>Egebnis Übersicht</h3>
@@ -10,6 +12,6 @@
     <h4>Maximal erreichbare Punkte: @Model.Max_Punkte</h4>
     <h4>Erreichte Punkte: @Model.Punkte</h4>
     <h4>Ereichte Punkte in Prozent: @Model.ProzentRichtig%</h4><br />
-    <a class="btn btn-primary" role="button" aria-pressed="true" id="closeResults" style="margin-top: 10px;">Zurück zur Stationsauswahl</a>
+    <a class="btn btn-primary" role="button" id="closeResults">Zurück zur Stationsauswahl</a>
 </div>
 

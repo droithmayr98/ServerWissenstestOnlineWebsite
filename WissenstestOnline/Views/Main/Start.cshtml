@@ -2,46 +2,25 @@
     ViewData["Title"] = "FF Wissenstest OÖ Startseite";
 }
 
+@model WissenstestOnlineWebseite.Models.Start_Model
 
 <div class="container">
-
     <div class="row">
+
+        <!--Left Part of the page-->
         <div class="col-md-6">
 
-            <!--Eingabemaske-->
-            <h2 class="h2" id="headingWissenstest">Wissenstest Online</h2>
+            <h2 id="headingWissenstest">Wissenstest Online</h2>
 
-            <form>
-
+            <form asp-controller="Main" asp-action="Start" method="post">
                 <div class="form-group" id="InputValueLogin">
                     <h4 id="headingBezirk">Bezirk</h4>
-
-                    <select id="bezirkSelect" class="form-control">
-                        <!--hardcoded -->
-                        <option selected value="Braunau">Braunau</option>
-                        <option value="Eferding">Eferding</option>
-                        <option value="Freistadt">Freistadt</option>
-                        <option value="Gmunden">Gmunden</option>
-                        <option value="Grieskirchen">Grieskirchen</option>
-                        <option value="Kirchdorf">Kirchdorf</option>
-                        <option value="Linz">Linz</option>
-                        <option value="Linz_Land">Linz-Land</option>
-                        <option value="Perg">Perg</option>
-                        <option value="Ried">Ried</option>
-                        <option value="Steyr">Steyr</option>
-                        <option value="Steyr_Land">Steyr-Land</option>
-                        <option value="Rohrbach">Rohrbach</option>
-                        <option value="Schärding">Schärding</option>
-                        <option value="Urfahr_Umgebung">Urfahr-Umgebung</option>
-                        <option value="Vöcklabruck">Vöcklabruck</option>
-                        <option value="Wels">Wels</option>
-                        <option value="Wels_Land">Wels-Land</option>
-                    </select>
+                    <select id="bezirkSelect" class="form-control" asp-items="@Model.BezikeList"></select>
                 </div>
 
                 <div class="form-group">
                     <h4 id="headingFeuerwehr">Feuerwehr</h4>
-                    <input type="text" id="FeuerwehrEingabe" class="form-control" placeholder="FF eingeben" />
+                    <input type="text" id="FeuerwehrEingabe" class="form-control" placeholder="FF eingeben"/>
                 </div>
 
 
@@ -50,13 +29,13 @@
 
                     <div class="btn-group" data-toggle="buttons" id="stufen">
                         <label class="btn btn-secondary active">
-                            <input type="radio" name="stufe" id="StufeBronze" autocomplete="off" value="Bronze" checked>Bronze
+                            <input type="radio" name="stufe" id="StufeBronze" value="Bronze" checked>Bronze
                         </label>
                         <label class="btn btn-secondary">
-                            <input type="radio" name="stufe" id="StufeSilver" autocomplete="off" value="Silber">Silver
+                            <input type="radio" name="stufe" id="StufeSilver" value="Silber">Silver
                         </label>
                         <label class="btn btn-secondary">
-                            <input type="radio" name="stufe" id="StufeGold" autocomplete="off" value="Gold">Gold
+                            <input type="radio" name="stufe" id="StufeGold" value="Gold">Gold
                         </label>
                     </div>
 
@@ -64,28 +43,17 @@
 
                 <a class="btn btn-primary" role="button" id="UserLoginButton">Weiter</a>
 
-                <p id="UserLoginError" style="color: red"></p>
-
-                <!--
-                <div class="alert alert-danger alert-dismissible" role="alert" id="UserLoginError">
-                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                </div>
-                    -->
-
-                <!--
-                <hr />
-                <h4>Test: @ViewBag.test</h4>
-                    -->
+                <p id="UserLoginError" class="errorMsg"></p>
 
             </form>
 
-
         </div>
-        <div class="col-md-6">
 
-            <!--Kurzinfos-->
+
+        <!--Right Part of the page-->
+        <div class="col-md-6">
             <div class="well" id="kurzinfos">
-                <h3 class="h3" id="headingKurzinfos">Kurzinfos</h3>
+                <h3 id="headingKurzinfos">Kurzinfos</h3>
                 <ul>
                     <li>Hier steht eine Kurzinformation!</li>
                     <li>Hier steht eine Kurzinformation!</li>
@@ -95,12 +63,8 @@
                     <li>Hier steht eine Kurzinformation!</li>
                 </ul>
             </div>
-
         </div>
+
     </div>
-
-
-
-
 
 </div>

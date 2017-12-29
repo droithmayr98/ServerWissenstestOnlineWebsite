@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DB_lib\DB_lib.csproj" />
-    <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Views\Main\PartialViews\LoadFrageText.cshtml">

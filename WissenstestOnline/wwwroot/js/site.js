@@ -1,4 +1,5 @@
-﻿var global_bezirk = "";
+﻿//Globale Variablen werden angelegt und initialisiert
+var global_bezirk = "";
 var global_ort = "";
 var global_stufe = "";
 var global_mode = "";
@@ -8,35 +9,33 @@ var global_aufgabenCount = "";
 var global_aktuelleStation = "";
 var global_antwortTypPractice = "";
 
+//jquery - Aufruf bei Seitenstart wo Skript angegeben ist
 $(document).ready(() => {
-    console.log('jQuery ready');
+    console.log('jQuery Testausgabe --> site.js');
 
 
-    //Start Testeingaben
+    //Testwerte
     $('#bezirkSelect').val('Schärding');
     $('#FeuerwehrEingabe').val('Eggerding');
-    //Ende Testeingaben
 
-    //Click Events
+
+    //CLICK EVENTS
     $('#UserLoginButton').on('click', UserCheck);
     $('#SelectStationButton').on('click', StationInput);
-
-    //Cancel
+    $('.showZusatzinfo').on('click', ShowZusatzinfo);
+    //Cancel/Close
     $('.cancel').on('click', CancelAufgabe);
-
+    $('#closeResults').on('click', CloseResults);
+    $('#closeZusatzinfo').on('click', CloseZusatzinfo);
     //Weiter
     $('#checkAufgabeLearn').on('click', WeiterAufgabeLearn);
     $('#checkAufgabePractise').on('click', WeiterAufgabePractise);
     //Zurück
     $('#lastAufgabeLearn').on('click', ZurueckAufgabeLearn);
+    $('#lastAufgabePractice').on('click', ZurueckAufgabePractice);
+    
 
-    //Zusatzinfo Click
-    $('.showZusatzinfo').on('click', ShowZusatzinfo);
-
-    $('#closeResults').on('click', CloseResults);
-    $('#closeZusatzinfo').on('click', CloseZusatzinfo);
-
-
+    //Daten von C# Code
     const url = '/Main/GetGlobalData';
     $.getJSON(url).then(map => {
         global_bezirk = map.bezirk;
@@ -50,9 +49,7 @@ $(document).ready(() => {
         global_antwortTypPractice = map.antwortTypPractice;
 
 
-        //Datenzugriff nur hier
-        //Methoden hier drinnen
-
+        //Datenzugriff nur im then-Bereich
         //Global Testlogs
         console.log('Global Data Testlogs:');
         console.log(`Bezirk: ${global_bezirk}`);
@@ -73,15 +70,7 @@ $(document).ready(() => {
             $('#aktuelleFrageCounterLearn').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
             $('#aktuelleStationLearn').html(global_aktuelleStation);
 
-            //funktioniert
-            const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
-            $('#FrageLearn').load(url_frage, () => {
-                const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
-                $('#AntwortLearn').load(url_antwort);
-            }
-            );
-
-            //Problem: Beides kann nicht aufgerufen werden
+            //Problem: Beides kann nicht hintereinander aufgerufen werden
             //soll mit include funktionieren
             //INCLUDE selektiert nicht die FroreignKeys der FroreignKeys
 
@@ -91,24 +80,33 @@ $(document).ready(() => {
             const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
             $('#AntwortLearn').load(url_antwort);*/
 
+            //Frage zuerst laden, danach Antwort --> aktuelle Lösung
+            const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
+            $('#FrageLearn').load(url_frage, () => {
+                const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
+                $('#AntwortLearn').load(url_antwort);
+            }
+            );
+
+            //Zusatzinfo laden
             const url_info = '/Main/LoadZusatzinfo';
             $('#loadZusatzinfo').load(url_info);
 
         }
         else if (global_mode === "practise") {
-            //Übungsmodus
 
+            //Update AufgabeUmgebungPractice
             $('#aktuelleFrageCounterPractise').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
             $('#aktuelleStationPractise').html(global_aktuelleStation);
 
-
+            //Vorgansweise wie oben
             const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
             $('#FragePractise').load(url_frage, () => {
                 const url_antwort = `/Main/LoadAntwortPractise?aufgabenNr=${global_aufgabenNr}`;
                 $('#AntwortPractise').load(url_antwort);
             });
 
-
+            //Zusatzinfo laden
             const url_info = '/Main/LoadZusatzinfo';
             $('#loadZusatzinfo').load(url_info);
         }
@@ -121,33 +119,37 @@ $(document).ready(() => {
 });
 
 
-
+//Click Events
 function UserCheck() {
     console.log('enter UserCheck');
 
+    //Eingabedaten von View holen
     var selectedBezirk = $('#bezirkSelect').val();
     var ff = $('#FeuerwehrEingabe').val();
     var selectedStufe = $('input[name=stufe]:checked').val();
 
-
-    //Testausgaben
-    console.log('EingabeWerte Testlogs:');
+    //Testausgaben der Eingabedaten
+    console.log('EingabeWerte Testlogs Start:');
     console.log(`Bezirk: ${selectedBezirk}`);
     console.log(`FF: ${ff}`);
     console.log(`Stufe: ${selectedStufe}`);
 
 
     if (ff === "") {
+        //Fehlermeldung
         $('#UserLoginError').html('Bitte geben Sie ihre Feuerwehr an!');
     } else {
+        //Prüfen der Eingabewerte
         const url = "/Main/CheckUserInfo";
         $.post(url, { bezirk: selectedBezirk, ort: ff, stufe: selectedStufe })
             .then(reply => {
                 console.log(`ServerReply CheckUserInfo: ${reply}`);
                 if (reply === 'ok') {
+                    //Öffnen der SelectStation Seite
                     $('#UserLoginError').html('');
                     window.open('Main/SelectStation');
                 } else {
+                    //Fehlermeldung
                     $('#UserLoginError').html('Bitte überprüfen Sie ihre Eingabedaten!');
                 }
             });
@@ -159,14 +161,16 @@ function UserCheck() {
 function StationInput() {
     console.log('enter StationInput');
 
+    //Eingabedaten von View holen
     var selectedStations = $('#stations').val();
     var selectedMode = $('input[name=mode]:checked').val();
 
-    //Testausgaben
-    console.log('EingabeWerte Testlogs:');
+    //Testausgaben der Eingabedaten
+    console.log('EingabeWerte Testlogs SelectStation:');
     console.log(`StationsCount: ${selectedStations.length}`);
     console.log(`Modus: ${selectedMode}`);
 
+    //Daten in C# Code übergeben
     const url = '/Main/GlobalStationData';
     $.post(url, {
         stations: selectedStations,
@@ -174,9 +178,10 @@ function StationInput() {
     }).then(result => console.log(`ServerReply StationInput: ${result}`));
 
     if (selectedStations == '') {
-        //Errormeldung
+        //Fehlermeldung
         $('#StationSelectError').html('Bitte wähle Sie mindestens eine Station aus!');
     }
+    //zum Schluss wird Lern- oder Übungsmodus gestartet
     else if (selectedMode === "learn") {
         $('#StationSelectError').html('');
         window.open('AufgabeUmgebungLearn');
@@ -189,8 +194,10 @@ function StationInput() {
 
 }
 
+
 function CancelAufgabe() {
     console.log('enter CancelAufgabe');
+    //Werte werden im C# Code auf Ausgangswert gesetzt, Fenster wird geschlossen
     const url = '/Main/CancelAufgabe';
     $.post(url).then(result => {
         console.log(`ServerReply CancelAufgabe: ${result}`);
@@ -220,27 +227,33 @@ function WeiterAufgabeLearn() {
     }).then(result => {
         console.log(`ServerReply WeiterAufgabeLearn: ${result}`);
         location.reload();
-        //window.open('AufgabeUmgebungLearn');
-        //self.close();
     });
 }
 
+//überdenken
 function WeiterAufgabePractise() {
     console.log('enter WeiterAufgabePractise');
+
+    //Weiter oder Check??
     var buttonAction = $('#checkAufgabePractise').val();
 
+    //UserData wird erhöht, wenn "Weiter" gedrückt wird
     const url = '/Main/PressedButtonPractise';
     $.post(url, {
         buttonActionPractice: buttonAction
     }).then(result => {
         console.log(`ServerReply WeiterAufgabePractise: ${result}`);
+        //je nach Buttonbetätigung, passiert was anderes
         if (result == "Weiter") {
+            //Button auf "Check" setzen und neuladen
             $('#checkAufgabePractise').val("Check");
             location.reload();
+            //Auswertung anzeigen
         } else if (result == "Auswertung") {
             window.open('ErgebnisOverview');
             self.close();
         } else {
+
             switch (global_antwortTypPractice) {
                 case "A_T":
                     var texteingabe = $('#textantwort').val();
@@ -410,5 +423,9 @@ function ZurueckAufgabeLearn() {
         //window.open('AufgabeUmgebungLearn');
         //self.close();
     });
+
+}
+
+function ZurueckAufgabePractice() {
 
 }

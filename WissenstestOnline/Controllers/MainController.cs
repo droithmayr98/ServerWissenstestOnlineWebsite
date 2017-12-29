@@ -1,55 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DB_lib;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting.Internal;
 using DB_lib.Tables;
-using DB_lib.Migrations;
-using System.Data.Entity;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 
 namespace WissenstestOnline.Controllers
 {
-    public class MainController : Controller //StationSelectError
+    public class MainController : Controller
     {
 
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
-        //public MainController(TestDB_Context db, ILogger<MainController> logger, MyImplTest myClass)
+        //Constructor, wenn UserData über Singleton in der Startup übergeben wird
+        //public MainController(TestDB_Context db, ILogger<MainController> logger, UserData myClass)
 
         public MainController(TestDB_Context db, ILogger<MainController> logger)
         {
+            //Testdatenbankinitialisierung --> wenn Datenbank im Hauptordner nicht vorhanden
+            // --> auskommentieren und einmal ausführen
             //var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
             //Database.SetInitializer(migration);
+
             this.test_db = db;
             this.logger = logger;
 
         }
 
+        //Wissenstest StartPage --> Bezirk, Feuerwehr, Stufe
         public IActionResult Start()
         {
-            System.Threading.Thread.Sleep(3000);
+            //Datenbankobjekte brauchen Zeit zum initialisieren
+            System.Threading.Thread.Sleep(2500);
 
-            //DB_ConnectionTest
-            var test = test_db.Bezirke.Count();
-            ViewBag.test = test;
-            //LoggerTest
-            logger.LogInformation("Test Log");
+            //DB-ConnectionTest + TestLog
+            var test_bezirke_count = test_db.Bezirke.Count();
+            logger.LogInformation($"DB Bezirke: {test_bezirke_count}");
 
-            return View();
+            //Bezirksnamen in SelectListItems umwandeln --> Value: Bezirksname  --> eventuell auf BezirksID umändern
+            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            foreach (Bezirk b in bezirke) {
+                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                bezirkeList.Add(bezirkItem);
+            }
+
+            //Datenübergabe an Model / Modelübergabe an View
+            var start_Model = new Start_Model();
+            start_Model.BezikeList = bezirkeList;
+            return View(start_Model);
         }
 
+        //Wissenstest Stationsauswahl + Modusauswahl
         public IActionResult SelectStation()
         {
+            //Stationennamen in SelectListItems umwandeln --> Value: Station_Id
             List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
             foreach (Station s in stations)
@@ -58,8 +69,10 @@ namespace WissenstestOnline.Controllers
                 stationsList.Add(stationItem);
             }
 
-            ViewBag.Stationen = stationsList;
-            return View();
+            //Datenübergabe an Model / Modelübergabe an View
+            var selectStation_Model = new SelectStation_Model();
+            selectStation_Model.StationsList = stationsList;
+            return View(selectStation_Model);
         }
 
         public IActionResult AufgabeUmgebungLearn()
@@ -72,8 +85,15 @@ namespace WissenstestOnline.Controllers
             return View();
         }
 
+        public IActionResult ZusatzInfo()
+        {
+            return View();
+        }
+
+        //Aufruf nach Übungsmodus
         public IActionResult ErgebnisOverview()
         {
+            //UserData Info in Model + Übergabe an View
             var ergebnis_Model = new Ergebnis_Model();
             ergebnis_Model.Punkte = UserData.PracticePoints.ToString();
             ergebnis_Model.Max_Punkte = UserData.AufgabenCount.ToString();
@@ -81,12 +101,6 @@ namespace WissenstestOnline.Controllers
             ergebnis_Model.ProzentRichtig = percentRight.ToString();
             return View(ergebnis_Model);
         }
-
-        public IActionResult ZusatzInfo()
-        {
-            return View();
-        }
-
 
         //AllgemeinInfo
         public IActionResult Info()
@@ -105,17 +119,19 @@ namespace WissenstestOnline.Controllers
         }
 
 
+
         //Ajax Calls
-
-        public string CheckUserInfo(string bezirk, string ort, string stufe)
-        {
-
-            List<Ort> alle_orte_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
-
+        //StartInfo überprüfen
+        public string CheckUserInfo(string bezirk, string ort, string stufe){
+            //alle Feuerwehren vom Bezirk holen
+            List<Ort> alle_ff_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
+            //FF Eingabe überprüfen
             if (Regex.IsMatch(ort, @"^[A-ZÄÖÜ][a-zA-ZÄÖÜäöü\-\. ]+$"))
             {
-                foreach (Ort o in alle_orte_vom_bezirk)
+                //ist Ort vorhanden?
+                foreach (Ort o in alle_ff_vom_bezirk)
                 {
+                    //Wenn ja --> Werte werden in UserData gespeichert und Kontrolle wird beendet
                     if (o.Ortsname.Equals(ort))
                     {
                         UserData.Bezirk = bezirk;
@@ -127,45 +143,45 @@ namespace WissenstestOnline.Controllers
 
                 }
             }
+            //Wenn nein
             return "wrong";
         }
 
-        public string GlobalStationData(List<string> stations, string mode)
-        {
-
+        public string GlobalStationData(List<string> stations, string mode){
+            //Array to string
             string stationsString = string.Join(",", stations.ToArray());
 
+            //Eingabewerte in UserData speichern
             UserData.Mode = mode;
             UserData.Stations = stationsString;
 
-            //Aufgaben selektieren grob //gehört noch genauer
+            //Aufgaben selektieren grob --> gehört noch genauer (Ort, Stufe, andere Faktoren...)
             for (int i = 0; i < stations.Count; i++)
             {
                 int selected_stationId = Convert.ToInt32(stations[i]);
                 List<Aufgabe> stationsteil = test_db.Aufgaben
-                    //.Include(x => x.Frage)
-                    //.Include(x => x.Antwort)
-                    //.Include(x => x.Zusatzinfo)
-                    //.Include(x => x.Station)
-                    //.Include(x => x.Stufe)
-                    //.Include(x => x.Hintergrundbild)
+                    //Include selektiert nur Wert des Foreign Keys, nicht jedoch das Oject!!!
+                    //.Include(x => x.Frage).Include(x => x.Antwort).Include(x => x.Zusatzinfo).Include(x => x.Station).Include(x => x.Stufe).Include(x => x.Hintergrundbild)
                     .Where(x => x.Station.Station_Id == selected_stationId)
                     .ToList();
+                //Stationsaufgaben an Gesamtliste ranhängen
                 UserData.Aufgaben.AddRange(stationsteil);
+                //Aktuelle Station setzen
                 if (i == 0)
                 {
                     UserData.AktuelleStation = stationsteil[0].Station.Stationsname;
                 }
             }
+            //Gesamtaufgabenanzahl in Userdata speichern
             UserData.AufgabenCount = UserData.Aufgaben.Count;
 
             return "ok";
         }
 
-
+        //Daten für jquery Code übergeben
         public IActionResult GetGlobalData()
         {
-
+            //Daten sammeln
             var RightAufgabeNr = UserData.AufgabeNr + 1;
             var RightAufgabenCount = UserData.AufgabenCount;
             var aktuellerTyp = "";
@@ -178,7 +194,7 @@ namespace WissenstestOnline.Controllers
                 UserData.Aufgabe = nexteAufgabe;
             }
 
-
+            //Daten übergeben
             var data = new Dictionary<string, string>()
             {
                 ["bezirk"] = UserData.Bezirk,
@@ -194,41 +210,41 @@ namespace WissenstestOnline.Controllers
             return Json(data);
         }
 
-
-        public IActionResult LoadFrage(string aufgabenNr)
-        {
-
+        //Frage wird in die View geladen
+        public IActionResult LoadFrage(string aufgabenNr){
+            //AufgabeNr -1, wegen Array
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
 
+            //Holen der benötigten Daten
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-
             string fragetyp = aufgabe.Frage.Typ.Typ;
             string fragetext = aufgabe.Frage.Fragetext;
 
-
+            //Aufruf der PartialView, je nach Fragetyp
             if (fragetyp.Equals("F_T"))
             {
                 var frageText_model = new FrageText_Model();
                 frageText_model.FrageText = fragetext;
                 return PartialView("PartialViews/LoadFrageText", frageText_model);
             }
-            else if (fragetyp.Equals("F_T+B"))
-            {
+            else if (fragetyp.Equals("F_T+B")){
                 //gehört noch gemacht
             }
-            else if (fragetyp.Equals("F_T+V"))
-            {
+            else if (fragetyp.Equals("F_T+V")){
                 //gehört noch gemacht
             }
 
+            //darf nicht passieren
+            //gehört noch gemacht
             return null;
         }
 
-        public string PressedButtonLearn(string pressedButtonLearn)
-        {
+        public string PressedButtonLearn(string pressedButtonLearn){
+            //in UserData abspeichern
             UserData.pressedButtonLearn = pressedButtonLearn;
 
+            //welcher Button wurde gedrückt?? --> AufgabeNr erhöhen oder senken
             if (UserData.pressedButtonLearn.Equals("zurueck"))
             {
                 UserData.AufgabeNr = UserData.AufgabeNr - 1;
@@ -238,6 +254,7 @@ namespace WissenstestOnline.Controllers
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
             }
 
+            //ArrayOutOfBounds verhindern
             if (UserData.AufgabeNr == -1 || UserData.AufgabeNr == UserData.AufgabenCount)
             {
                 if (UserData.pressedButtonLearn.Equals("zurueck"))
@@ -248,27 +265,28 @@ namespace WissenstestOnline.Controllers
                 {
                     UserData.AufgabeNr = UserData.AufgabeNr - 1;
                 }
+                //User steht Am Anfang oder Ende --> Alert zur Bekanntmachung
                 return "ok";
             }
             else
             {
-                //maybe alert?
                 return "ok";
             }
 
         }
 
-        public IActionResult LoadAntwortLearn(string aufgabenNr)
-        {
-
+        public IActionResult LoadAntwortLearn(string aufgabenNr){
+            //AufgabeNr -1, wegen Array
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
 
+            //Holen der benötigten Daten
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-
             string antwort_typ = aufgabe.Antwort.Typ.Typ;
             int inhalt_id = aufgabe.Antwort.Inhalt_Id;
 
+            //Aufruf der PartialView, je nach Fragetyp
+            //Füllen des dazugehörigen Models
             switch (antwort_typ)
             {
                 case "A_T":
@@ -291,8 +309,8 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-        public string CancelAufgabe()
-        {
+        public string CancelAufgabe(){
+            //Werte werden auf Ausgangswert im UserData gesetzt
             UserData.Aufgaben = new List<Aufgabe>();
             UserData.AufgabeNr = 0;
             UserData.AufgabenCount = 0;
@@ -301,14 +319,15 @@ namespace WissenstestOnline.Controllers
 
         public IActionResult LoadZusatzinfo()
         {
+            //Benötigte Informationen holen
             int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
-            logger.LogInformation("AufgabeNr: " + aufgabenNr_Int);
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-
             string info_typ = aufgabe.Zusatzinfo.Typ.Typ;
 
+            //Typtrennung für weitere Vorgehensweise
             string[] splitInfo_ = info_typ.Split('_');
 
+            //Je nach Typ, wird eine spezielle Partialview aufgerufen und die benötigten Daten geholt
             if (splitInfo_[1].Contains('+'))
             {
                 //gehört noch gemacht
@@ -334,12 +353,12 @@ namespace WissenstestOnline.Controllers
         }
 
 
-        public string PressedButtonPractise(string buttonActionPractice)
-        {
+        public string PressedButtonPractise(string buttonActionPractice){
+            //Bei "Weiter" wird UserData erhöht
             if (buttonActionPractice.Equals("Weiter"))
             {
                 UserData.AufgabeNr = UserData.AufgabeNr + 1;
-
+                //ArrayOutOfBounds vermeiden
                 if (UserData.AufgabeNr == UserData.AufgabenCount)
                 {
                     UserData.AufgabeNr = UserData.AufgabeNr - 1;
@@ -350,6 +369,7 @@ namespace WissenstestOnline.Controllers
                     return "Weiter";
                 }
             }
+            //andere Rückmeldung
             else if (buttonActionPractice.Equals("Auswertung"))
             {
                 return "Auswertung";
@@ -362,15 +382,18 @@ namespace WissenstestOnline.Controllers
 
 
         }
-        //LoadAntwortPractise
-        public IActionResult LoadAntwortPractise(string aufgabenNr)
-        {
+        public IActionResult LoadAntwortPractise(string aufgabenNr){
+            //AufgabeNr -1, wegen Array
             int aufgabenNr_Int = Convert.ToInt32(aufgabenNr);
             aufgabenNr_Int--;
+
+            //Holen der benötigten Daten
             Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
             string antwort_typ = aufgabe.Antwort.Typ.Typ;
             int inhalt_id = aufgabe.Antwort.Inhalt_Id;
 
+            //Aufruf der PartialView, je nach Fragetyp
+            //Füllen des dazugehörigen Models
             switch (antwort_typ)
             {
                 case "A_T":
@@ -393,6 +416,8 @@ namespace WissenstestOnline.Controllers
             }
 
         }
+
+
 
 
         //ModelFüllMethoden
@@ -443,6 +468,8 @@ namespace WissenstestOnline.Controllers
             antwortRadioButtons_Model.RadioButton_rightVal = rb_rightVal;
             return antwortRadioButtons_Model;
         }
+
+
 
         //Überprüfen der Antwort im Übungsmodus
         public bool CheckAntwortText(string texteingabe)
