@@ -37,8 +37,8 @@ textarea {
 }
 
 
-/*My CSS code*/
 
+/*My CSS code*/
 #stufen {
     background-color: dimgray;
     color: white;
@@ -107,6 +107,8 @@ textarea {
     width: inherit;
 }
 
+
+/*Scrollbare Liste Adminoverview*/
 #adminListAufgaben ul {
     height: 200px;
     width: 100%;
@@ -125,6 +127,22 @@ textarea {
 #adminListAdmins ul {
     overflow: hidden;
     overflow-y: scroll;
+}
+
+/*Modal Dialogs Headings*/
+.MyInfoHeader {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.MyWarningHeader {
+    background-color: #ffbb33;
+    color: white;
+}
+
+.MyDangerHeader {
+    background-color: #d9534f;
+    color: white;
 }
 
 /*Nav Bar Design*/

@@ -13,6 +13,8 @@
 
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
+    $('.admin_warning').on('click', AdminEditClicked);
+    $('.admin_danger').on('click', AdminDeleteClicked);
 
 
 });
@@ -64,4 +66,18 @@ function AdminInfoClicked(event) {
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
     $('#adminInfo_Modal').modal('show');
+}
+
+function AdminEditClicked(event) {
+    console.log('Admin Edit Clicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    $('#adminEdit_Modal').modal('show');
+}
+
+function AdminDeleteClicked(event) {
+    console.log('Admin Delete Clicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    $('#adminDelete_Modal').modal('show');
 }
