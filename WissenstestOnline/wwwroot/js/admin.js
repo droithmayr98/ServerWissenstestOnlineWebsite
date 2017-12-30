@@ -11,6 +11,11 @@
     //Suchtrigger Aufgaben
     $('#stations_admin').on('click', StationSelected);
 
+    //AufgabeItemButtons
+    $('.aufgabe_Info').on('click', AufgabeInfoClicked);
+    $('.aufgabe_warning').on('click', AufgabeEditClicked);
+    $('.aufgabe_danger').on('click', AufgabeDeleteClicked);
+
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
     $('.admin_warning').on('click', AdminEditClicked);
@@ -47,16 +52,47 @@ function CheckAdminInfo() {
 
 }
 
+//überarbeiten
 function StationSelected() {
     var selectedStation = $('#stations_admin').val();
     console.log(`Selected Station: ${selectedStation}`);
 
-    if (selectedStation != null) {
+    if (selectedStation != "noItemSelected") {
         const url = '/Admin/StationSelected';
 
+        var aufgabenLI_list = $('#admin_aufgabenliste').children().toArray();
+        for (var li_aufgabe in aufgabenLI_list) {
+            console.log('li: ' + li_aufgabe);
+            var station = li_aufgabe.id.split("-");  //doesnt work
+            if (station != selectedStation) {
+                li_aufgabe.hide();
+            }
+        }
 
 
     }
+}
+
+//AufgabeButtonFunctions
+function AufgabeInfoClicked(event) {
+    console.log('Aufgabe Info Clicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    $('#aufgabeInfo_Modal').modal('show');
+}
+
+function AufgabeEditClicked(event) {
+    console.log('Aufgabe Edit Clicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    $('#aufgabeEdit_Modal').modal('show');
+}
+
+function AufgabeDeleteClicked(event) {
+    console.log('Aufgabe Delete Clicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    $('#aufgabeDelete_Modal').modal('show');
 }
 
 
