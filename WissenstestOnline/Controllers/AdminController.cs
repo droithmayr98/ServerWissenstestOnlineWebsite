@@ -23,21 +23,21 @@ namespace WissenstestOnline.Controllers
             this.logger = logger;
         }
 
-
-        public IActionResult Login()
-        {
+        //Admin Login Page
+        public IActionResult Login(){
             logger.LogInformation("Testlog Admincontroller");
-
             return View();
         }
 
+
         public IActionResult AdminOverview()
         {
-
-            List<Aufgabe> alle_aufgaben = test_db.Aufgaben.Select(x => x).ToList();
+            //Alle Aufgaben holen und in Model speichern
+            List<Aufgabe> alle_aufgaben = test_db.Aufgaben.Select(x => x).OrderBy(x => x.Station.Station_Id).ToList();
             var adminOverwiew_model = new AdminOverview_Model();
             adminOverwiew_model.Aufgaben = alle_aufgaben;
 
+            //Stationen als SelectListItems umwandeln und in Model speichern
             List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
             stationsList.Add(new SelectListItem { Text = "keine ausgewählt", Value = "noItemSelected"});
@@ -48,7 +48,8 @@ namespace WissenstestOnline.Controllers
             }
             adminOverwiew_model.Stationen = stationsList;
 
-            List<Admintable> alle_admins = test_db.Admins.Select(x => x).ToList();
+            //Admins holen und in Model speichern + Modelübergabe an View
+            List<Admintable> alle_admins = test_db.Admins.Select(x => x).OrderBy(x => x.Username).ToList();
             adminOverwiew_model.Admins = alle_admins;
 
             return View(adminOverwiew_model);
@@ -66,8 +67,8 @@ namespace WissenstestOnline.Controllers
             return RedirectToAction("Start", "Main");
         }
 
-        //Ajax calls
 
+        //Ajax calls
         public string CheckAdminInfo(string username, string password) {
 
             Admintable admin =  test_db.Admins.SingleOrDefault(x => x.Username.Equals(username));
