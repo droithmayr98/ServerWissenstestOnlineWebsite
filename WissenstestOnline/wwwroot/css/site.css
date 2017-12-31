@@ -39,20 +39,24 @@ textarea {
 
 
 /*My CSS code*/
+
+/*Toggle Buttons Stufen*/  /*Design anpassen*/
 #stufen {
     background-color: dimgray;
     color: white;
-}
-.errorMsg {
-    margin-top: 10px;
-    color: red;
-    font-size: medium;
 }
 
 .active {
     background-color: red;
     color: white;
 }
+
+.errorMsg {
+    margin-top: 10px;
+    color: red;
+    font-size: medium;
+}
+
 
 #headingWissenstest {
     font-weight: bold;
