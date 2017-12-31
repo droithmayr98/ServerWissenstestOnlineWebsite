@@ -9,7 +9,16 @@
     $('#adminLoginButton').on('click', CheckAdminInfo);
 
     //Suchtrigger Aufgaben
-    $('#stations_admin').on('click', StationSelected);
+    $('#stations_admin').on('change', StationSelected);
+    $('#searchFrageText').on('click', SearchFrageText);
+
+    $('#searchFrageField').bind('enterKey', SearchFrageText);
+    $('#searchFrageField').keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(this).trigger('enterKey');
+            e.preventDefault();
+        }
+    });
 
     //AufgabeItemButtons
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
@@ -52,26 +61,51 @@ function CheckAdminInfo() {
 
 }
 
-//überarbeiten
 function StationSelected() {
     var selectedStation = $('#stations_admin').val();
     console.log(`Selected Station: ${selectedStation}`);
 
     if (selectedStation != "noItemSelected") {
-        const url = '/Admin/StationSelected';
 
-        var aufgabenLI_list = $('#admin_aufgabenliste').children().toArray();
-        for (var li_aufgabe in aufgabenLI_list) {
-            console.log('li: ' + li_aufgabe);
-            var station = li_aufgabe.id.split("-");  //doesnt work
-            if (station != selectedStation) {
-                li_aufgabe.hide();
+        var aufgabenLI_list = $('#admin_aufgabenliste').children();
+        for (var i = 0; i < aufgabenLI_list.length; i++) {
+            var aufgabe_li = aufgabenLI_list[i];
+            var id_split = aufgabe_li.id.split("-");
+            if (id_split[1] != selectedStation) {
+                $(`#${aufgabe_li.id}`).hide();
+            } else {
+                $(`#${aufgabe_li.id}`).show();
             }
         }
 
+    } else {
+        var aufgabenLI_list = $('#admin_aufgabenliste').children();
+        for (var i = 0; i < aufgabenLI_list.length; i++) {
+            var aufgabe_li = aufgabenLI_list[i];
+            $(`#${aufgabe_li.id}`).show();
+        }
 
     }
+
 }
+
+function SearchFrageText() {
+    var eingabe = $('#searchFrageField').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    var aufgabenLI_list = $('#admin_aufgabenliste').children();
+    for (var i = 0; i < aufgabenLI_list.length; i++) {
+        var aufgabe_li = aufgabenLI_list[i];
+        var span_frage = $(`#${aufgabe_li.id}`).children().first();
+        if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+            $(`#${aufgabe_li.id}`).show();
+        } else {
+            $(`#${aufgabe_li.id}`).hide();
+        }
+    }
+
+}
+
 
 //AufgabeButtonFunctions
 function AufgabeInfoClicked(event) {
