@@ -1,0 +1,50 @@
+@model WissenstestOnlineWebseite.AdminModels.AdminInfo_Model
+
+<div class="modal fade" id="adminInfo_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyInfoHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">AdminInfo: @Model.Username</h4>
+            </div>
+            <div class="modal-body">
+                <p><span style="font-weight: bold">Admin ID:</span> @Model.Id</p>
+                <p><span style="font-weight: bold">Benutzername:</span> @Model.Username</p>
+
+                <p>
+                    <span style="font-weight: bold">Admin Account erstellen:</span>
+                    @if(@Model.Can_create_acc){
+                        <span style="color: green;" class="glyphicon glyphicon-ok"></span>
+                    }else{
+                        <span style="color: red;" class="glyphicon glyphicon-remove"></span>
+                    }
+                </p>
+
+                <p>
+                    <span style="font-weight: bold">Admin Account bearbeiten:</span>
+                    @if(@Model.Can_edit_acc){
+                        <span style="color: green;" class="glyphicon glyphicon-ok"></span>
+                    }else{
+                        <span style="color: red;" class="glyphicon glyphicon-remove"></span>
+                    }
+                </p>
+
+                <p>
+                    <span style="font-weight: bold">Admin Account loeschen:</span>
+                    @if(@Model.Can_delete_acc){
+                        <span style="color: green;" class="glyphicon glyphicon-ok"></span>
+                    }else{
+                        <span style="color: red;" class="glyphicon glyphicon-remove"></span>
+                    }
+                </p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

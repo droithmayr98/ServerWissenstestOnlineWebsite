@@ -135,14 +135,24 @@ function AdminInfoClicked(event) {
     console.log('Admin Info Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#adminInfo_Modal').modal('show');
+
+    const url = `/Admin/GetAdminInfo?admin_id=${id}`;
+    $('#loadModal').load(url, () => {
+        $('#adminInfo_Modal').modal('show');
+    });
+
 }
 
 function AdminEditClicked(event) {
     console.log('Admin Edit Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#adminEdit_Modal').modal('show');
+
+    const url = `/Admin/GetAdminEdit?admin_id=${id}`;
+    $('#loadModal').load(url, () => {
+        $('#adminEdit_Modal').modal('show');
+    });
+
 }
 
 function AdminDeleteClicked(event) {

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using DB_lib.Tables;
 using WissenstestOnlineWebseite.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WissenstestOnlineWebseite.AdminModels;
 
 namespace WissenstestOnline.Controllers
 {
@@ -85,12 +86,30 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-        public string StationSelected(string station_nr) {
-
-            return null;
+        public IActionResult GetAdminInfo(string admin_id) {
+            int adminId_int = Convert.ToInt32(admin_id);
+            var adminInfo_model = FillAdminModel(adminId_int);
+            return PartialView("Modal_PartialViews/AdminInfo_Modal", adminInfo_model);
         }
 
+        public IActionResult GetAdminEdit(string admin_id) {
+            int adminId_int = Convert.ToInt32(admin_id);
+            var adminInfo_model = FillAdminModel(adminId_int);
+            return PartialView("Modal_PartialViews/AdminEdit_Modal", adminInfo_model);
+        }
 
+        public AdminInfo_Model FillAdminModel(int adminId_int) {
+            
+            Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
+            var adminInfo_model = new AdminInfo_Model();
+            adminInfo_model.Id = admin.Admin_Id;
+            adminInfo_model.Username = admin.Username;
+            adminInfo_model.Password = admin.Password;
+            adminInfo_model.Can_create_acc = admin.Can_create_acc;
+            adminInfo_model.Can_edit_acc = admin.Can_edit_acc;
+            adminInfo_model.Can_delete_acc = admin.Can_delete_acc;
+            return adminInfo_model;
+        }
 
 
 
