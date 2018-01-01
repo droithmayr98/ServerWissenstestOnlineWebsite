@@ -24,12 +24,16 @@
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
     $('.aufgabe_danger').on('click', AufgabeDeleteClicked);
-    $('#saveAdminChanges').on('click', SaveAdminChanges);
 
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
     $('.admin_warning').on('click', AdminEditClicked);
     $('.admin_danger').on('click', AdminDeleteClicked);
+
+
+    //new Admin
+    $('#create_new_admin').on('click', CreateAdminClicked);
+    $('#create_admin_button').on('click', CreateAdmin);
 
 
 });
@@ -157,6 +161,7 @@ function AdminEditClicked(event) {
     const url = `/Admin/GetAdminEdit?admin_id=${id}`;
     $('#loadModal').load(url, () => {
         $('#adminEdit_Modal').modal('show');
+        $('#saveAdminChanges').on('click', SaveAdminChanges);
     });
 
 }
@@ -169,11 +174,93 @@ function AdminDeleteClicked(event) {
     const url = `/Admin/GetAdminDelete?admin_id=${id}`;
     $('#loadModal').load(url, () => {
         $('#adminDelete_Modal').modal('show');
+        $('#deleteAdmin').on('click', DeleteAdmin);
     });
 
 }
 
 function SaveAdminChanges() {
     console.log('enter SaveAdminChanges');
+
+    //Eingabewerte auslesen und testen
+    var admin_id_selected = $('#admin_id_edit').text();
+    var username_input = $('#changeUsername').val();
+    var password_input = $('#changePassword').val();
+    var can_create_acc_input = $('input[name=admin_create_option]:checked').val();
+    var can_edit_acc_input = $('input[name=admin_edit_option]:checked').val();
+    var can_delete_acc_input = $('input[name=admin_delete_option]:checked').val();
+
+    console.log('Testausgabe-EditAdminData Benutzereingaben:');
+    console.log(`Admin_ID: ${admin_id_selected}`);
+    console.log(`Username: ${username_input}`);
+    console.log(`Password: ${password_input}`);
+    console.log(`Can_Create_Acc: ${can_create_acc_input}`);
+    console.log(`Can_Edit_Acc: ${can_edit_acc_input}`);
+    console.log(`Can_Delete_Acc: ${can_delete_acc_input}`);
+
+    const url = `/Admin/SaveAdminChanges`;
+    $.post(url, {
+        admin_id: admin_id_selected,
+        username: username_input,
+        password: password_input,
+        can_create_acc: can_create_acc_input,
+        can_edit_acc: can_edit_acc_input,
+        can_delete_acc: can_delete_acc_input
+    }).then(result => {
+        console.log(`ServerReply SaveAdminChanges: ${result}`);
+        location.reload();
+        });
+
+
+}
+
+function DeleteAdmin() {
+    console.log('enter DeleteAdmin');
+
+    var admin_id = $('#admin_id_delete').text();
+    console.log(`Admin_ID: ${admin_id}`);
+
+    const url = `/Admin/DeleteAdmin`;
+    $.post(url, {
+        admin_id: admin_id
+    }).then(result => {
+        console.log(`ServerReply DeleteAdmin: ${result}`);
+        location.reload();
+        });
+
+}
+
+function CreateAdminClicked() {
+    console.log('enter CreateAdminClicked');
+    $('#adminCreate_Modal').modal('show');    
+}
+
+function CreateAdmin() {
+    console.log('enter CreateAdmin');
+
+    //Eingabewerte auslesen und testen
+    var username_input = $('#newAdmin_Username').val();
+    var password_input = $('#newAdmin_Password').val();
+    var can_create_acc_input = $('input[name=admin_create_option]:checked').val();
+    var can_edit_acc_input = $('input[name=admin_edit_option]:checked').val();
+    var can_delete_acc_input = $('input[name=admin_delete_option]:checked').val();
+
+    console.log(`Username: ${username_input}`);
+    console.log(`Password: ${password_input}`);
+    console.log(`Can_Create_Acc: ${can_create_acc_input}`);
+    console.log(`Can_Edit_Acc: ${can_edit_acc_input}`);
+    console.log(`Can_Delete_Acc: ${can_delete_acc_input}`);
+
+    const url = `/Admin/CreateAdmin`;
+    $.post(url, {
+        username: username_input,
+        password: password_input,
+        can_create_acc: can_create_acc_input,
+        can_edit_acc: can_edit_acc_input,
+        can_delete_acc: can_delete_acc_input
+    }).then(result => {
+        console.log(`ServerReply CreateAdmin: ${result}`);
+        location.reload();
+    });
 
 }

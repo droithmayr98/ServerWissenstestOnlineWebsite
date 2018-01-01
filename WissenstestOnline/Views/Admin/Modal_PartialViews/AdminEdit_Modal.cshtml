@@ -12,7 +12,7 @@
             <!-- Body Part -->
             <div class="modal-body">
 
-                <h5><span style="font-weight: bold">Admin ID:</span> @Model.Id</h5>
+                <h5><span style="font-weight: bold">Admin ID:</span> <span id="admin_id_edit">@Model.Id</span></h5>
 
                 <div class="form-group">
                     <h5 style="font-weight: bold">Benutzername:</h5>
@@ -110,7 +110,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveAdminChanges">Speichern</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveAdminChanges">Speichern</button>
             </div>
         </div>
 

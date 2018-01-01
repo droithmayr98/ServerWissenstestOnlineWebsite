@@ -53,6 +53,8 @@ namespace WissenstestOnline.Controllers
             List<Admintable> alle_admins = test_db.Admins.Select(x => x).OrderBy(x => x.Username).ToList();
             adminOverwiew_model.Admins = alle_admins;
 
+            //Aktuellen Admin holen
+
             return View(adminOverwiew_model);
 
         }
@@ -129,6 +131,38 @@ namespace WissenstestOnline.Controllers
             aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
             aufgabeInfo_model.Frage = aufgabe.Frage.Fragetext;
             return aufgabeInfo_model;
+        }
+
+        public string SaveAdminChanges(int admin_id, string username,string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc) {
+            //Datenbankänderungen u Überprüfungen
+            var edit_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
+            edit_admin.Username = username;
+            edit_admin.Password = password;
+            edit_admin.Can_create_acc = can_create_acc;
+            edit_admin.Can_edit_acc = can_edit_acc;
+            edit_admin.Can_delete_acc = can_delete_acc;
+            test_db.SaveChanges();
+            return "ok";
+        }
+
+        public string DeleteAdmin(int admin_id) {
+            //Datensatz löschen
+            var delete_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
+            test_db.Admins.Remove(delete_admin);
+            test_db.SaveChanges();
+            return "ok";
+        }
+
+        public string CreateAdmin(string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc) {
+            Admintable new_admin = new Admintable();
+            new_admin.Username = username;
+            new_admin.Password = password;
+            new_admin.Can_create_acc = can_create_acc;
+            new_admin.Can_edit_acc = can_edit_acc;
+            new_admin.Can_delete_acc = can_delete_acc;
+            test_db.Admins.Add(new_admin);
+            test_db.SaveChanges();
+            return "ok";
         }
 
 

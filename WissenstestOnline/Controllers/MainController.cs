@@ -36,7 +36,7 @@ namespace WissenstestOnline.Controllers
         public IActionResult Start()
         {
             //Datenbankobjekte brauchen Zeit zum initialisieren
-            System.Threading.Thread.Sleep(2500);
+            System.Threading.Thread.Sleep(3000);
 
             //DB-ConnectionTest + TestLog
             var test_bezirke_count = test_db.Bezirke.Count();

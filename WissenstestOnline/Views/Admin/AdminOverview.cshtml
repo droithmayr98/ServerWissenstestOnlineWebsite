@@ -46,7 +46,7 @@
     <!--Adminliste-->
     <div class="container well">
         <h3 style="float: left;">Adminübersicht</h3>
-        <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;">+ neuen Admin erstellen</button>
+        <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;" id="create_new_admin">+ neuen Admin erstellen</button>
         <!--Suchoptionen-->
         <nav id="adminListAdmins">
             <ul class="list-group">
@@ -56,8 +56,10 @@
                         <span>@admin.Username</span>
                         <div class="btn-group" style="float:right">
                             <button class="btn btn-info admin_Info" id="@admin.Admin_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                            <!--if abfrage ob angemeldeter admin berechtigt-->
                             <button class="btn btn-warning admin_warning" id="@admin.Admin_Id"><span class="glyphicon glyphicon-pencil"></span></button>
                             <button class="btn btn-danger admin_danger" id="@admin.Admin_Id"><span class="glyphicon glyphicon-remove"></span></button>
+
                         </div>
                     </li>
                 }
@@ -78,11 +80,7 @@
 
 
 <!--Modals-->
-
 <!--AufgabenModals-->
-
-
-
 <!--AufgabeEdit-->
 <div class="modal fade" id="aufgabeEdit_Modal" role="dialog">
     <div class="modal-dialog">
@@ -127,3 +125,80 @@
 </div>
 
 
+<!--create new Admin-->
+<div class="modal fade" id="adminCreate_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Neuer Administrator</h4>
+            </div>
+            <!-- Body Part -->
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Benutzername:</h5>
+                    <input placeholder="Benutzername" class="form-control input-field" type="text" id="newAdmin_Username" />
+                </div>
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Passwort:</h5>
+                    <input placeholder="Passwort" class="form-control input-field" type="password" id="newAdmin_Password">
+                    <!--<span class="glyphicon glyphicon-eye-open" style="float:left"></span>--> <!--Passwortauge einfügen und machen-->
+                </div>
+
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Admin Account erstellen:</h5>
+
+                    <div class="btn-group" data-toggle="buttons" id="stufen">
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="admin_create_option" id="btn_erlauben_create" value="true">Erlauben
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="admin_create_option" id="btn_nichtErlauben_create" value="false" checked>Nicht Erlauben
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Admin Account bearbeiten:</h5>
+                    <div class="btn-group" data-toggle="buttons" id="stufen">
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="admin_edit_option" id="btn_erlauben_edit" value="true">Erlauben
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="admin_edit_option" id="btn_nichtErlauben_edit" value="false" checked>Nicht Erlauben
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Admin Account loeschen:</h5>
+
+                    <div class="btn-group" data-toggle="buttons" id="stufen">
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="admin_delete_option" id="btn_erlauben_delete" value="true">Erlauben
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="admin_delete_option" id="btn_nichtErlauben_delete" value="false" checked>Nicht Erlauben
+                        </label>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_admin_button">Erstellen</button>
+            </div>
+        </div>
+
+    </div>
+</div>
