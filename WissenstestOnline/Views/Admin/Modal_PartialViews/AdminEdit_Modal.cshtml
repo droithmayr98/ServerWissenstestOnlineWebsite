@@ -15,64 +15,102 @@
                 <h5><span style="font-weight: bold">Admin ID:</span> @Model.Id</h5>
 
                 <div class="form-group">
-                <h5 style="font-weight: bold">Benutzername:</h5>
+                    <h5 style="font-weight: bold">Benutzername:</h5>
                     <input placeholder="Benutzername" class="form-control input-field" type="text" value="@Model.Username" id="changeUsername" />
                 </div>
 
                 <div class="form-group">
                     <h5 style="font-weight: bold">Passwort:</h5>
-                        <input placeholder="Passwort" class="form-control input-field" type="password" value="@Model.Password" id="changePassword">
-                        <!--<span class="glyphicon glyphicon-eye-open" style="float:left"></span>--> <!--Passwortauge einfügen und machen--> 
+                    <input placeholder="Passwort" class="form-control input-field" type="password" value="@Model.Password" id="changePassword">
+                    <!--<span class="glyphicon glyphicon-eye-open" style="float:left"></span>--> <!--Passwortauge einfügen und machen-->
                 </div>
+
 
                 <div class="form-group">
                     <h5 style="font-weight: bold">Admin Account erstellen:</h5>
-
-                    <div class="btn-group" data-toggle="buttons" id="stufen">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="admin_create_option" id="btn_erlauben_create" value="true" checked>Erlauben
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="admin_create_option" id="btn_nichtErlauben_create" value="false">Nicht Erlauben
-                        </label>
-                    </div>
-
+                    @if (Model.Can_create_acc)
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_create_option" id="btn_erlauben_create" value="true" checked>Erlauben
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_create_option" id="btn_nichtErlauben_create" value="false">Nicht Erlauben
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_create_option" id="btn_erlauben_create" value="true">Erlauben
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_create_option" id="btn_nichtErlauben_create" value="false" checked>Nicht Erlauben
+                            </label>
+                        </div>
+                    }
                 </div>
 
                 <div class="form-group">
                     <h5 style="font-weight: bold">Admin Account bearbeiten:</h5>
-
-                    <div class="btn-group" data-toggle="buttons" id="stufen">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="admin_edit_option" id="btn_erlauben_edit" value="true" checked>Erlauben
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="admin_edit_option" id="btn_nichtErlauben_edit" value="false">Nicht Erlauben
-                        </label>
-                    </div>
-
+                    @if (Model.Can_edit_acc)
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_edit_option" id="btn_erlauben_edit" value="true" checked>Erlauben
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_edit_option" id="btn_nichtErlauben_edit" value="false">Nicht Erlauben
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_edit_option" id="btn_erlauben_edit" value="true">Erlauben
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_edit_option" id="btn_nichtErlauben_edit" value="false" checked>Nicht Erlauben
+                            </label>
+                        </div>
+                    }
                 </div>
 
                 <div class="form-group">
                     <h5 style="font-weight: bold">Admin Account loeschen:</h5>
-
-                    <div class="btn-group" data-toggle="buttons" id="stufen">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="admin_delete_option" id="btn_erlauben_delete" value="true" checked>Erlauben
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="admin_delete_option" id="btn_nichtErlauben_delete" value="false">Nicht Erlauben
-                        </label>
-                    </div>
-
+                    @if (Model.Can_delete_acc)
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_delete_option" id="btn_erlauben_delete" value="true" checked>Erlauben
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_delete_option" id="btn_nichtErlauben_delete" value="false">Nicht Erlauben
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="admin_delete_option" id="btn_erlauben_delete" value="true">Erlauben
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="admin_delete_option" id="btn_nichtErlauben_delete" value="false" checked>Nicht Erlauben
+                            </label>
+                        </div>
+                    }
                 </div>
+
 
             </div>
 
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Speichern</button>
+                <button type="button" class="btn btn-primary" id="saveAdminChanges">Speichern</button>
             </div>
         </div>
 

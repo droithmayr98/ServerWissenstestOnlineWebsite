@@ -24,6 +24,7 @@
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
     $('.aufgabe_danger').on('click', AufgabeDeleteClicked);
+    $('#saveAdminChanges').on('click', SaveAdminChanges);
 
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
@@ -112,7 +113,12 @@ function AufgabeInfoClicked(event) {
     console.log('Aufgabe Info Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#aufgabeInfo_Modal').modal('show');
+
+    const url = `/Admin/GetAufgabeInfo?aufgabe_id=${id}`;
+    $('#loadModal').load(url, () => {
+        $('#aufgabeInfo_Modal').modal('show');
+    });
+
 }
 
 function AufgabeEditClicked(event) {
@@ -159,5 +165,15 @@ function AdminDeleteClicked(event) {
     console.log('Admin Delete Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#adminDelete_Modal').modal('show');
+
+    const url = `/Admin/GetAdminDelete?admin_id=${id}`;
+    $('#loadModal').load(url, () => {
+        $('#adminDelete_Modal').modal('show');
+    });
+
+}
+
+function SaveAdminChanges() {
+    console.log('enter SaveAdminChanges');
+
 }

@@ -98,6 +98,18 @@ namespace WissenstestOnline.Controllers
             return PartialView("Modal_PartialViews/AdminEdit_Modal", adminInfo_model);
         }
 
+        public IActionResult GetAdminDelete(string admin_id) {
+            int adminId_int = Convert.ToInt32(admin_id);
+            var adminInfo_model = FillAdminModel(adminId_int);
+            return PartialView("Modal_PartialViews/AdminDelete_Modal", adminInfo_model);
+        }
+
+        public IActionResult GetAufgabeInfo(string aufgabe_id) {
+            int aufgabeId_int = Convert.ToInt32(aufgabe_id);
+            var aufgabeInfo_model = FillAufgabeModel(aufgabeId_int);
+            return PartialView("Modal_PartialViews/AufgabeInfo_Modal", aufgabeInfo_model);
+        }
+
         public AdminInfo_Model FillAdminModel(int adminId_int) {
             
             Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
@@ -109,6 +121,14 @@ namespace WissenstestOnline.Controllers
             adminInfo_model.Can_edit_acc = admin.Can_edit_acc;
             adminInfo_model.Can_delete_acc = admin.Can_delete_acc;
             return adminInfo_model;
+        }
+
+        public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int) {
+            Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
+            var aufgabeInfo_model = new AufgabeInfo_Model();
+            aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
+            aufgabeInfo_model.Frage = aufgabe.Frage.Fragetext;
+            return aufgabeInfo_model;
         }
 
 

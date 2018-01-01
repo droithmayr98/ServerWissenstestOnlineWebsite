@@ -19,7 +19,7 @@
                 <button class="btn btn-info btn" type="button" style="float:left;" id="searchFrageText">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
-                <button class="btn btn-success" style="margin-left: 8px">+ neue Aufgabe erstellen</button>
+                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;">+ neue Aufgabe erstellen</button>
             </div>
         </form>
 
@@ -45,7 +45,8 @@
 
     <!--Adminliste-->
     <div class="container well">
-        <h3>Adminübersicht</h3>
+        <h3 style="float: left;">Adminübersicht</h3>
+        <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;">+ neuen Admin erstellen</button>
         <!--Suchoptionen-->
         <nav id="adminListAdmins">
             <ul class="list-group">
@@ -79,26 +80,7 @@
 <!--Modals-->
 
 <!--AufgabenModals-->
-<!--AufgabeInfo-->
-<div class="modal fade" id="aufgabeInfo_Modal" role="dialog">
-    <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header MyInfoHeader">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AufgabeInfo: </h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 
 <!--AufgabeEdit-->
@@ -145,28 +127,3 @@
 </div>
 
 
-
-<!--AdminModals-->
-
-
-
-<!--AdminDelete-->
-<div class="modal fade" id="adminDelete_Modal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header MyDangerHeader">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AdminDelete: </h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
