@@ -129,7 +129,45 @@ namespace WissenstestOnline.Controllers
             Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
             var aufgabeInfo_model = new AufgabeInfo_Model();
             aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
-            aufgabeInfo_model.Frage = aufgabe.Frage.Fragetext;
+            aufgabeInfo_model.Station = aufgabe.Station.Stationsname;
+            aufgabeInfo_model.Stufe = aufgabe.Stufe.Stufenname;
+            aufgabeInfo_model.IsPflichtaufgabe = aufgabe.Pflichtaufgabe;
+            aufgabeInfo_model.Bezirk = aufgabe.AufgabeBezirk == null ? "-" : aufgabe.AufgabeBezirk;
+            aufgabeInfo_model.Ort = aufgabe.AufgabeOrt == null ? "-" : aufgabe.AufgabeOrt;
+            aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilaufgabeVon == null ? "-" : aufgabe.TeilaufgabeVon.Aufgabe_Id.ToString();
+
+            aufgabeInfo_model.Frage = aufgabe.Frage;
+
+            aufgabeInfo_model.Info = aufgabe.Zusatzinfo.InfoContentM;
+
+
+            //Antwort
+            string aufgabe_typ = aufgabe.Antwort.Typ.Typ;
+            int aufgabe_inhalt_id = aufgabe.Antwort.Inhalt_Id;
+
+            switch (aufgabe_typ) {
+                case "A_T":
+                    aufgabeInfo_model.Antworttyp = "Text";
+                    aufgabeInfo_model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == aufgabe_inhalt_id);
+                    break;
+                case "A_S":
+                    aufgabeInfo_model.Antworttyp = "Slider";
+                    aufgabeInfo_model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == aufgabe_inhalt_id);
+                    break;
+                case "A_DP":
+                    aufgabeInfo_model.Antworttyp = "DatePicker";
+                    aufgabeInfo_model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == aufgabe_inhalt_id);
+                    break;
+                case "A_CB:T":
+                    aufgabeInfo_model.Antworttyp = "CheckBox";
+                    aufgabeInfo_model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == aufgabe_inhalt_id).CheckBoxes;
+                    break;
+                case "A_RB:T":
+                    aufgabeInfo_model.Antworttyp = "RadioButton";
+                    aufgabeInfo_model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == aufgabe_inhalt_id).RadioButtons;
+                    break;
+            }
+
             return aufgabeInfo_model;
         }
 

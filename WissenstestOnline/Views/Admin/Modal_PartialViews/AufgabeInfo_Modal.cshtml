@@ -8,12 +8,144 @@
         <div class="modal-content">
             <div class="modal-header MyInfoHeader">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AufgabeInfo: @Model.Frage</h4>
+                <h4 class="modal-title">AufgabeInfo: @Model.Frage.Fragetext</h4>
             </div>
             <div class="modal-body">
                 <p><span style="font-weight: bold">Aufgabe ID:</span> @Model.Aufgabe_Id</p>
+                <p><span style="font-weight: bold">Station:</span> @Model.Station</p>
+                <p><span style="font-weight: bold">Stufe:</span> @Model.Stufe</p>
+                <p><span style="font-weight: bold">Ist Teilaufgabe von:</span> @Model.TeilAufgabeVon</p>
+                <p><span style="font-weight: bold">Bezirk:</span> @Model.Bezirk</p>
+                <p><span style="font-weight: bold">Ort:</span> @Model.Ort</p>
+
+                <p>
+                    <span style="font-weight: bold">Pflichtaufgabe:</span>
+                    @if (@Model.IsPflichtaufgabe)
+                    {
+                        <span style="color: green;" class="glyphicon glyphicon-ok"></span>
+                    }
+                    else
+                    {
+                        <span style="color: red;" class="glyphicon glyphicon-remove"></span>
+                    }
+                </p>
+
+                <hr />
+
                 <span style="font-weight: bold">Frage:</span>
-                <p>@Model.Frage</p>
+                <p>@Model.Frage.Fragetext</p>
+
+                <hr />
+
+                <p><span style="font-weight: bold">Antwort:</span></p>
+                <p><span style="font-weight: bold">Antworttyp:</span> @Model.Antworttyp</p>
+
+                @if (Model.Antwort_Text != null)
+                {
+                    <p><span style="font-weight: bold">Eingabe:</span> @Model.Antwort_Text.Text</p>
+                }
+                else if (Model.Antwort_Slider != null)
+                {
+
+                    <div class="row  form-group">
+                        <div class="col-md-4">
+                            <input type="range" class="form-control" id="sliderBar" min="@Model.Antwort_Slider.Min_val" max="@Model.Antwort_Slider.Max_val" step="@Model.Antwort_Slider.Sprungweite" value="@Model.Antwort_Slider.RightVal" oninput="changeSlider(this.value, @Model.Antwort_Slider.RightVal);">
+                        </div>
+                        <div class="col-md-2">
+                            <input style="background-color: green; color: black; font-weight: bold" class="form-control" type="text" id="textfield_slider" value="@Model.Antwort_Slider.RightVal" oninput="changeTextField(this.value, @Model.Antwort_Slider.RightVal)" />
+                        </div>
+                    </div>
+
+
+                }
+                else if (Model.Antwort_DatePicker != null)
+                {
+
+                    @if (Model.Antwort_DatePicker.Date.Month < 10)
+                    {
+                        if (Model.Antwort_DatePicker.Date.Day < 10)
+                        {
+                            var monat = "0" + Model.Antwort_DatePicker.Date.Month;
+                            var tag = "0" + Model.Antwort_DatePicker.Date.Day;
+                            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@monat-@tag" onchange="changeDatum(this.value, @Model.Antwort_DatePicker.Date.Day, @Model.Antwort_DatePicker.Date.Month, @Model.Antwort_DatePicker.Date.Year);" style="background-color: green;"/>
+                        }
+                        else
+                        {
+                            var monat = "0" + Model.Antwort_DatePicker.Date.Month;
+                            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@monat-@Model.Antwort_DatePicker.Date.Day" onchange="changeDatum(this.value, @Model.Antwort_DatePicker.Date.Day, @Model.Antwort_DatePicker.Date.Month, @Model.Antwort_DatePicker.Date.Year);" style="background-color: green;"/>
+                        }
+                    }
+                    else if (Model.Antwort_DatePicker.Date.Day < 10)
+                    {
+                        var tag = "0" + Model.Antwort_DatePicker.Date.Day;
+                        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@Model.Antwort_DatePicker.Date.Month-@tag" onchange="changeDatum(this.value, @Model.Antwort_DatePicker.Date.Day, @Model.Antwort_DatePicker.Date.Month, @Model.Antwort_DatePicker.Date.Year);" style="background-color: green;"/>
+                    }
+                    else
+                    {
+                        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@Model.Antwort_DatePicker.Date.Month-@Model.Antwort_DatePicker.Date.Day" onchange="changeDatum(this.value, @Model.Antwort_DatePicker.Date.Day, @Model.Antwort_DatePicker.Date.Month, @Model.Antwort_DatePicker.Date.Year);" style="background-color: green;"/>
+                    }
+
+                }
+                else if (Model.Antwort_RadioButtons != null)
+                {
+
+                    @foreach (var radioButton in @Model.Antwort_RadioButtons)
+                    {
+                        if (radioButton.IsTrue)
+                        {
+                            <div class="radio">
+                                <label style="background-color:green"><input type="radio" name="gruppe" id="@radioButton.Radio_Id" checked /> @radioButton.Content</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="radio">
+                                <label><input type="radio" name="gruppe" id="@radioButton.Radio_Id" /> @radioButton.Content</label>
+                            </div>
+                        }
+
+                    }
+
+                }
+                else if (Model.Antwort_CheckBoxes != null)
+                {
+
+                    @foreach (var checkBox in @Model.Antwort_CheckBoxes)
+                    {
+                        if (checkBox.CheckBoxVal)
+                        {
+                            <div class="checkbox">
+                                <label style="background-color:green"><input type="checkbox" id="@checkBox.CheckBox_Id" checked />@checkBox.Content</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="checkbox">
+                                <label><input type="checkbox" id="@checkBox.CheckBox_Id" />@checkBox.Content</label>
+                            </div>
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    <p>Aufgabe hat keine Antwort!</p>
+                }
+
+
+                <hr />
+
+                <span style="font-weight: bold">Info:</span>
+                @foreach (var text in @Model.Info)
+                {
+                    <h4>@text.Heading</h4>
+                    <p>@text.Info_Content</p>
+
+                }
+
+
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
