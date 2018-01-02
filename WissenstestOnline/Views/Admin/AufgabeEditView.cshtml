@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Aufgabe bearbeiten";
+}
+
+@model WissenstestOnlineWebseite.AdminModels.AufgabeEditMain_Model
+
+<div class="container">
+    <h1>Aufgabenbearbeitungsmodus</h1>
+
+    <h4><span style="font-weight: bold">Aufgabe ID:</span> @Model.AufgabeInfo_Model.Aufgabe_Id</h4>
+
+
+    <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
+
+        <h4>Bezirk:</h4>
+        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
+
+    </form>
+
+
+
+
+
+</div>
+
+@section scripts{
+
+    <script src="~/js/admin.js"></script>
+}

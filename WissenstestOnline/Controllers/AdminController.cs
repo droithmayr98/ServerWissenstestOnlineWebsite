@@ -59,9 +59,42 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult CreateNewAdmin()
+        public IActionResult AufgabeEditView(int aufgabe_id)
         {
-            return View();
+            logger.LogInformation("Selected Aufgabe ID: " + aufgabe_id);
+
+
+
+            //Stationen
+            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<SelectListItem> stationsList = new List<SelectListItem>();
+            foreach (Station s in stations)
+            {
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                stationsList.Add(stationItem);
+            }
+
+            //Bezirke
+            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            foreach (Bezirk b in bezirke)
+            {
+                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                bezirkeList.Add(bezirkItem);
+            }
+
+            var aufgabe_view_Model = new AufgabeEditView_Model();
+
+            aufgabe_view_Model.Stationen = stationsList;
+            aufgabe_view_Model.Bezirke = bezirkeList;
+
+
+            var aufgabeInfo_edit_Model = FillAufgabeModel(aufgabe_id);
+
+            var aufgabe_edit_main_Model = new AufgabeEditMain_Model();
+            aufgabe_edit_main_Model.AufgabeInfo_Model = aufgabeInfo_edit_Model;
+            aufgabe_edit_main_Model.AufgabeEditView_Model = aufgabe_view_Model;
+            return View(aufgabe_edit_main_Model);
         }
 
         public IActionResult Logout()

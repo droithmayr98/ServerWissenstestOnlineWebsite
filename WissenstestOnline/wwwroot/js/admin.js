@@ -129,7 +129,11 @@ function AufgabeEditClicked(event) {
     console.log('Aufgabe Edit Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#aufgabeEdit_Modal').modal('show');
+
+    window.open(`AufgabeEditView?aufgabe_id=${id}`);
+    //$('#aufgabeEdit_Modal').modal('show');
+
+
 }
 
 function AufgabeDeleteClicked(event) {
