@@ -10,6 +10,8 @@ namespace WissenstestOnlineWebseite.AdminModels
     {
         public List<SelectListItem> Stationen { get; set; }
         public List<SelectListItem> Bezirke { get; set; }
+        public List<SelectListItem> Standorte { get; set; }
+        public List<SelectListItem> Fragen { get; set; }
 
     }
 }

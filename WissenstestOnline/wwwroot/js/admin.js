@@ -35,6 +35,9 @@
     $('#create_new_admin').on('click', CreateAdminClicked);
     $('#create_admin_button').on('click', CreateAdmin);
 
+    //editAufgabe
+    $('#adminEdit_bezirk_select').on('change', SetStandorteBezirk);
+
 
 });
 
@@ -266,5 +269,15 @@ function CreateAdmin() {
         console.log(`ServerReply CreateAdmin: ${result}`);
         location.reload();
     });
+
+}
+
+function SetStandorteBezirk() {
+    console.log('enter SetStandorteBezirk');
+    var bezirk_selected = $('#adminEdit_bezirk_select').val();
+    console.log(`Selected Bezirk: ${bezirk_selected}`);
+
+    const url = `/Admin/SetStandorteBezirkComboBox?bezirk=${bezirk_selected}`;
+    $('#adminEdit_ort_select').load(url);
 
 }

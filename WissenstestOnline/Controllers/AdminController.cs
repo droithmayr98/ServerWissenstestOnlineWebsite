@@ -25,7 +25,8 @@ namespace WissenstestOnline.Controllers
         }
 
         //Admin Login Page
-        public IActionResult Login(){
+        public IActionResult Login()
+        {
             logger.LogInformation("Testlog Admincontroller");
             return View();
         }
@@ -41,7 +42,7 @@ namespace WissenstestOnline.Controllers
             //Stationen als SelectListItems umwandeln und in Model speichern
             List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
-            stationsList.Add(new SelectListItem { Text = "keine ausgewählt", Value = "noItemSelected"});
+            stationsList.Add(new SelectListItem { Text = "keine ausgewählt", Value = "noItemSelected" });
             foreach (Station s in stations)
             {
                 SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
@@ -63,6 +64,7 @@ namespace WissenstestOnline.Controllers
         {
             logger.LogInformation("Selected Aufgabe ID: " + aufgabe_id);
 
+            var aufgabeInfo_edit_Model = FillAufgabeModel(aufgabe_id);
 
 
             //Stationen
@@ -70,26 +72,88 @@ namespace WissenstestOnline.Controllers
             List<SelectListItem> stationsList = new List<SelectListItem>();
             foreach (Station s in stations)
             {
-                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
-                stationsList.Add(stationItem);
+                if (s.Stationsname == aufgabeInfo_edit_Model.Station)
+                {
+                    SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                    stationItem.Selected = true;
+                    stationsList.Add(stationItem);
+                }
+                else
+                {
+                    SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                    stationsList.Add(stationItem);
+                }
             }
+
+            //FFs_1
+            List<Ort> standorte_ff = new List<Ort>();
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
 
             //Bezirke
             List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
             List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
             foreach (Bezirk b in bezirke)
             {
-                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
-                bezirkeList.Add(bezirkItem);
+                if (b.Bezirksname == aufgabeInfo_edit_Model.Bezirk)
+                {
+                    SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                    bezirkItem.Selected = true;
+                    bezirkeList.Add(bezirkItem);
+                    standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirk_Id == b.Bezirk_Id).ToList();
+                }
+                else
+                {
+                    SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                    bezirkeList.Add(bezirkItem);
+                }
             }
+
+            //FFs_2
+            foreach (Ort o in standorte_ff)
+            {
+                if (o.Ortsname == aufgabeInfo_edit_Model.Ort)
+                {
+                    SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                    standortItem.Selected = true;
+                    standorteList.Add(standortItem);
+                }
+                else
+                {
+                    SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                    standorteList.Add(standortItem);
+                }
+            }
+
+            //Fragen
+            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
+            List<SelectListItem> fragenList = new List<SelectListItem>();
+            foreach (Frage f in fragen)
+            {
+                if (f.Frage_Id == aufgabeInfo_edit_Model.Frage.Frage_Id)
+                {
+                    SelectListItem frageItem = new SelectListItem { Text = f.Fragetext, Value = f.Frage_Id.ToString() };
+                    frageItem.Selected = true;
+                    fragenList.Add(frageItem);
+                }
+                else
+                {
+                    SelectListItem frageItem = new SelectListItem { Text = f.Fragetext, Value = f.Frage_Id.ToString() };
+                    fragenList.Add(frageItem);
+                }
+            }
+
 
             var aufgabe_view_Model = new AufgabeEditView_Model();
 
             aufgabe_view_Model.Stationen = stationsList;
             aufgabe_view_Model.Bezirke = bezirkeList;
+            aufgabe_view_Model.Standorte = standorteList;
+            aufgabe_view_Model.Fragen = fragenList;
 
 
-            var aufgabeInfo_edit_Model = FillAufgabeModel(aufgabe_id);
+
 
             var aufgabe_edit_main_Model = new AufgabeEditMain_Model();
             aufgabe_edit_main_Model.AufgabeInfo_Model = aufgabeInfo_edit_Model;
@@ -105,9 +169,10 @@ namespace WissenstestOnline.Controllers
 
 
         //Ajax calls
-        public string CheckAdminInfo(string username, string password) {
+        public string CheckAdminInfo(string username, string password)
+        {
 
-            Admintable admin =  test_db.Admins.SingleOrDefault(x => x.Username.Equals(username));
+            Admintable admin = test_db.Admins.SingleOrDefault(x => x.Username.Equals(username));
             if (admin == null)
             {
                 return "username_fail";
@@ -116,37 +181,43 @@ namespace WissenstestOnline.Controllers
             {
                 return "password_fail";
             }
-            else {
+            else
+            {
                 return "ok";
             }
         }
 
-        public IActionResult GetAdminInfo(string admin_id) {
+        public IActionResult GetAdminInfo(string admin_id)
+        {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
             return PartialView("Modal_PartialViews/AdminInfo_Modal", adminInfo_model);
         }
 
-        public IActionResult GetAdminEdit(string admin_id) {
+        public IActionResult GetAdminEdit(string admin_id)
+        {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
             return PartialView("Modal_PartialViews/AdminEdit_Modal", adminInfo_model);
         }
 
-        public IActionResult GetAdminDelete(string admin_id) {
+        public IActionResult GetAdminDelete(string admin_id)
+        {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
             return PartialView("Modal_PartialViews/AdminDelete_Modal", adminInfo_model);
         }
 
-        public IActionResult GetAufgabeInfo(string aufgabe_id) {
+        public IActionResult GetAufgabeInfo(string aufgabe_id)
+        {
             int aufgabeId_int = Convert.ToInt32(aufgabe_id);
             var aufgabeInfo_model = FillAufgabeModel(aufgabeId_int);
             return PartialView("Modal_PartialViews/AufgabeInfo_Modal", aufgabeInfo_model);
         }
 
-        public AdminInfo_Model FillAdminModel(int adminId_int) {
-            
+        public AdminInfo_Model FillAdminModel(int adminId_int)
+        {
+
             Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
             var adminInfo_model = new AdminInfo_Model();
             adminInfo_model.Id = admin.Admin_Id;
@@ -158,7 +229,8 @@ namespace WissenstestOnline.Controllers
             return adminInfo_model;
         }
 
-        public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int) {
+        public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int)
+        {
             Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
             var aufgabeInfo_model = new AufgabeInfo_Model();
             aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
@@ -178,7 +250,8 @@ namespace WissenstestOnline.Controllers
             string aufgabe_typ = aufgabe.Antwort.Typ.Typ;
             int aufgabe_inhalt_id = aufgabe.Antwort.Inhalt_Id;
 
-            switch (aufgabe_typ) {
+            switch (aufgabe_typ)
+            {
                 case "A_T":
                     aufgabeInfo_model.Antworttyp = "Text";
                     aufgabeInfo_model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == aufgabe_inhalt_id);
@@ -204,7 +277,8 @@ namespace WissenstestOnline.Controllers
             return aufgabeInfo_model;
         }
 
-        public string SaveAdminChanges(int admin_id, string username,string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc) {
+        public string SaveAdminChanges(int admin_id, string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc)
+        {
             //Datenbankänderungen u Überprüfungen
             var edit_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
             edit_admin.Username = username;
@@ -216,7 +290,8 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string DeleteAdmin(int admin_id) {
+        public string DeleteAdmin(int admin_id)
+        {
             //Datensatz löschen
             var delete_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
             test_db.Admins.Remove(delete_admin);
@@ -224,7 +299,8 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string CreateAdmin(string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc) {
+        public string CreateAdmin(string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc)
+        {
             Admintable new_admin = new Admintable();
             new_admin.Username = username;
             new_admin.Password = password;
@@ -236,7 +312,25 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public IActionResult SetStandorteBezirkComboBox(string bezirk)
+        {
 
+            List<Ort> standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).ToList();
+
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
+
+            foreach (Ort o in standorte_ff)
+            {
+                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                standorteList.Add(standortItem);
+            }
+
+            var newComboBoxValues_Model = new NewComboBoxValues_Model();
+            newComboBoxValues_Model.New_values = standorteList;
+
+            return PartialView("NewComboBoxValues", newComboBoxValues_Model);
+        }
 
     }
 }

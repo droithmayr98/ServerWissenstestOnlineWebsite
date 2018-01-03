@@ -12,15 +12,102 @@
 
     <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
 
+        <h4>Station:</h4>
+        <!--val="@Model.AufgabeInfo_Model.Station"-->
+        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
+
+        <h4>Stufe:</h4>
+
+        @if (Model.AufgabeInfo_Model.Stufe == "Bronze")
+        {
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary active buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze" checked>Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                </label>
+            </div>
+        }
+        else if (Model.AufgabeInfo_Model.Stufe == "Silver")
+        {
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber" checked>Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                </label>
+            </div>
+        }
+        else
+        {
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold" checked>Gold
+                </label>
+            </div>
+        }
+
+        <h4>Pflichtaufgabe:</h4>
+        @if (Model.AufgabeInfo_Model.IsPflichtaufgabe)
+        {
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true" checked>Ja
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false">Nein
+                </label>
+            </div>
+        }
+        else
+        {
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true">Ja
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false" checked>Nein
+                </label>
+            </div>
+        }
+
+        <h4>Teilaufgabe von: @Model.AufgabeInfo_Model.TeilAufgabeVon</h4>
+
         <h4>Bezirk:</h4>
-        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen">
-        </select>
+        <select id="adminEdit_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
+
+        <h4>Ort:</h4>
+        <select id="adminEdit_ort_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Standorte"></select>
+
+
+
+        <!--Fragen ändern oder neue Frage oder Frage bearbeiten???     -> Fragebaukasten -->
+        <hr />
+        <h3>Frage:</h3>
+        <select class="form-control" id="aufgabeEdit_fragen" asp-items="@Model.AufgabeEditView_Model.Fragen"></select>
+        <textarea class="form-control">@Model.AufgabeInfo_Model.Frage.Fragetext</textarea>
+        <button class="btn btn-success">+ Neue Frage</button>
+        <hr />
+        <h3>Antwort:</h3>
+
+        <hr />
+        <h3>Info:</h3>
 
     </form>
-
-
-
-
 
 </div>
 
