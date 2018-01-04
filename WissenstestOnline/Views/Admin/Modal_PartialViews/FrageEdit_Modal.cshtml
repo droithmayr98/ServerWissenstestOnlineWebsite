@@ -1,0 +1,30 @@
+@model WissenstestOnlineWebseite.AdminModels.FrageInfo_Model
+
+<div class="modal fade" id="frageEdit_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyWarningHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">FrageEdit: @Model.FrageText</h4>
+            </div>
+            <!-- Body Part -->
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5><span style="font-weight: bold">Frage ID:</span> <span id="frageEdit_Id">@Model.FrageId</span></h5>
+                    <textarea class="form-control" id="textarea_fragetext">@Model.FrageText</textarea>
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveFrageChanges">Speichern</button>
+            </div>
+        </div>
+
+    </div>
+</div>

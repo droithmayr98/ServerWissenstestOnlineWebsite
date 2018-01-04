@@ -20,6 +20,17 @@
         }
     });
 
+    //Suchtrigger Fragen
+    $('#searchFrageText_AufgabeEditView').on('click', SearchFrageText_AufgabeEditView_Frage);
+
+    $('#searchFrageField_AufgabeEditView').bind('enterKey2', SearchFrageText_AufgabeEditView_Frage);
+    $('#searchFrageField_AufgabeEditView').keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(this).trigger('enterKey2');
+            e.preventDefault();
+        }
+    });
+
     //AufgabeItemButtons
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
@@ -30,6 +41,17 @@
     $('.admin_warning').on('click', AdminEditClicked);
     $('.admin_danger').on('click', AdminDeleteClicked);
 
+    //FrageItemButtons
+    $('.frage_Info').on('click', FrageInfoClicked);
+    $('.frage_warning').on('click', FrageEditClicked);
+    $('.frage_danger').on('click', FrageDeleteClicked);
+
+    //new Frage
+    $('#newFrage_AufgabeEditView').on('click', CreateFrageClicked);
+    $('#create_frage_button').on('click', CreateFrage);
+
+    //Frage auswählen
+    $('.frageobject').on('click', SelectFrage);
 
     //new Admin
     $('#create_new_admin').on('click', CreateAdminClicked);
@@ -114,6 +136,24 @@ function SearchFrageText() {
 
 }
 
+function SearchFrageText_AufgabeEditView_Frage() {
+    var eingabe = $('#searchFrageField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    var fragenLI_list = $('#frageliste_aufgabeEditView').children();
+    for (var i = 0; i < fragenLI_list.length; i++) {
+        var frage_li = fragenLI_list[i];
+        
+        var span_frage = $(`#${frage_li.id}`).children().first();
+
+        if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+            $(`#${frage_li.id}`).show();
+        } else {
+            $(`#${frage_li.id}`).hide();
+        }
+    }
+
+}
 
 //AufgabeButtonFunctions
 function AufgabeInfoClicked(event) {
@@ -145,7 +185,6 @@ function AufgabeDeleteClicked(event) {
     console.log(`Target_ID: ${id}`);
     $('#aufgabeDelete_Modal').modal('show');
 }
-
 
 //AdminButtonFunctions
 function AdminInfoClicked(event) {
@@ -279,5 +318,115 @@ function SetStandorteBezirk() {
 
     const url = `/Admin/SetStandorteBezirkComboBox?bezirk=${bezirk_selected}`;
     $('#adminEdit_ort_select').load(url);
+
+}
+
+//FrageButtonFunctions
+function FrageInfoClicked(event) {
+    console.log('Frage InfoClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    const url = `/Admin/GetFrageInfo?frage_id=${id}`;
+    $('#loadFrageModal').load(url, () => {
+        $('#frageInfo_Modal').modal('show');
+    });
+
+}
+
+function FrageEditClicked(event) {
+    console.log('Frage EditClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    const url = `/Admin/GetFrageEdit?frage_id=${id}`;
+    $('#loadFrageModal').load(url, () => {
+        $('#frageEdit_Modal').modal('show');
+        $('#saveFrageChanges').on('click', SaveFrageEdit);
+    });
+
+}
+
+function FrageDeleteClicked(event) {
+    console.log('Frage DeleteClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    const url = `/Admin/GetFrageDelete?frage_id=${id}`;
+    $('#loadFrageModal').load(url, () => {
+        $('#frageDelete_Modal').modal('show');
+        $('#deleteFrage').on('click', DeleteFrage);
+    });
+
+}
+
+function SaveFrageEdit() {
+    console.log('enter SaveFrageEdit');
+    var frage_id_selected = $('#frageEdit_Id').text();
+    console.log(`Selected Frage ID: ${frage_id_selected}`);
+    var fragetext_change = $('#textarea_fragetext').val();
+
+    const url = `/Admin/SaveFrageChanges`;
+    $.post(url, {
+        frage_id: frage_id_selected,
+        fragetext: fragetext_change
+    }).then(result => {
+        console.log(`ServerReply SaveFrageChanges: ${result}`);
+        location.reload();
+        });
+
+
+
+}
+
+function CreateFrageClicked() {
+    console.log('enter CreateFrageClicked');
+    $('#frageCreate_Modal').modal('show');
+    
+}
+
+function CreateFrage() {
+    console.log('enter CreateFrage');
+    var new_frage_text = $('#newFrage_Fragetext').val();
+
+    const url = `/Admin/CreateFrage`;
+    $.post(url, {
+        fragetext: new_frage_text
+    }).then(result => {
+        console.log(`ServerReply CreateFrage: ${result}`);
+        location.reload();
+    });
+
+}
+
+function DeleteFrage() {
+    console.log('enter DeleteFrage');
+    //Nur Frage löschen --> wenn Frage in keiner aufgabe vorkommt
+    //Was passiert mit aufgaben, die die Frage beinhalten???
+    var frage_id_selected = $('#frage_id_delete').text();
+
+    const url = `/Admin/DeleteFrage`;
+    $.post(url, {
+        frage_id: frage_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteFrage: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        } else {
+            //Frage darf nicht gelöscht werden --> Frage ist noch in einer Aufgabe vorhanden
+            $('#frageDeleteError_Modal').modal('show');
+            
+        }
+        
+    });
+
+}
+
+function SelectFrage(event) {
+    console.log('enter SelectFrage');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    $(`#li_${id}`).css("background-color", "green");
 
 }

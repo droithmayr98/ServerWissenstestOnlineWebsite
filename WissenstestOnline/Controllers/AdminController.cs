@@ -9,6 +9,7 @@ using DB_lib.Tables;
 using WissenstestOnlineWebseite.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.AdminModels;
+using System.Data.Entity.Validation;
 
 namespace WissenstestOnline.Controllers
 {
@@ -331,6 +332,94 @@ namespace WissenstestOnline.Controllers
 
             return PartialView("NewComboBoxValues", newComboBoxValues_Model);
         }
+
+        public IActionResult GetFrageInfo(int frage_id)
+        {
+            var frageInfo_Model = FillFrageInfoModel(frage_id);
+            return PartialView("Modal_PartialViews/FrageInfo_Modal", frageInfo_Model);
+        }
+
+        public IActionResult GetFrageEdit(int frage_id)
+        {
+            var frageEdit_Model = FillFrageInfoModel(frage_id);
+            return PartialView("Modal_PartialViews/FrageEdit_Modal", frageEdit_Model);
+        }
+
+        public FrageInfo_Model FillFrageInfoModel(int frage_id)
+        {
+            Frage frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
+            var frageInfo_Model = new FrageInfo_Model();
+            frageInfo_Model.FrageId = frage.Frage_Id;
+            frageInfo_Model.FrageText = frage.Fragetext;
+            return frageInfo_Model;
+        }
+
+        public string SaveFrageChanges(int frage_id, string fragetext)
+        {
+
+            Frage edit_frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
+            edit_frage.Fragetext = fragetext;
+            edit_frage.Typ = edit_frage.Typ;
+
+            try
+            {
+                test_db.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+
+
+            return "ok";
+        }
+
+        public string CreateFrage(string fragetext)
+        {
+
+            Frage new_frage = new Frage();
+            new_frage.Fragetext = fragetext;
+            new_frage.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals("F_T"));
+
+            test_db.Fragen.Add(new_frage);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        public IActionResult GetFrageDelete(int frage_id)
+        {
+            var frageDelete_Model = FillFrageInfoModel(frage_id);
+            return PartialView("Modal_PartialViews/FrageDelete_Modal", frageDelete_Model);
+        }
+
+        public string DeleteFrage(int frage_id)
+        {
+            Frage frage_delete = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
+            if (frage_delete.Aufgaben.Count == 0)
+            {
+                test_db.Fragen.Remove(frage_delete);
+                test_db.SaveChanges();
+                return "ok";
+            }
+            else
+            {
+                return "not deletable";
+            }
+
+        }
+
+
 
     }
 }
