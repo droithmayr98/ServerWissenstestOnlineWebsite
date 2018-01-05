@@ -133,11 +133,11 @@ namespace DB_lib.Migrations
             #endregion----------------------------------------------
 
             #region-----------------------------------Zusatzinfo erzeugen
-            Zusatzinfo zusatzinfoText1 = new Zusatzinfo { Typ = I_TTTTT};
-            Zusatzinfo zusatzinfoText2 = new Zusatzinfo { Typ = I_TTT };
-            Zusatzinfo zusatzinfoText3 = new Zusatzinfo { Typ = I_TT };
-            Zusatzinfo zusatzinfoText4 = new Zusatzinfo { Typ = I_T };
-            Zusatzinfo zusatzinfoText5 = new Zusatzinfo { Typ = I_T };
+            Zusatzinfo zusatzinfoText1 = new Zusatzinfo { Typ = I_TTTTT, Zusatzinfo_Name="Allgemeines über Österreich"};
+            Zusatzinfo zusatzinfoText2 = new Zusatzinfo { Typ = I_TTT, Zusatzinfo_Name="Dienstgrade der Feuerwehr" };
+            Zusatzinfo zusatzinfoText3 = new Zusatzinfo { Typ = I_TT, Zusatzinfo_Name="Verschiedene Feuerwehrschläuche"};
+            Zusatzinfo zusatzinfoText4 = new Zusatzinfo { Typ = I_T, Zusatzinfo_Name="Feuerwehrfahrzeuge" };
+            Zusatzinfo zusatzinfoText5 = new Zusatzinfo { Typ = I_T, Zusatzinfo_Name="TestzusatzinfoAAA" };
             #endregion---------------------------------------------
 
             #region-----------------------------------InfoContent erzeugen
@@ -234,23 +234,23 @@ namespace DB_lib.Migrations
             #endregion----------------------------------------------------
 
             #region-------------------------------Antworten erzeugen
-            Antwort Antwort_Text1 = new Antwort {Typ = A_T, Inhalt_Id = 1 };
-            Antwort Antwort_Text2 = new Antwort { Typ = A_T, Inhalt_Id = 2 };
+            Antwort Antwort_Text1 = new Antwort {Typ = A_T, Inhalt_Id = 1, Antwort_Name="Eingabefeld_Schärding" };
+            Antwort Antwort_Text2 = new Antwort { Typ = A_T, Inhalt_Id = 2, Antwort_Name="Eingabefeld_Verwalter" };
 
-            Antwort Antwort_Slider1 = new Antwort { Typ = A_S, Inhalt_Id = 1 };
-            Antwort Antwort_Slider2 = new Antwort { Typ = A_S, Inhalt_Id = 2 };
+            Antwort Antwort_Slider1 = new Antwort { Typ = A_S, Inhalt_Id = 1, Antwort_Name="Slider_C-Druckschlauch" };
+            Antwort Antwort_Slider2 = new Antwort { Typ = A_S, Inhalt_Id = 2, Antwort_Name = "Slider_B-Druckschlauch" };
 
-            Antwort Antwort_DatePicker1 = new Antwort { Typ = A_DP, Inhalt_Id = 1 };
-            Antwort Antwort_DatePicker2 = new Antwort { Typ = A_DP, Inhalt_Id = 2 };
+            Antwort Antwort_DatePicker1 = new Antwort { Typ = A_DP, Inhalt_Id = 1, Antwort_Name="Datepicker_MeinGeburtstag" };
+            Antwort Antwort_DatePicker2 = new Antwort { Typ = A_DP, Inhalt_Id = 2, Antwort_Name= "Datepicker_Weihnachten2017" };
 
-            Antwort Antwort_CheckBox1 = new Antwort { Typ = A_CBxT, Inhalt_Id = 1 };
-            Antwort Antwort_CheckBox2 = new Antwort { Typ = A_CBxT, Inhalt_Id = 2 };
+            Antwort Antwort_CheckBox1 = new Antwort { Typ = A_CBxT, Inhalt_Id = 1, Antwort_Name="Eggerding_Feuerwehrfahrzeuge" };
+            Antwort Antwort_CheckBox2 = new Antwort { Typ = A_CBxT, Inhalt_Id = 2, Antwort_Name="RichtigFalschTest" };
 
-            Antwort Antwort_RadioButtons1 = new Antwort { Typ = A_RBxT, Inhalt_Id = 1 };
-            Antwort Antwort_RadioButtons2 = new Antwort { Typ = A_RBxT, Inhalt_Id = 2 };
+            Antwort Antwort_RadioButtons1 = new Antwort { Typ = A_RBxT, Inhalt_Id = 1, Antwort_Name="SchutzpatronFF" };
+            Antwort Antwort_RadioButtons2 = new Antwort { Typ = A_RBxT, Inhalt_Id = 2, Antwort_Name="Bezirke_OÖ" };
 
-            Antwort Antwort_Verbinden1 = new Antwort { Typ = A_VxBBuM, Inhalt_Id = 1 };
-            Antwort Antwort_Verbinden2 = new Antwort { Typ = A_VxBBuV, Inhalt_Id = 2 };
+            Antwort Antwort_Verbinden1 = new Antwort { Typ = A_VxBBuM, Inhalt_Id = 1, Antwort_Name="Verbinden1" };
+            Antwort Antwort_Verbinden2 = new Antwort { Typ = A_VxBBuV, Inhalt_Id = 2, Antwort_Name = "Verbinden2" };
             #endregion----------------------------------------------------------
 
             #region------------------------------------------AUFGABEN ERSTELLEN

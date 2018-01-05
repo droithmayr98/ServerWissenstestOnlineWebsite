@@ -15,6 +15,8 @@ namespace WissenstestOnlineWebseite.AdminModels
         public string Ort { get; set; }
         public string TeilAufgabeVon { get; set; }
         public bool IsPflichtaufgabe { get; set; }
+        public int Antwort_Id { get; set; }
+        public string Antwort_Name { get; set; }
 
         public Frage Frage { get; set; }
         public List<InfoContent> Info { get; set; }

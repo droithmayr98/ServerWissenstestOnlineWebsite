@@ -129,21 +129,24 @@ namespace WissenstestOnline.Controllers
 
             //Fragen
             List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
-            List<SelectListItem> fragenList = new List<SelectListItem>();
-            foreach (Frage f in fragen)
+
+            //Antworten
+            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
+
+            //Antworttypen
+            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
+
+            List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
+            antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in antwort_typen)
             {
-                if (f.Frage_Id == aufgabeInfo_edit_Model.Frage.Frage_Id)
-                {
-                    SelectListItem frageItem = new SelectListItem { Text = f.Fragetext, Value = f.Frage_Id.ToString() };
-                    frageItem.Selected = true;
-                    fragenList.Add(frageItem);
-                }
-                else
-                {
-                    SelectListItem frageItem = new SelectListItem { Text = f.Fragetext, Value = f.Frage_Id.ToString() };
-                    fragenList.Add(frageItem);
-                }
+                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                antwort_typen_list.Add(antwortTypItem);
             }
+
+
+            //Zusatzinfo
+
 
 
             var aufgabe_view_Model = new AufgabeEditView_Model();
@@ -151,8 +154,9 @@ namespace WissenstestOnline.Controllers
             aufgabe_view_Model.Stationen = stationsList;
             aufgabe_view_Model.Bezirke = bezirkeList;
             aufgabe_view_Model.Standorte = standorteList;
-            aufgabe_view_Model.Fragen = fragenList;
-
+            aufgabe_view_Model.Fragen = fragen;
+            aufgabe_view_Model.Antworten = antworten;
+            aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
 
 
 
@@ -241,6 +245,8 @@ namespace WissenstestOnline.Controllers
             aufgabeInfo_model.Bezirk = aufgabe.AufgabeBezirk == null ? "-" : aufgabe.AufgabeBezirk;
             aufgabeInfo_model.Ort = aufgabe.AufgabeOrt == null ? "-" : aufgabe.AufgabeOrt;
             aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilaufgabeVon == null ? "-" : aufgabe.TeilaufgabeVon.Aufgabe_Id.ToString();
+            aufgabeInfo_model.Antwort_Id = aufgabe.Antwort.Antwort_Id;
+            aufgabeInfo_model.Antwort_Name = aufgabe.Antwort.Antwort_Name;
 
             aufgabeInfo_model.Frage = aufgabe.Frage;
 
@@ -417,6 +423,11 @@ namespace WissenstestOnline.Controllers
                 return "not deletable";
             }
 
+        }
+
+        public IActionResult GetAntwortInfo(string antwort_id) {
+
+            return PartialView();
         }
 
 

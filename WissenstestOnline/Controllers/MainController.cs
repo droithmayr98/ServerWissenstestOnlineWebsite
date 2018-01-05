@@ -8,7 +8,8 @@ using DB_lib.Tables;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.Models;
-
+using System.Data.Entity;
+using DB_lib.Migrations;
 
 namespace WissenstestOnline.Controllers
 {

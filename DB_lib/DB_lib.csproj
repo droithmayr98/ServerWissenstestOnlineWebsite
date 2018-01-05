@@ -48,9 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201711030857213_initialV2.cs" />
-    <Compile Include="Migrations\201711030857213_initialV2.Designer.cs">
-      <DependentUpon>201711030857213_initialV2.cs</DependentUpon>
+    <Compile Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs" />
+    <Compile Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.Designer.cs">
+      <DependentUpon>201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,8 +91,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711030857213_initialV2.resx">
-      <DependentUpon>201711030857213_initialV2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.resx">
+      <DependentUpon>201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

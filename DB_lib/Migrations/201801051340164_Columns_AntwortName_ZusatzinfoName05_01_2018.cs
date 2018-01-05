@@ -3,7 +3,7 @@ namespace DB_lib.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initialV2 : DbMigration
+    public partial class Columns_AntwortName_ZusatzinfoName05_01_2018 : DbMigration
     {
         public override void Up()
         {
@@ -122,6 +122,7 @@ namespace DB_lib.Migrations
                 c => new
                     {
                         Antwort_Id = c.Int(nullable: false, identity: true),
+                        Antwort_Name = c.String(nullable: false),
                         Inhalt_Id = c.Int(nullable: false),
                         Typ_Typ_Id = c.Int(nullable: false),
                     })
@@ -189,6 +190,7 @@ namespace DB_lib.Migrations
                 c => new
                     {
                         Zusatzinfo_Id = c.Int(nullable: false, identity: true),
+                        Zusatzinfo_Name = c.String(nullable: false),
                         Typ_Typ_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Zusatzinfo_Id)

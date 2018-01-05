@@ -31,6 +31,18 @@
         }
     });
 
+    //Suchtrigger Antworten
+    $('#searchAntwortText_AufgabeEditView').on('click', SearchAntwortText_AufgabeEditView_Antwort);
+
+    $('#searchAntwortField_AufgabeEditView').bind('enterKey3', SearchAntwortText_AufgabeEditView_Antwort);
+    $('#searchAntwortField_AufgabeEditView').keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(this).trigger('enterKey3');
+            e.preventDefault();
+        }
+    });
+
+
     //AufgabeItemButtons
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
@@ -46,12 +58,20 @@
     $('.frage_warning').on('click', FrageEditClicked);
     $('.frage_danger').on('click', FrageDeleteClicked);
 
+    //AntwortItemButtons
+    $('.antwort_Info').on('click', AntwortInfoClicked);
+    $('.antwort_warning').on('click', AntwortEditClicked);
+    $('.antwort_danger').on('click', AntwortDeleteClicked);
+
     //new Frage
     $('#newFrage_AufgabeEditView').on('click', CreateFrageClicked);
     $('#create_frage_button').on('click', CreateFrage);
 
     //Frage auswählen
     $('.frageobject').on('click', SelectFrage);
+
+    //Antworttyp Select
+    $('#aufgabeEdit_antworttyp_select').on('change', SelectAntworttyp);
 
     //new Admin
     $('#create_new_admin').on('click', CreateAdminClicked);
@@ -136,9 +156,16 @@ function SearchFrageText() {
 
 }
 
+//Fehler ComboBox wird nicht beachtet
 function SearchFrageText_AufgabeEditView_Frage() {
     var eingabe = $('#searchFrageField_AufgabeEditView').val();
     console.log(`Eingegebener Text: ${eingabe}`);
+
+    var station_selected = $('#stations_admin').val();
+    console.log(`Ausgewählte Station: ${station_selected}`);
+    if (station_selected != "noItemSelected") {
+
+    }
 
     var fragenLI_list = $('#frageliste_aufgabeEditView').children();
     for (var i = 0; i < fragenLI_list.length; i++) {
@@ -153,6 +180,32 @@ function SearchFrageText_AufgabeEditView_Frage() {
         }
     }
 
+}
+
+
+//Fehler ComboBox wird nicht beachtet
+function SearchAntwortText_AufgabeEditView_Antwort() {
+    var eingabe = $('#searchAntwortField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    var antworttyp_selected = $('#aufgabeEdit_antworttyp_select').val();
+    console.log(`Antworttyp Selected: ${antworttyp_selected}`);
+    if (antworttyp_selected != "noItemSelected") {
+        
+    }
+
+    var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+    for (var i = 0; i < antwortenLI_list.length; i++) {
+        var antwort_li = antwortenLI_list[i];
+
+        var span_antwort = $(`#${antwort_li.id}`).children().first();
+
+        if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+            $(`#${antwort_li.id}`).show();
+        } else {
+            $(`#${antwort_li.id}`).hide();
+        }
+    }
 }
 
 //AufgabeButtonFunctions
@@ -430,3 +483,61 @@ function SelectFrage(event) {
     $(`#li_${id}`).css("background-color", "green");
 
 }
+
+function SelectAntworttyp() {
+    console.log('enter SelectAntworttyp');
+
+    var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
+    console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
+
+    if (selectedAntworttyp != "noItemSelected") {
+
+        var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+        for (var i = 0; i < antwortLI_list.length; i++) {
+            var antwort_li = antwortLI_list[i];
+            var id_split = antwort_li.id.split("-");
+            if (id_split[1] != selectedAntworttyp) {
+                $(`#${antwort_li.id}`).hide();
+            } else {
+                $(`#${antwort_li.id}`).show();
+            }
+        }
+
+    } else {
+        var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+        for (var i = 0; i < antwortLI_list.length; i++) {
+            var antwort_li = antwortLI_list[i];
+            $(`#${antwort_li.id}`).show();
+        }
+
+    }
+
+
+}
+
+//AntwortButtonFunctions
+function AntwortInfoClicked(event) {
+    console.log('AntwortInfoClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    const url = `/Admin/GetAntwortInfo?antwort_id=${id}`;
+    $('#loadAntwortModal').load(url, () => {
+        $('#antwortInfo_Modal').modal('show');
+    });
+
+}
+
+function AntwortEditClicked(event) {
+    console.log('AntwortEditClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+}
+
+function AntwortDeleteClicked(event) {
+    console.log('AntwortEditClicked');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+}
+

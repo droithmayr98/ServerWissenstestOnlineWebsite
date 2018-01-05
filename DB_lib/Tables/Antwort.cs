@@ -14,6 +14,8 @@ namespace DB_lib.Tables
         [Key]
         public int Antwort_Id { get; set; }
         [Required]
+        public string Antwort_Name { get; set; }
+        [Required]
         public virtual Typendefinition Typ { get; set; }
         [Required]
         public int Inhalt_Id { get; set; }

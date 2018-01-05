@@ -14,6 +14,8 @@ namespace DB_lib.Tables
         [Key]
         public int Zusatzinfo_Id { get; set; }
         [Required]
+        public string Zusatzinfo_Name { get; set; }
+        [Required]
         public virtual Typendefinition Typ {get; set;}
 
         public virtual List<Aufgabe> Aufgaben { get; set; }

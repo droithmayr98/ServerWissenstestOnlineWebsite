@@ -20,69 +20,69 @@
 
         @if (Model.AufgabeInfo_Model.Stufe == "Bronze")
         {
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary active buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze" checked>Bronze
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
-            </label>
-        </div>
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary active buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze" checked>Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                </label>
+            </div>
         }
         else if (Model.AufgabeInfo_Model.Stufe == "Silver")
         {
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
-            </label>
-            <label class="btn btn-secondary buttons_stufen active">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber" checked>Silver
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
-            </label>
-        </div>
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber" checked>Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                </label>
+            </div>
         }
         else
         {
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
-            </label>
-            <label class="btn btn-secondary buttons_stufen active">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold" checked>Gold
-            </label>
-        </div>
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold" checked>Gold
+                </label>
+            </div>
         }
 
         <h4>Pflichtaufgabe:</h4>
         @if (Model.AufgabeInfo_Model.IsPflichtaufgabe)
         {
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary buttons_stufen active">
-                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true" checked>Ja
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false">Nein
-            </label>
-        </div>
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true" checked>Ja
+                </label>
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false">Nein
+                </label>
+            </div>
         }
         else
         {
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true">Ja
-            </label>
-            <label class="btn btn-secondary buttons_stufen active">
-                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false" checked>Nein
-            </label>
-        </div>
+            <div class="btn-group" data-toggle="buttons" id="stufen">
+                <label class="btn btn-secondary buttons_stufen">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true">Ja
+                </label>
+                <label class="btn btn-secondary buttons_stufen active">
+                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false" checked>Nein
+                </label>
+            </div>
         }
 
         <h4>Teilaufgabe von: @Model.AufgabeInfo_Model.TeilAufgabeVon</h4>
@@ -115,28 +115,28 @@
 
                 @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
                 {
-                @if (frage.Value == Model.AufgabeInfo_Model.Frage.Frage_Id.ToString())
+                    @if (frage.Frage_Id == Model.AufgabeInfo_Model.Frage.Frage_Id)
                 {
-                <li class="list-group-item" style="background-color: green" id="li_@frage.Value">
-                    <span class="frageobject" id="@frage.Value">@frage.Text</span>
-                    <div class="btn-group" style="float:right">
-                        <button class="btn btn-info frage_Info" id="@frage.Value"><span class="glyphicon glyphicon-info-sign"></span></button>
-                        <button class="btn btn-warning frage_warning" id="@frage.Value"><span class="glyphicon glyphicon-pencil"></span></button>
-                        <button class="btn btn-danger frage_danger" id="@frage.Value"><span class="glyphicon glyphicon-remove"></span></button>
-                    </div>
-                </li>
-                }
-                else
-                {
-                <li class="list-group-item" id="li_@frage.Value">
-                    <span class="frageobject" id="@frage.Value">@frage.Text</span>
-                    <div class="btn-group" style="float:right">
-                        <button class="btn btn-info frage_Info" id="@frage.Value"><span class="glyphicon glyphicon-info-sign"></span></button>
-                        <button class="btn btn-warning frage_warning" id="@frage.Value"><span class="glyphicon glyphicon-pencil"></span></button>
-                        <button class="btn btn-danger frage_danger" id="@frage.Value"><span class="glyphicon glyphicon-remove"></span></button>
-                    </div>
-                </li>
-                }
+                        <li class="list-group-item" style="background-color: green" id="li_@frage.Frage_Id">
+                            <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning frage_warning" id="@frage.Frage_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger frage_danger" id="@frage.Frage_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item" id="li_@frage.Frage_Id">
+                            <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning frage_warning" id="@frage.Frage_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger frage_danger" id="@frage.Frage_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
 
 
                 }
@@ -151,6 +151,62 @@
 
     <hr />
     <h3>Antwort:</h3>
+    <h4><span style="font-weight: bold">Ausgewählte Antwort:</span> @Model.AufgabeInfo_Model.Antwort_Name</h4>
+
+    <div class="well">
+
+        <div>
+            <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
+                <select id="aufgabeEdit_antworttyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
+
+                <input type="text" class="form-control input" placeholder="Antwort eingeben..." style="float:left;" id="searchAntwortField_AufgabeEditView">
+                <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeEditView">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
+            </form>
+            
+        </div>
+
+        <nav id="aufgabeEditAntworten">
+            <ul class="list-group" id="antwortliste_aufgabeEditView">
+
+                @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
+                {
+                    @if (antwort.Antwort_Id == Model.AufgabeInfo_Model.Antwort_Id)
+                {
+                        <li class="list-group-item" style="background-color: green" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
+                            <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning antwort_warning" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger antwort_danger" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
+                            <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning antwort_warning" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger antwort_danger" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
+
+
+                }
+
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+
 
     <hr />
     <h3>Info:</h3>
@@ -161,10 +217,11 @@
 
 
 <div id="loadFrageModal"></div>
+<div id="loadAntwortModal"></div>
 
 @section scripts{
 
-<script src="~/js/admin.js"></script>
+    <script src="~/js/admin.js"></script>
 }
 
 
