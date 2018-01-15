@@ -518,10 +518,12 @@ function SelectAntworttyp() {
 //AntwortButtonFunctions
 function AntwortInfoClicked(event) {
     console.log('AntwortInfoClicked');
-    var id = event.target.id;
-    console.log(`Target_ID: ${id}`);
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
 
-    const url = `/Admin/GetAntwortInfo?antwort_id=${id}`;
+    const url = `/Admin/GetAntwortInfo?antwort_id=${id[1]}`;
     $('#loadAntwortModal').load(url, () => {
         $('#antwortInfo_Modal').modal('show');
     });
@@ -530,12 +532,20 @@ function AntwortInfoClicked(event) {
 
 function AntwortEditClicked(event) {
     console.log('AntwortEditClicked');
-    var id = event.target.id;
-    console.log(`Target_ID: ${id}`);
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetAntwortEdit?antwort_id=${id[1]}`;
+    $('#loadAntwortModal').load(url, () => {
+        $('#antwortEdit_Modal').modal('show');
+    });
+
 }
 
 function AntwortDeleteClicked(event) {
-    console.log('AntwortEditClicked');
+    console.log('AntwortDeleteClicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
 
