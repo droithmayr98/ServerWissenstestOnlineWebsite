@@ -18,7 +18,10 @@ namespace WissenstestOnlineWebseite.AdminModels
         public int Antwort_Id { get; set; }
         public string Antwort_Name { get; set; }
 
+        //Frage
         public Frage Frage { get; set; }
+
+        //??? do I need this
         public List<InfoContent> Info { get; set; }
 
         //Antwort
@@ -28,7 +31,9 @@ namespace WissenstestOnlineWebseite.AdminModels
         public Antwort_Slider Antwort_Slider { get; set; }
         public List<CheckBox> Antwort_CheckBoxes { get; set; }
         public List<RadioButton> Antwort_RadioButtons { get; set; }
-        
+
+        //Zusatzinfo
+        public Zusatzinfo Zusatzinfo { get; set; }
 
 
 

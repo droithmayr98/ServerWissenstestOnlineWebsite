@@ -206,10 +206,67 @@
     </div>
 
 
-
-
     <hr />
-    <h3>Info:</h3>
+
+    <h3>ZusatzInfo:</h3>
+    <h4><span style="font-weight: bold">Ausgewählte Zusatzinfo:</span> @Model.AufgabeInfo_Model.Zusatzinfo.Zusatzinfo_Name</h4>
+
+    <div class="well">
+
+        <div>
+            <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
+                <select id="aufgabeEdit_infotyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Info_Typen"></select>
+
+                <input type="text" class="form-control input" placeholder="Zusatzinfo eingeben..." style="float:left;" id="searchInfoField_AufgabeEditView">
+                <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeEditView">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
+            </form>
+
+        </div>
+
+        <nav id="aufgabeEditInfo">
+            <ul class="list-group" id="infoliste_aufgabeEditView">
+
+                @foreach (var info in Model.AufgabeEditView_Model.Infos)
+                {
+                    @if (info.Zusatzinfo_Id == Model.AufgabeInfo_Model.Zusatzinfo.Zusatzinfo_Id)
+                {
+                        <li class="list-group-item" style="background-color: green" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
+                            <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning info_warning" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger info_danger" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
+                            <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
+                            <div class="btn-group" style="float:right">
+                                <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                <button class="btn btn-warning info_warning" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-danger info_danger" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </li>
+                    }
+
+
+                }
+
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+
+
+    <!-- Ende Info -->
 
 
 

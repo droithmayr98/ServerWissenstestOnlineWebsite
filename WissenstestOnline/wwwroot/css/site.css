@@ -153,6 +153,17 @@ textarea {
     overflow-y: scroll;
 }
 
+#aufgabeEditInfo ul {
+    height: 200px;
+    width: 100%;
+}
+
+#aufgabeEditInfo ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+
 /*Modal Dialogs Headings*/
 .MyInfoHeader {
     background-color: #5bc0de;

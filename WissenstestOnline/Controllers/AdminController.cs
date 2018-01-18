@@ -133,7 +133,10 @@ namespace WissenstestOnline.Controllers
             //Antworten
             List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
 
-            //Antworttypen
+            //Zusatzinfo
+            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
+
+            //AntwortTypen
             List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
 
             List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
@@ -145,8 +148,16 @@ namespace WissenstestOnline.Controllers
             }
 
 
-            //Zusatzinfo
+            //ZusatzinfoTypen
+            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
 
+            List<SelectListItem> info_typen_list = new List<SelectListItem>();
+            info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in info_typen)
+            {
+                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                info_typen_list.Add(infoTypItem);
+            }
 
 
             var aufgabe_view_Model = new AufgabeEditView_Model();
@@ -156,7 +167,9 @@ namespace WissenstestOnline.Controllers
             aufgabe_view_Model.Standorte = standorteList;
             aufgabe_view_Model.Fragen = fragen;
             aufgabe_view_Model.Antworten = antworten;
+            aufgabe_view_Model.Infos = infos;
             aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
+            aufgabe_view_Model.Info_Typen = info_typen_list;
 
 
 
@@ -196,21 +209,21 @@ namespace WissenstestOnline.Controllers
         {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
-            return PartialView("Modal_PartialViews/AdminInfo_Modal", adminInfo_model);
+            return PartialView("Modal_PartialViews/AdminModals/AdminInfo_Modal", adminInfo_model);
         }
 
         public IActionResult GetAdminEdit(string admin_id)
         {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
-            return PartialView("Modal_PartialViews/AdminEdit_Modal", adminInfo_model);
+            return PartialView("Modal_PartialViews/AdminModals/AdminEdit_Modal", adminInfo_model);
         }
 
         public IActionResult GetAdminDelete(string admin_id)
         {
             int adminId_int = Convert.ToInt32(admin_id);
             var adminInfo_model = FillAdminModel(adminId_int);
-            return PartialView("Modal_PartialViews/AdminDelete_Modal", adminInfo_model);
+            return PartialView("Modal_PartialViews/AdminModals/AdminDelete_Modal", adminInfo_model);
         }
 
         public IActionResult GetAufgabeInfo(string aufgabe_id)
@@ -251,6 +264,7 @@ namespace WissenstestOnline.Controllers
             aufgabeInfo_model.Frage = aufgabe.Frage;
 
             aufgabeInfo_model.Info = aufgabe.Zusatzinfo.InfoContentM;
+            aufgabeInfo_model.Zusatzinfo = aufgabe.Zusatzinfo;
 
 
             //Antwort
@@ -342,13 +356,13 @@ namespace WissenstestOnline.Controllers
         public IActionResult GetFrageInfo(int frage_id)
         {
             var frageInfo_Model = FillFrageInfoModel(frage_id);
-            return PartialView("Modal_PartialViews/FrageInfo_Modal", frageInfo_Model);
+            return PartialView("Modal_PartialViews/FrageModals/FrageInfo_Modal", frageInfo_Model);
         }
 
         public IActionResult GetFrageEdit(int frage_id)
         {
             var frageEdit_Model = FillFrageInfoModel(frage_id);
-            return PartialView("Modal_PartialViews/FrageEdit_Modal", frageEdit_Model);
+            return PartialView("Modal_PartialViews/FrageModals/FrageEdit_Modal", frageEdit_Model);
         }
 
         public FrageInfo_Model FillFrageInfoModel(int frage_id)
@@ -406,7 +420,7 @@ namespace WissenstestOnline.Controllers
         public IActionResult GetFrageDelete(int frage_id)
         {
             var frageDelete_Model = FillFrageInfoModel(frage_id);
-            return PartialView("Modal_PartialViews/FrageDelete_Modal", frageDelete_Model);
+            return PartialView("Modal_PartialViews/FrageModals/FrageDelete_Modal", frageDelete_Model);
         }
 
         public string DeleteFrage(int frage_id)
