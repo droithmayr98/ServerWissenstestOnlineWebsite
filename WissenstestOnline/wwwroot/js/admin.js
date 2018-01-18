@@ -540,6 +540,14 @@ function AntwortEditClicked(event) {
     const url = `/Admin/GetAntwortEdit?antwort_id=${id[1]}`;
     $('#loadAntwortModal').load(url, () => {
         $('#antwortEdit_Modal').modal('show');
+
+        console.log('AntwortPartialView aufrufen');
+        //Antwortteil Spezial laden
+        const url2 = `/Admin/LoadAntwortEditAntwort?antwort_id=${id[1]}`;
+        $('#partialViewAntworten').load(url2, () => {
+            console.log('Load LoadAntwortEditAntwort');
+        });
+
     });
 
 }

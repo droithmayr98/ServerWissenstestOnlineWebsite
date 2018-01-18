@@ -425,17 +425,64 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult GetAntwortInfo(int antwort_id) {
+        public IActionResult GetAntwortInfo(int antwort_id)
+        {
             var antwortInfo_Model = FillAntwortModel(antwort_id);
             return PartialView("Modal_PartialViews/AntwortInfo_Modal", antwortInfo_Model);
         }
 
-        public IActionResult GetAntwortEdit(int antwort_id) {
+        public IActionResult GetAntwortEdit(int antwort_id)
+        {
+            var antwortEditMain_Model = new AntwortEditMain_Model();
             var antwortEdit_Model = FillAntwortModel(antwort_id);
-            return PartialView("Modal_PartialViews/AntwortEdit_Modal", antwortEdit_Model);
+
+            List<Typendefinition> antwortTypen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A_")).ToList<Typendefinition>();
+            List<SelectListItem> antwortTypenList = new List<SelectListItem>();
+            foreach (Typendefinition t in antwortTypen)
+            {
+                string typ_string = "";
+                switch (t.Typ)
+                {
+                    case "A_T":
+                        typ_string = "Text";
+                        break;
+                    case "A_S":
+                        typ_string = "Slider";
+                        break;
+                    case "A_DP":
+                        typ_string = "DatePicker";
+                        break;
+                    case "A_CB:T":
+                        typ_string = "CheckBox";
+                        break;
+                    case "A_RB:T":
+                        typ_string = "RadioButton";
+                        break;
+                }
+                if (antwortEdit_Model.Antworttyp.Equals(typ_string))
+                {
+                    SelectListItem antwortTypItem = new SelectListItem { Text = typ_string, Value = t.Typ_Id.ToString() };
+                    antwortTypItem.Selected = true;
+                    antwortTypenList.Add(antwortTypItem);
+                }
+                else
+                {
+                    SelectListItem antwortTypItem = new SelectListItem { Text = typ_string, Value = t.Typ_Id.ToString() };
+                    antwortTypenList.Add(antwortTypItem);
+                }
+
+            }
+            var antwortEditView_Model = new AntwortEditView_Model();
+            antwortEditView_Model.AntwortTypen = antwortTypenList;
+
+            antwortEditMain_Model.AntwortInfo_Model = antwortEdit_Model;
+            antwortEditMain_Model.AntwortEditView_Model = antwortEditView_Model;
+
+            return PartialView("Modal_PartialViews/AntwortEdit_Modal", antwortEditMain_Model);
         }
 
-        public AntwortInfo_Model FillAntwortModel(int antwort_id) {
+        public AntwortInfo_Model FillAntwortModel(int antwort_id)
+        {
             Antwort antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
             var antwortInfo_Model = new AntwortInfo_Model();
             antwortInfo_Model.Antwort_Id = antwort.Antwort_Id;
@@ -467,6 +514,28 @@ namespace WissenstestOnline.Controllers
             }
 
             return antwortInfo_Model;
+        }
+
+        public IActionResult LoadAntwortEditAntwort(int antwort_id)
+        {
+            var antwortEdit_Model = FillAntwortModel(antwort_id);
+
+            switch (antwortEdit_Model.Antworttyp)
+            {
+                case "Text":
+                    return PartialView("Antwort_PartialViews/AntwortEditTextPV", antwortEdit_Model);
+                case "Slider":
+                    return PartialView("Antwort_PartialViews/AntwortEditSliderPV", antwortEdit_Model);
+                case "DatePicker":
+                    return PartialView("Antwort_PartialViews/AntwortEditDatePickerPV", antwortEdit_Model);
+                case "CheckBox":
+                    return PartialView("Antwort_PartialViews/AntwortEditCheckBoxPV", antwortEdit_Model);
+                case "RadioButton":
+                    return PartialView("Antwort_PartialViews/AntwortEditRadioButtonsPV", antwortEdit_Model);
+                default:
+                    return PartialView("Antwort_PartialViews/AntwortEditDefaultPV", antwortEdit_Model);
+            }
+
         }
 
 

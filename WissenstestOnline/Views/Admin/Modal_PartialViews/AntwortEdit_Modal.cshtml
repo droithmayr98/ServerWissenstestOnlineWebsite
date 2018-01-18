@@ -1,4 +1,4 @@
-@model WissenstestOnlineWebseite.AdminModels.AntwortInfo_Model
+@model WissenstestOnlineWebseite.AdminModels.AntwortEditMain_Model
 
 <div class="modal fade" id="antwortEdit_Modal" role="dialog">
     <div class="modal-dialog">
@@ -7,13 +7,30 @@
         <div class="modal-content">
             <div class="modal-header MyWarningHeader">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AntwortEdit: @Model.Antwortname</h4>
+                <h4 class="modal-title">AntwortEdit: @Model.AntwortInfo_Model.Antwortname</h4>
             </div>
             <!-- Body Part -->
             <div class="modal-body">
 
-                    <span style="font-weight: bold">Antwort ID:</span> <span id="antwortEdit_Id">@Model.Antwort_Id</span>
-                    
+                <h5><span style="font-weight: bold">Antwort ID:</span> <span id="antwortEdit_Id">@Model.AntwortInfo_Model.Antwort_Id</span></h5>
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Antwortname:</h5>
+                    <input placeholder="Antwortname" class="form-control input-field" type="text" value="@Model.AntwortInfo_Model.Antwortname" id="antwortEdit_Antwortname" />
+                </div>
+
+                <form asp-controller="Admin" asp-action="GetAntwortEdit" method="post">
+                    <div class="form-group" id="InputValueLogin">
+                        <h5 id="headingBezirk">Antworttyp:</h5>
+                        <select id="bezirkSelect" class="form-control" asp-items="@Model.AntwortEditView_Model.AntwortTypen"></select>
+                    </div>
+                </form>
+
+                <div>
+                    <h2>Test PartialView</h2>
+                    <div id="partialViewAntworten">Here should be the PartialView</div>
+                </div>
+
 
             </div>
 
