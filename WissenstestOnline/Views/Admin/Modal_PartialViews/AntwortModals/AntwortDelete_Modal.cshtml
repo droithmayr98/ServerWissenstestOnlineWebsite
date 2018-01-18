@@ -1,0 +1,25 @@
+@model WissenstestOnlineWebseite.AdminModels.AntwortInfo_Model
+
+<!--AntwortDelete-->
+<div class="modal fade" id="antwortDelete_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">AntwortDelete: @Model.Antwortname</h4>
+            </div>
+            <div class="modal-body">
+                <p><span style="font-weight: bold">Antwort ID:</span> <span id="antwort_id_delete">@Model.Antwort_Id</span></p>
+                <h5>Soll diese Antwort wirklich entfernt werden?</h5>
+                <span style="font-weight: bold">@Model.Antwortname</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteAntwort">Delete</button>
+            </div>
+        </div>
+
+    </div>
+</div>

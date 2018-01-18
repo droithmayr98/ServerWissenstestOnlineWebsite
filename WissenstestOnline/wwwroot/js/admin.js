@@ -236,7 +236,14 @@ function AufgabeDeleteClicked(event) {
     console.log('Aufgabe Delete Clicked');
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
-    $('#aufgabeDelete_Modal').modal('show');
+
+    const url = `/Admin/GetAufgabeDelete?aufgabe_id=${id}`;
+    $('#loadModal').load(url, () => {
+        $('#aufgabeDelete_Modal').modal('show');
+        $('#deleteAufgabe').on('click', DeleteAufgabe);
+    });
+
+
 }
 
 //AdminButtonFunctions
@@ -541,6 +548,9 @@ function AntwortEditClicked(event) {
     $('#loadAntwortModal').load(url, () => {
         $('#antwortEdit_Modal').modal('show');
 
+        //Events
+        $('#antwortEditTypSelect').on('change', AntwortEditDialogTypeChanged);
+
         console.log('AntwortPartialView aufrufen');
         //Antwortteil Spezial laden
         const url2 = `/Admin/LoadAntwortEditAntwort?antwort_id=${id[1]}`;
@@ -554,8 +564,62 @@ function AntwortEditClicked(event) {
 
 function AntwortDeleteClicked(event) {
     console.log('AntwortDeleteClicked');
-    var id = event.target.id;
-    console.log(`Target_ID: ${id}`);
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetAntwortDelete?antwort_id=${id[1]}`;
+    $('#loadAntwortModal').load(url, () => {
+        $('#antwortDelete_Modal').modal('show');
+        $('#deleteAntwort').on('click', DeleteAntwort);
+    });
+
+
+}
+
+function AntwortEditDialogTypeChanged() {
+    var selected_Typ = $('#antwortEditTypSelect').val();
+    console.log(`Changed Typ: ${selected_Typ}`);
+}
+
+function DeleteAntwort() {
+    console.log('enter DeleteAntwort');
+    //Nur Antwort löschen --> wenn Antwort in keiner aufgabe vorkommt
+    //Was passiert mit aufgaben, die die Antwort beinhalten???
+    var antwort_id_selected = $('#antwort_id_delete').text();
+
+    const url = `/Admin/DeleteAntwort`;
+    $.post(url, {
+        antwort_id: antwort_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteAntwort: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        } else {
+            //Antwort darf nicht gelöscht werden --> Antwort ist noch in einer Aufgabe vorhanden
+            $('#antwortDeleteError_Modal').modal('show');
+
+        }
+
+    });
+
+}
+
+function DeleteAufgabe() {
+    console.log('enter DeleteAufgabe');
+    var aufgabe_id_selected = $('#aufgabe_id_delete').text();
+
+    const url = `/Admin/DeleteAufgabe`;
+    $.post(url, {
+        aufgabe_id: aufgabe_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteAufgabe: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        }
+
+    });
 
 }
 

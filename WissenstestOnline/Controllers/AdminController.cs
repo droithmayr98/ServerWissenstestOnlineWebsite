@@ -475,13 +475,13 @@ namespace WissenstestOnline.Controllers
                 }
                 if (antwortEdit_Model.Antworttyp.Equals(typ_string))
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = typ_string, Value = t.Typ_Id.ToString() };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
                     antwortTypItem.Selected = true;
                     antwortTypenList.Add(antwortTypItem);
                 }
                 else
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = typ_string, Value = t.Typ_Id.ToString() };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
                     antwortTypenList.Add(antwortTypItem);
                 }
 
@@ -551,6 +551,45 @@ namespace WissenstestOnline.Controllers
             }
 
         }
+
+        public IActionResult GetAntwortDelete(int antwort_id)
+        {
+            var antwortDelete_Model = FillAntwortModel(antwort_id);
+            return PartialView("Modal_PartialViews/AntwortModals/AntwortDelete_Modal", antwortDelete_Model);
+        }
+
+        public string DeleteAntwort(int antwort_id)
+        {
+            Antwort antwort_delete = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
+            if (antwort_delete.Aufgaben.Count == 0)
+            {
+                test_db.Antworten.Remove(antwort_delete);
+                test_db.SaveChanges();
+                return "ok";
+            }
+            else
+            {
+                return "not deletable";
+            }
+        }
+
+        public IActionResult GetAufgabeDelete(int aufgabe_id)
+        {
+            var aufgabeDelete_Model = FillAufgabeModel(aufgabe_id);
+            return PartialView("Modal_PartialViews/AufgabeModals/AufgabeDelete_Modal", aufgabeDelete_Model);
+        }
+
+        public string DeleteAufgabe(int aufgabe_id)
+        {
+            Aufgabe aufgabe_delete = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
+            test_db.Aufgaben.Remove(aufgabe_delete);
+            test_db.SaveChanges();
+            return "ok";
+        }
+
+
+
+
 
 
 

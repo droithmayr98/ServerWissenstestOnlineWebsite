@@ -49,8 +49,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Admin\Modal_PartialViews\AufgabeModals\" />
-    <Folder Include="Views\Admin\Modal_PartialViews\AntwortModals\" />
     <Folder Include="Views\Admin\Modal_PartialViews\ZusatzInfoModals\" />
   </ItemGroup>
 

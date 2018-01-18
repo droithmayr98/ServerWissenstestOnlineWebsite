@@ -1,0 +1,28 @@
+@model WissenstestOnlineWebseite.AdminModels.AufgabeInfo_Model
+
+<!--AufgabeDelete-->
+<div class="modal fade" id="aufgabeDelete_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">AufgabeDelete: @Model.Frage.Fragetext</h4>
+            </div>
+            <div class="modal-body">
+                <p><span style="font-weight: bold">Aufgabe ID:</span> <span id="aufgabe_id_delete">@Model.Aufgabe_Id</span></p>
+                <h4>Soll diese Aufgabe wirklich entfernt werden?</h4>
+                <p><span style="font-weight: bold">Frage: </span><span>@Model.Frage.Fragetext</span></p>
+                <p><span style="font-weight: bold">Antwort: </span><span>@Model.Antwort_Name</span></p>
+                <p><span style="font-weight: bold">ZusatzInfo: </span><span>@Model.Zusatzinfo.Zusatzinfo_Name</span></p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteAufgabe">Delete</button>
+            </div>
+        </div>
+
+    </div>
+</div>
