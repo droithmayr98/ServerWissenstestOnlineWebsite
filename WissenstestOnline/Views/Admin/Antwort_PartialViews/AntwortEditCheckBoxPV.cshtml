@@ -1,5 +1,37 @@
 @model WissenstestOnlineWebseite.AdminModels.AntwortInfo_Model
 
 <div>
-    <h2>hallo checkBox</h2>
+    <div class="form-group">
+        <h5 style="font-weight: bold">Richtige Antwort(en):</h5>
+        @foreach (var checkBox in Model.Antwort_CheckBoxes)
+        {
+            if (checkBox.CheckBoxVal)
+            {
+                <div>
+                    <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
+                    <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                </div><br />
+            }
+        }
+
+        <button class="btn btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+
+    </div>
+
+    <div class="form-group">
+        <h5 style="font-weight: bold">Falsche Antwort(en):</h5>
+        @foreach (var checkBox in Model.Antwort_CheckBoxes)
+        {
+            if (!checkBox.CheckBoxVal)
+            {
+                <div>
+                    <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
+                    <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                </div><br />
+            }
+        }
+
+        <button class="btn btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+
+    </div>
 </div>

@@ -1,5 +1,28 @@
 @model WissenstestOnlineWebseite.AdminModels.AntwortInfo_Model
 
 <div>
-    <h2>hallo slider</h2>
+    <div class="form-group">
+        <h5 style="font-weight: bold">Minimum:</h5>
+        <input placeholder="Minimum eingeben" class="form-control input-field" type="text" value="@Model.Antwort_Slider.Min_val" id="edit_slider_min" />
+    </div>
+
+    <div class="form-group">
+        <h5 style="font-weight: bold">Maximum:</h5>
+        <input placeholder="Maximum eingeben" class="form-control input-field" type="text" value="@Model.Antwort_Slider.Max_val" id="edit_slider_max" />
+    </div>
+
+    <div class="form-group">
+        <h5 style="font-weight: bold">Sprungweite:</h5>
+        <input placeholder="Sprungweite eingeben" class="form-control input-field" type="text" value="@Model.Antwort_Slider.Sprungweite" id="edit_slider_sprungweite" />
+    </div>
+
+    <div class="form-group">
+        <h5 style="font-weight: bold">Richtiger Wert:</h5>
+        <input placeholder="Richtigen Wert eingeben" class="form-control input-field" type="text" value="@Model.Antwort_Slider.RightVal" id="edit_slider_rightVal" />
+    </div>
+
+    <div class="form-group">
+        <h5 style="font-weight: bold">Optionaler Titel:</h5>
+        <input placeholder="Optionalen Titel eingeben" class="form-control input-field" type="text" value="@Model.Antwort_Slider.Slider_text" id="edit_slider_text" />
+    </div>
 </div>

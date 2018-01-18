@@ -1,5 +1,29 @@
 @model WissenstestOnlineWebseite.AdminModels.AntwortInfo_Model
 
 <div>
-    <h2>hallo datepicker</h2>
+    
+    @if (@Model.Antwort_DatePicker.Date.Month < 10)
+    {
+        if (@Model.Antwort_DatePicker.Date.Day < 10)
+        {
+            var monat = "0" + @Model.Antwort_DatePicker.Date.Month;
+            var tag = "0" + @Model.Antwort_DatePicker.Date.Day;
+            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@monat-@tag" />
+        }
+        else
+        {
+            var monat = "0" + @Model.Antwort_DatePicker.Date.Month;
+            <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@monat-@Model.Antwort_DatePicker.Date.Day" />
+        }
+    }
+    else if (@Model.Antwort_DatePicker.Date.Day < 10)
+    {
+        var tag = "0" + @Model.Antwort_DatePicker.Date.Day;
+        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@Model.Antwort_DatePicker.Date.Month-@tag" />
+    }
+    else
+    {
+        <input class="form-control datepicker" id="datepickerLearn" type="date" value="@Model.Antwort_DatePicker.Date.Year-@Model.Antwort_DatePicker.Date.Month-@Model.Antwort_DatePicker.Date.Day" />
+    }
+
 </div>
