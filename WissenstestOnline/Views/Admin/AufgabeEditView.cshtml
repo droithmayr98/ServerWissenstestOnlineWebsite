@@ -163,8 +163,8 @@
                 <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeEditView">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
-                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
             </form>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
 
         </div>
 
@@ -302,9 +302,6 @@
                     <input placeholder="Frage eingeben" class="form-control input-field" type="text" id="newFrage_Fragetext" />
                 </div>
 
-
-
-
             </div>
 
 
@@ -354,6 +351,44 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--Antwort erstellen-->
+<div class="modal fade" role="dialog" id="antwortCreate_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Neue Antwort</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Antwortname:</h5>
+                    <input placeholder="Antwortname" class="form-control input-field" type="text" id="antwortEdit_AntwortnameNew" />
+                </div>
+
+                <form asp-controller="Admin" asp-action="GetAntwortEdit" method="post">
+                    <div class="form-group" id="InputValueLogin">
+                        <h5 id="headingBezirk">Antworttyp:</h5>
+                        <select id="antwortTypSelectNew" class="form-control" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
+                    </div>
+                </form>
+
+                <hr />
+
+                <div>
+                    <div id="partialViewAntwortenNew">Kein Antworttyp ausgewählt!</div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_antwort_button">Erstellen</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

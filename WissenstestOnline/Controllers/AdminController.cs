@@ -587,6 +587,26 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public IActionResult SetNewAntwortType(int typ_id) {
+            string antwort_typ = test_db.Typendefinitionen.Single(x => x.Typ_Id == typ_id).Typ;
+
+            switch (antwort_typ)
+            {
+                case "A_T":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewTextPV");
+                case "A_S":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewSliderPV");
+                case "A_DP":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewDatePickerPV");
+                case "A_CB:T":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewCheckBoxPV");
+                case "A_RB:T":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewRadioButtonsPV");
+                default:
+                    return PartialView("AntwortNew_PartialViews/AntwortNewDefaultPV");
+            }
+
+        }
 
 
 

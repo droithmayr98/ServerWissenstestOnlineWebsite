@@ -63,6 +63,10 @@
     $('.antwort_warning').on('click', AntwortEditClicked);
     $('.antwort_danger').on('click', AntwortDeleteClicked);
 
+    //new Antwort
+    $('#newAntwort_AufgabeEditView').on('click', CreateAntwortClicked);
+    $('#create_antwort_button').on('click', CreateAntwort);
+
     //new Frage
     $('#newFrage_AufgabeEditView').on('click', CreateFrageClicked);
     $('#create_frage_button').on('click', CreateFrage);
@@ -72,6 +76,9 @@
 
     //Antworttyp Select
     $('#aufgabeEdit_antworttyp_select').on('change', SelectAntworttyp);
+
+    //AntwortDialog Neu Select Typ
+    $('#antwortTypSelectNew').on('change', AntwortNewDialogTypeChanged);
 
     //new Admin
     $('#create_new_admin').on('click', CreateAdminClicked);
@@ -170,7 +177,7 @@ function SearchFrageText_AufgabeEditView_Frage() {
     var fragenLI_list = $('#frageliste_aufgabeEditView').children();
     for (var i = 0; i < fragenLI_list.length; i++) {
         var frage_li = fragenLI_list[i];
-        
+
         var span_frage = $(`#${frage_li.id}`).children().first();
 
         if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
@@ -191,7 +198,7 @@ function SearchAntwortText_AufgabeEditView_Antwort() {
     var antworttyp_selected = $('#aufgabeEdit_antworttyp_select').val();
     console.log(`Antworttyp Selected: ${antworttyp_selected}`);
     if (antworttyp_selected != "noItemSelected") {
-        
+
     }
 
     var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
@@ -315,7 +322,7 @@ function SaveAdminChanges() {
     }).then(result => {
         console.log(`ServerReply SaveAdminChanges: ${result}`);
         location.reload();
-        });
+    });
 
 
 }
@@ -332,13 +339,13 @@ function DeleteAdmin() {
     }).then(result => {
         console.log(`ServerReply DeleteAdmin: ${result}`);
         location.reload();
-        });
+    });
 
 }
 
 function CreateAdminClicked() {
     console.log('enter CreateAdminClicked');
-    $('#adminCreate_Modal').modal('show');    
+    $('#adminCreate_Modal').modal('show');
 }
 
 function CreateAdmin() {
@@ -433,7 +440,7 @@ function SaveFrageEdit() {
     }).then(result => {
         console.log(`ServerReply SaveFrageChanges: ${result}`);
         location.reload();
-        });
+    });
 
 
 
@@ -442,7 +449,7 @@ function SaveFrageEdit() {
 function CreateFrageClicked() {
     console.log('enter CreateFrageClicked');
     $('#frageCreate_Modal').modal('show');
-    
+
 }
 
 function CreateFrage() {
@@ -475,9 +482,9 @@ function DeleteFrage() {
         } else {
             //Frage darf nicht gelöscht werden --> Frage ist noch in einer Aufgabe vorhanden
             $('#frageDeleteError_Modal').modal('show');
-            
+
         }
-        
+
     });
 
 }
@@ -556,6 +563,10 @@ function AntwortEditClicked(event) {
         const url2 = `/Admin/LoadAntwortEditAntwort?antwort_id=${id[1]}`;
         $('#partialViewAntworten').load(url2, () => {
             console.log('Load LoadAntwortEditAntwort');
+
+            //Antwort speichern
+            $('#saveAntwortChanges').on('click', SaveAntwortChanges);
+
         });
 
     });
@@ -581,6 +592,11 @@ function AntwortDeleteClicked(event) {
 function AntwortEditDialogTypeChanged() {
     var selected_Typ = $('#antwortEditTypSelect').val();
     console.log(`Changed Typ: ${selected_Typ}`);
+
+    const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
+    $('#partialViewAntworten').load(url, () => {
+    });
+
 }
 
 function DeleteAntwort() {
@@ -623,3 +639,69 @@ function DeleteAufgabe() {
 
 }
 
+function SaveAntwortChanges() {
+    console.log('enter SaveAntwortChanges');
+    var selected_Typ_string = $('#antwortEditTypSelect').text();
+
+    switch (selected_Typ_string) {
+        case "A_T":
+
+            break;
+        case "A_S":
+
+            break;
+        case "A_DP":
+
+            break;
+        case "A_RB:T":
+
+            break;
+        case "A_CB:T":
+
+            break;
+        default:
+            console.log('Keine Antwort zum Speichern');
+
+    }
+    
+}
+
+function CreateAntwortClicked() {
+    console.log('enter AntwortNewClicked');
+    $('#antwortCreate_Modal').modal('show');
+}
+
+function AntwortNewDialogTypeChanged() {
+    var selected_Typ = $('#antwortTypSelectNew').val();
+    console.log(`Changed Typ: ${selected_Typ}`);
+
+    const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
+    $('#partialViewAntwortenNew').load(url, () => {
+    });
+}
+
+function CreateAntwort() {
+    console.log('enter CreateAntwort');
+    var selected_Typ_string = $('#antwortEditTypSelect').text();
+
+    switch (selected_Typ_string) {
+        case "A_T":
+
+            break;
+        case "A_S":
+
+            break;
+        case "A_DP":
+
+            break;
+        case "A_RB:T":
+
+            break;
+        case "A_CB:T":
+
+            break;
+        default:
+            console.log('Keine Antwort zum Speichern');
+
+    }
+}
