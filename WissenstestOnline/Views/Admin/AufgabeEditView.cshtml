@@ -221,8 +221,8 @@
                 <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeEditView">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
-                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
             </form>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
 
         </div>
 
@@ -275,6 +275,7 @@
 
 <div id="loadFrageModal"></div>
 <div id="loadAntwortModal"></div>
+<div id="loadZusatzInfoModal"></div>
 
 @section scripts{
 
@@ -389,6 +390,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_antwort_button">Erstellen</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--ErrorMessage: ZusatzInfo darf nicht gelöscht werden-->
+<div class="modal fade" role="dialog" id="zusatzInfoDeleteError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>ZusatzInfo kann nicht gelöscht werden!</h4>
+                <p>Ausgewählte ZusatzInfo kommt in einer oder mehreren Aufgabe(n) vor.</p>
+                <p>Löschen sie zuerst die Aufgabe(n) mit der dazugehörigen ZusatzInfo oder ändern sie die ZusatzInfo der Aufgabe(n).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -558,8 +558,10 @@ namespace WissenstestOnline.Controllers
             return PartialView("Modal_PartialViews/AntwortModals/AntwortDelete_Modal", antwortDelete_Model);
         }
 
+        //Antwort Art wird nicht gelöscht WICHTIG!!!!!!!!!!!!!!!!!
         public string DeleteAntwort(int antwort_id)
         {
+            //Antwort Art wird nicht gelöscht
             Antwort antwort_delete = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
             if (antwort_delete.Aufgaben.Count == 0)
             {
@@ -607,6 +609,60 @@ namespace WissenstestOnline.Controllers
             }
 
         }
+
+        public IActionResult GetZusatzInfo_Info(int info_id) {
+            var infoZusatzInfo_Model = FillInfoModel(info_id);
+            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfo_InfoModal", infoZusatzInfo_Model);
+        }
+
+        public IActionResult GetZusatzInfoDelete(int info_id) {
+            var infoDelete_Model = FillInfoModel(info_id);
+            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoDelete_Modal", infoDelete_Model);
+        }
+
+        public ZusatzInfo_InfoModel FillInfoModel(int info_id) {
+
+            Zusatzinfo zusatzInfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
+            InfoContent[] infoContents = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == info_id).ToArray();
+            List<ZusatzInfoTextblock> infoTextblocks = new List<ZusatzInfoTextblock>();
+
+            ZusatzInfoTextOnly_Model zusatzInfo_Model = new ZusatzInfoTextOnly_Model();
+            foreach (InfoContent infoCon in infoContents) {
+                ZusatzInfoTextblock textBlock = new ZusatzInfoTextblock();
+                textBlock.Heading = infoCon.Heading;
+                textBlock.Text = infoCon.Info_Content;
+                infoTextblocks.Add(textBlock);
+            }
+
+            var zusatzInfo_InfoModel = new ZusatzInfo_InfoModel();
+            zusatzInfo_InfoModel.Texte = infoTextblocks;
+            zusatzInfo_InfoModel.ZusatzInfo_Id = zusatzInfo.Zusatzinfo_Id;
+            zusatzInfo_InfoModel.ZusatzInfo_Typ = zusatzInfo.Typ.Typ;
+            zusatzInfo_InfoModel.ZusatzInfo_Name = zusatzInfo.Zusatzinfo_Name;
+
+            return zusatzInfo_InfoModel;
+
+        }
+
+        public string DeleteZusatzInfo(int info_id) {
+            Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
+            if (info_delete.Aufgaben.Count == 0)
+            {
+                //InfoContents automatisiert löschen???
+                InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
+                foreach (InfoContent infC in infoContentDel) {
+                    test_db.InfoContentM.Remove(infC);
+                }
+                test_db.Zusatzinfos.Remove(info_delete);
+                test_db.SaveChanges();
+                return "ok";
+            }
+            else
+            {
+                return "not deletable";
+            }
+        }
+
 
 
 

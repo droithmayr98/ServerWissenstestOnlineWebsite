@@ -63,6 +63,10 @@
     $('.antwort_warning').on('click', AntwortEditClicked);
     $('.antwort_danger').on('click', AntwortDeleteClicked);
 
+    //ZusatzInfoItemButtons
+    $('.info_Info').on('click', ZusatzInfo_InfoClicked);
+    $('.info_danger').on('click', ZusatzInfo_DeleteClicked);
+
     //new Antwort
     $('#newAntwort_AufgabeEditView').on('click', CreateAntwortClicked);
     $('#create_antwort_button').on('click', CreateAntwort);
@@ -704,4 +708,57 @@ function CreateAntwort() {
             console.log('Keine Antwort zum Speichern');
 
     }
+}
+
+function ZusatzInfo_InfoClicked(event) {
+    console.log('ZusatzInfo_InfoClicked');
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetZusatzInfo_Info?info_id=${id[1]}`;
+    $('#loadZusatzInfoModal').load(url, () => {
+        $('#zusatzInfoInfo_Modal').modal('show');
+    });
+}
+
+function ZusatzInfo_DeleteClicked(event) {
+
+    console.log('ZusatzInfo_DeleteClicked');
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetZusatzInfoDelete?info_id=${id[1]}`;
+    $('#loadZusatzInfoModal').load(url, () => {
+        $('#zusatzInfoDelete_Modal').modal('show');
+        $('#deleteZusatzInfo').on('click', DeleteZusatzInfo);
+    });
+
+
+}
+
+function DeleteZusatzInfo() {
+    console.log('enter DeleteZusatzInfos');
+    //Nur Zusatzinfo löschen --> wenn ZusatzInfo in keiner aufgabe vorkommt
+    //Was passiert mit aufgaben, die die ZusatzInfo beinhalten???
+    var info_id_selected = $('#zusatzInfo_id_delete').text();
+
+    const url = `/Admin/DeleteZusatzInfo`;
+    $.post(url, {
+        info_id: info_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteZusatzInfo: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        } else {
+            //ZusatzInfo darf nicht gelöscht werden --> ZusatzInfo ist noch in einer Aufgabe vorhanden
+            $('#zusatzInfoDeleteError_Modal').modal('show');
+
+        }
+
+        });
+
 }

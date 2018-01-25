@@ -1,0 +1,31 @@
+@model WissenstestOnlineWebseite.AdminModels.ZusatzInfo_InfoModel
+<!--AntwortInfo-->
+<div class="modal fade" id="zusatzInfoInfo_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyInfoHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ZusatzInfo: @Model.ZusatzInfo_Name</h4>
+            </div>
+            <div class="modal-body">
+                <p><span style="font-weight: bold">ZusatzInfo ID:</span> @Model.ZusatzInfo_Id</p>
+                <p><span style="font-weight: bold">ZusatzInfo Name:</span> @Model.ZusatzInfo_Name</p>
+                <p><span style="font-weight: bold">ZusatzInfo Typ:</span> @Model.ZusatzInfo_Typ</p>
+                <span style="font-weight: bold;">Zusatzinfos:</span>
+
+                @foreach (var text in Model.Texte)
+                {
+                    <h3>@text.Heading</h3>
+                    <p>@text.Text</p>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

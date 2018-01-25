@@ -48,8 +48,5 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Admin\Modal_PartialViews\ZusatzInfoModals\" />
-  </ItemGroup>
 
 </Project>
