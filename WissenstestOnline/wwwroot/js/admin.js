@@ -91,8 +91,15 @@
     //editAufgabe
     $('#adminEdit_bezirk_select').on('change', SetStandorteBezirk);
 
-
 });
+
+var id_cbNew_AntwortRichtig = 1;
+var id_cbNew_AntwortFalsch = 1;
+var id_rbNew_AntwortFalsch = 1;
+
+var id_cbEdit_AntwortRichtig = 100;
+var id_cbEdit_AntwortFalsch = 100;
+var id_rbEdit_AntwortFalsch = 100;
 
 //LoginInformationen prüfen
 function CheckAdminInfo() {
@@ -167,7 +174,7 @@ function SearchFrageText() {
 
 }
 
-//Fehler ComboBox wird nicht beachtet
+//FEHLER ComboBox wird nicht beachtet
 function SearchFrageText_AufgabeEditView_Frage() {
     var eingabe = $('#searchFrageField_AufgabeEditView').val();
     console.log(`Eingegebener Text: ${eingabe}`);
@@ -194,7 +201,7 @@ function SearchFrageText_AufgabeEditView_Frage() {
 }
 
 
-//Fehler ComboBox wird nicht beachtet
+//FEHLER ComboBox wird nicht beachtet
 function SearchAntwortText_AufgabeEditView_Antwort() {
     var eingabe = $('#searchAntwortField_AufgabeEditView').val();
     console.log(`Eingegebener Text: ${eingabe}`);
@@ -571,6 +578,22 @@ function AntwortEditClicked(event) {
             //Antwort speichern
             $('#saveAntwortChanges').on('click', SaveAntwortChanges);
 
+            //Bei Auswahl des Typs ID Counter zurücksetzen
+
+            id_cbEdit_AntwortRichtig = 100;
+            id_cbEdit_AntwortFalsch = 100;
+            id_rbEdit_AntwortFalsch = 100;
+
+            //CB events editAntwortDialog
+            $('#editAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortEdit);
+            $('#editAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortEdit);
+            $('#editAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
+            $('#editAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+
+            //RB events editAntwortDialog
+            $('#editAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortEdit);
+            $('#editAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+
         });
 
     });
@@ -599,6 +622,22 @@ function AntwortEditDialogTypeChanged() {
 
     const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
     $('#partialViewAntworten').load(url, () => {
+
+        //Bei Auswahl des Typs ID Counter zurücksetzen
+        id_cbNew_AntwortRichtig = 1;
+        id_cbNew_AntwortFalsch = 1;
+        id_rbNew_AntwortFalsch = 1;
+
+        //CB events newAntwortDialog
+        $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
+        $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
+        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+
+        //RB events newAntwortDialog
+        $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
+        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+
     });
 
 }
@@ -667,7 +706,7 @@ function SaveAntwortChanges() {
             console.log('Keine Antwort zum Speichern');
 
     }
-    
+
 }
 
 function CreateAntwortClicked() {
@@ -681,6 +720,22 @@ function AntwortNewDialogTypeChanged() {
 
     const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
     $('#partialViewAntwortenNew').load(url, () => {
+
+        //Bei Auswahl des Typs ID Counter zurücksetzen
+        id_cbNew_AntwortRichtig = 1;
+        id_cbNew_AntwortFalsch = 1;
+        id_rbNew_AntwortFalsch = 1;
+
+        //CB events newAntwortDialog
+        $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
+        $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
+        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+
+        //RB events newAntwortDialog
+        $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
+        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+
     });
 }
 
@@ -759,6 +814,113 @@ function DeleteZusatzInfo() {
 
         }
 
-        });
+    });
 
 }
+
+function AddNewCBOption_RichtigeAntwortNew() {
+    console.log('enter AddNewCBOption_RichtigeAntwortNew');
+    id_cbNew_AntwortRichtig++;
+    $('#newAntwort_cbText_richtig').append(
+        `
+        <div id="newAntwort_cbText_richtig_${id_cbNew_AntwortRichtig}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Richtige Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger delete_CB_richtig_AntwortNeu" id="btn_newAntwort_cbText_richtig_${id_cbNew_AntwortRichtig}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+
+}
+
+function AddNewCBOption_FalscheAntwortNew() {
+    console.log('enter AddNewCBOption_FalscheAntwortNew');
+    id_cbNew_AntwortFalsch++;
+    $('#newAntwort_cbText_falsch').append(
+        `
+        <div id="newAntwort_cbText_falsch_${id_cbNew_AntwortFalsch}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger delete_CB_falsch_AntwortNeu" id="btn_newAntwort_cbText_falsch_${id_cbNew_AntwortFalsch}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+
+}
+
+function AddNewRBOption_FalscheAntwortNew() {
+    console.log('enter AddNewRBOption_FalscheAntwortNew');
+    id_rbNew_AntwortFalsch++;
+    $('#newAntwort_rbText_falsch').append(
+        `
+        <div id="newAntwort_rbText_falsch_${id_rbNew_AntwortFalsch}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger delete_RB_falsch_AntwortNeu" id="btn_newAntwort_rbText_falsch_${id_rbNew_AntwortFalsch}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+
+}
+
+function AddNewCBOption_RichtigeAntwortEdit() {
+    console.log('enter AddNewCBOption_RichtigeAntwortEdit');
+    id_cbEdit_AntwortRichtig++;
+    $('#editAntwort_cbText_richtig').append(
+        `
+        <div id="editAntwort_cbText_richtig_${id_cbEdit_AntwortRichtig}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Richtige Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger" id="btn_editAntwort_cbText_richtig_${id_cbEdit_AntwortRichtig}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+
+}
+
+function AddNewCBOption_FalscheAntwortEdit() {
+    console.log('enter AddNewCBOption_FalscheAntwortEdit');
+    id_cbEdit_AntwortFalsch++;
+    $('#editAntwort_cbText_falsch').append(
+        `
+        <div id="editAntwort_cbText_falsch_${id_cbEdit_AntwortFalsch}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger" id="btn_editAntwort_cbText_falsch_${id_cbEdit_AntwortFalsch}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+
+}
+
+function AddNewRBOption_FalscheAntwortEdit() {
+    console.log('enter AddNewRBOption_FalscheAntwortEdit');
+    id_rbEdit_AntwortFalsch++;
+    $('#editAntwort_rbText_falsch').append(
+        `
+        <div id="editAntwort_rbText_falsch_${id_rbEdit_AntwortFalsch}">
+        <div>
+            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" />
+            <button class="btn btn-danger" id="btn_editAntwort_rbText_falsch_${id_rbEdit_AntwortFalsch}"><span class="glyphicon glyphicon-remove"></span></button>
+        </div> <br />
+            </div>
+        `
+    );
+}
+
+function DeleteItemOption_Antwort(event) {
+    console.log('enter DeleteNewCBOption_RichtigeAntwortNew');
+    console.log(`Target ID BTN delete: ${event.target.id}`);
+    var button_id = event.target.id;
+    if (button_id.startsWith('btn_')) {
+        var div_id = button_id.replace('btn_', '');
+        console.log(`Edited String: ${div_id}`);
+        $(`#${div_id}`).remove();
+    }
+}
+

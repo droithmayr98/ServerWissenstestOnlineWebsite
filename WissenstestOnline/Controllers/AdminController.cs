@@ -589,7 +589,8 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public IActionResult SetNewAntwortType(int typ_id) {
+        public IActionResult SetNewAntwortType(int typ_id)
+        {
             string antwort_typ = test_db.Typendefinitionen.Single(x => x.Typ_Id == typ_id).Typ;
 
             switch (antwort_typ)
@@ -610,24 +611,28 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public IActionResult GetZusatzInfo_Info(int info_id) {
+        public IActionResult GetZusatzInfo_Info(int info_id)
+        {
             var infoZusatzInfo_Model = FillInfoModel(info_id);
             return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfo_InfoModal", infoZusatzInfo_Model);
         }
 
-        public IActionResult GetZusatzInfoDelete(int info_id) {
+        public IActionResult GetZusatzInfoDelete(int info_id)
+        {
             var infoDelete_Model = FillInfoModel(info_id);
             return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoDelete_Modal", infoDelete_Model);
         }
 
-        public ZusatzInfo_InfoModel FillInfoModel(int info_id) {
+        public ZusatzInfo_InfoModel FillInfoModel(int info_id)
+        {
 
             Zusatzinfo zusatzInfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
             InfoContent[] infoContents = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == info_id).ToArray();
             List<ZusatzInfoTextblock> infoTextblocks = new List<ZusatzInfoTextblock>();
 
             ZusatzInfoTextOnly_Model zusatzInfo_Model = new ZusatzInfoTextOnly_Model();
-            foreach (InfoContent infoCon in infoContents) {
+            foreach (InfoContent infoCon in infoContents)
+            {
                 ZusatzInfoTextblock textBlock = new ZusatzInfoTextblock();
                 textBlock.Heading = infoCon.Heading;
                 textBlock.Text = infoCon.Info_Content;
@@ -644,13 +649,15 @@ namespace WissenstestOnline.Controllers
 
         }
 
-        public string DeleteZusatzInfo(int info_id) {
+        public string DeleteZusatzInfo(int info_id)
+        {
             Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
             if (info_delete.Aufgaben.Count == 0)
             {
                 //InfoContents automatisiert löschen???
                 InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
-                foreach (InfoContent infC in infoContentDel) {
+                foreach (InfoContent infC in infoContentDel)
+                {
                     test_db.InfoContentM.Remove(infC);
                 }
                 test_db.Zusatzinfos.Remove(info_delete);

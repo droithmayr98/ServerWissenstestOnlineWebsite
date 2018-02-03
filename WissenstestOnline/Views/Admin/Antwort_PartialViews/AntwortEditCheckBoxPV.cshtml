@@ -3,35 +3,49 @@
 <div>
     <div class="form-group">
         <h5 style="font-weight: bold">Richtige Antwort(en):</h5>
-        @foreach (var checkBox in Model.Antwort_CheckBoxes)
-        {
-            if (checkBox.CheckBoxVal)
-            {
-                <div>
-                    <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
-                    <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                </div><br />
-            }
-        }
 
-        <button class="btn btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+        <div id="editAntwort_cbText_richtig">
+            @{int i = 0;}
+            @foreach (var checkBox in Model.Antwort_CheckBoxes)
+            {
+                if (checkBox.CheckBoxVal)
+                {
+                    i++;
+                    <div id="editAntwort_cbText_richtig_@i">
+                        <div>
+                            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
+                            <button class="btn btn-danger" id="btn_editAntwort_cbText_richtig_@i"><span class="glyphicon glyphicon-remove"></span></button>
+                        </div><br />
+                    </div>
+                }
+            }
+        </div>
+
+        <button class="btn btn-success" id="editAntwort_cbText_richtig_addCB"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
 
     </div>
 
     <div class="form-group">
         <h5 style="font-weight: bold">Falsche Antwort(en):</h5>
-        @foreach (var checkBox in Model.Antwort_CheckBoxes)
-        {
-            if (!checkBox.CheckBoxVal)
-            {
-                <div>
-                    <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
-                    <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                </div><br />
-            }
-        }
 
-        <button class="btn btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+        <div id="editAntwort_cbText_falsch">
+            @{int j = 0;}
+            @foreach (var checkBox in Model.Antwort_CheckBoxes)
+            {
+                if (!checkBox.CheckBoxVal)
+                {
+                    j++;
+                    <div id="editAntwort_cbText_falsch_@j">
+                        <div>
+                            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@checkBox.Content" />
+                            <button class="btn btn-danger" id="btn_editAntwort_cbText_falsch_@j"><span class="glyphicon glyphicon-remove"></span></button>
+                        </div><br />
+                    </div>
+                }
+            }
+        </div>
+
+        <button class="btn btn-success" id="editAntwort_cbText_falsch_addCB"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
 
     </div>
 </div>

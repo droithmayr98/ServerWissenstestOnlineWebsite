@@ -16,18 +16,24 @@
 
     <div class="form-group">
         <h5 style="font-weight: bold">Falsche Antwort(en):</h5>
-        @foreach (var radioButton in Model.Antwort_RadioButtons)
-        {
-            if (!radioButton.IsTrue)
+        <div id="editAntwort_rbText_falsch">
+            @{int i = 0;}
+            @foreach (var radioButton in Model.Antwort_RadioButtons)
             {
-                <div>
-                    <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@radioButton.Content" />
-                    <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                </div><br />
+                if (!radioButton.IsTrue)
+                {
+                    i++;
+                    <div id="editAntwort_rbText_falsch_@i">
+                        <div>
+                            <input style="margin-bottom: 5px; float:left;" placeholder="Falsche Antwort eingeben" class="form-control input-field" type="text" value="@radioButton.Content" />
+                            <button class="btn btn-danger" id="btn_editAntwort_rbText_falsch_@i"><span class="glyphicon glyphicon-remove"></span></button>
+                        </div><br />
+                    </div>
+                }
             }
-        }
+        </div>
 
-        <button class="btn btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+        <button class="btn btn-success" id="editAntwort_rbText_falsch_addRB"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
 
     </div>
 
