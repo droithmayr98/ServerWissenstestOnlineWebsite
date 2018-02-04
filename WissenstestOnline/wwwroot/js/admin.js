@@ -741,17 +741,69 @@ function AntwortNewDialogTypeChanged() {
 
 function CreateAntwort() {
     console.log('enter CreateAntwort');
-    var selected_Typ_string = $('#antwortEditTypSelect').text();
+
+    var antwort_name = $('#antwortNew_AntwortnameNew').val();
+    var selected_Typ_string = $('#antwortTypSelectNew').val();
+
+    console.log(`Selected Typ: ${selected_Typ_string}`);
+    console.log(`Antwortname: ${antwort_name}`);
 
     switch (selected_Typ_string) {
         case "A_T":
+            var antwort_text = $('#textfieldNewAntwortText').val();
+            console.log(`Antwort Text: ${antwort_text}`);
 
+            const url_text = `/Admin/CreateAntwort_Text`;
+            $.post(url_text, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                antwortText: antwort_text
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_Text: ${result}`);
+                location.reload();
+            });
             break;
         case "A_S":
+            var slider_min = $('#new_slider_min').val();
+            var slider_max = $('#new_slider_max').val();
+            var slider_sprungweite = $('#new_slider_sprungweite').val();
+            var slider_rightVal = $('#new_slider_rightVal').val();
+            var slider_titel = $('#new_slider_text').val();
 
+            if (slider_titel == null) {
+                slider_titel = "";
+            }
+
+            console.log(`Werte: ${slider_min} + ${slider_max} + ${slider_sprungweite} + ${slider_rightVal} + ${slider_titel}`);
+
+            const url_slider = `/Admin/CreateAntwort_Slider`;
+            $.post(url_slider, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                sliderMin: slider_min,
+                sliderMax: slider_max,
+                sliderSprungweite: slider_sprungweite,
+                sliderRightVal: slider_rightVal,
+                sliderTitel: slider_titel
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_Slider: ${result}`);
+                location.reload();
+            });
             break;
         case "A_DP":
+            var date = $('#newAntwortDatepicker').val();
 
+            console.log(`New Date: ${date}`);
+
+            const url_DP = `/Admin/CreateAntwort_DP`;
+            $.post(url_DP, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                date: date
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_DP: ${result}`);
+                location.reload();
+            });
             break;
         case "A_RB:T":
 
@@ -761,8 +813,9 @@ function CreateAntwort() {
             break;
         default:
             console.log('Keine Antwort zum Speichern');
-
+            break;
     }
+
 }
 
 function ZusatzInfo_InfoClicked(event) {

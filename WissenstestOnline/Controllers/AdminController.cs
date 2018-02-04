@@ -143,7 +143,7 @@ namespace WissenstestOnline.Controllers
             antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
             foreach (Typendefinition t in antwort_typen)
             {
-                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
                 antwort_typen_list.Add(antwortTypItem);
             }
 
@@ -558,13 +558,51 @@ namespace WissenstestOnline.Controllers
             return PartialView("Modal_PartialViews/AntwortModals/AntwortDelete_Modal", antwortDelete_Model);
         }
 
-        //Antwort Art wird nicht gelöscht WICHTIG!!!!!!!!!!!!!!!!!
         public string DeleteAntwort(int antwort_id)
         {
-            //Antwort Art wird nicht gelöscht
             Antwort antwort_delete = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
             if (antwort_delete.Aufgaben.Count == 0)
             {
+                string a_typ = antwort_delete.Typ.Typ;
+                int inhalt_id = antwort_delete.Inhalt_Id;
+                switch (a_typ)
+                {
+                    case "A_T":
+                        Antwort_Text antwort_Text_delete = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
+                        test_db.Antwort_Texte.Remove(antwort_Text_delete);
+                        break;
+                    case "A_S":
+                        Antwort_Slider antwort_Slider_delete = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
+                        test_db.Antwort_Sliders.Remove(antwort_Slider_delete);
+                        break;
+                    case "A_DP":
+                        Antwort_DatePicker antwort_DP_delete = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
+                        test_db.Antwort_DatePickerM.Remove(antwort_DP_delete);
+                        break;
+                    case "A_RB:T":
+                        Antwort_RadioButton antwort_RB_delete = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
+                        int rb_inhalt_id = antwort_RB_delete.Inhalt_Id;
+                        RadioButton[] radioButtons_delete = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == rb_inhalt_id).ToArray();
+                        foreach (RadioButton rb_delete in radioButtons_delete)
+                        {
+                            test_db.RadioButtons.Remove(rb_delete);
+                        }
+                        test_db.Antwort_RadioButtons.Remove(antwort_RB_delete);
+                        break;
+                    case "A_CB:T":
+                        Antwort_CheckBox antwort_CB_delete = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
+                        int cb_inhalt_id = antwort_CB_delete.Inhalt_Id;
+                        CheckBox[] checkBoxes_delete = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == cb_inhalt_id).ToArray();
+                        foreach (CheckBox cb_delete in checkBoxes_delete)
+                        {
+                            test_db.CheckBoxes.Remove(cb_delete);
+                        }
+                        test_db.Antwort_CheckBoxes.Remove(antwort_CB_delete);
+                        break;
+                    default:
+                        //nothing
+                        break;
+                }
                 test_db.Antworten.Remove(antwort_delete);
                 test_db.SaveChanges();
                 return "ok";
@@ -589,11 +627,13 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public IActionResult SetNewAntwortType(int typ_id)
+        public IActionResult SetNewAntwortType(string typ_id)
         {
-            string antwort_typ = test_db.Typendefinitionen.Single(x => x.Typ_Id == typ_id).Typ;
+            Console.WriteLine("Selected AntwortType: " + typ_id);
 
-            switch (antwort_typ)
+            string typ_string = test_db.Typendefinitionen.Single(x => x.Typ_Id.ToString().Equals(typ_id)).Typ;
+
+            switch (typ_string)
             {
                 case "A_T":
                     return PartialView("AntwortNew_PartialViews/AntwortNewTextPV");
@@ -654,7 +694,6 @@ namespace WissenstestOnline.Controllers
             Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
             if (info_delete.Aufgaben.Count == 0)
             {
-                //InfoContents automatisiert löschen???
                 InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
                 foreach (InfoContent infC in infoContentDel)
                 {
@@ -669,6 +708,88 @@ namespace WissenstestOnline.Controllers
                 return "not deletable";
             }
         }
+
+        //neue Antworten erstellen
+        public string CreateAntwort_Text(string antwortName, string antwortTyp, string antwortText)
+        {
+            //Console.WriteLine("AntwortTyp: " + antwortTyp);
+            //Console.WriteLine("AntwortName: " + antwortName);
+
+            Antwort new_antwort = new Antwort();
+            Antwort_Text new_antwortText = new Antwort_Text();
+
+            new_antwortText.Text = antwortText;
+            test_db.Antwort_Texte.Add(new_antwortText);
+            test_db.SaveChanges();
+
+            new_antwort.Antwort_Name = antwortName;
+            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            new_antwort.Inhalt_Id = new_antwortText.Inhalt_Id;
+            new_antwort.Aufgaben = new List<Aufgabe>();
+            test_db.Antworten.Add(new_antwort);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        public string CreateAntwort_Slider(
+                string antwortName,
+                string antwortTyp,
+                int sliderMin,
+                int sliderMax,
+                int sliderSprungweite,
+                int sliderRightVal,
+                string sliderTitel)
+        {
+            Antwort new_antwort = new Antwort();
+            Antwort_Slider new_antwortSlider = new Antwort_Slider();
+
+            new_antwortSlider.Min_val = sliderMin;
+            new_antwortSlider.Max_val = sliderMax;
+            new_antwortSlider.Sprungweite = sliderSprungweite;
+            new_antwortSlider.RightVal = sliderRightVal;
+            if (sliderTitel == "")
+            {
+                new_antwortSlider.Slider_text = null;
+            }
+            else {
+                new_antwortSlider.Slider_text = sliderTitel;
+            }
+
+            test_db.Antwort_Sliders.Add(new_antwortSlider);
+            test_db.SaveChanges();
+
+            new_antwort.Antwort_Name = antwortName;
+            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            new_antwort.Inhalt_Id = new_antwortSlider.Inhalt_Id;
+            new_antwort.Aufgaben = new List<Aufgabe>();
+            test_db.Antworten.Add(new_antwort);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        public string CreateAntwort_DP(string antwortName, string antwortTyp, string date) {
+
+            Antwort new_antwort = new Antwort();
+            Antwort_DatePicker new_antwortDP = new Antwort_DatePicker();
+
+            DateTime date_formated = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            new_antwortDP.Date = date_formated;
+            test_db.Antwort_DatePickerM.Add(new_antwortDP);
+            test_db.SaveChanges();
+
+            new_antwort.Antwort_Name = antwortName;
+            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            new_antwort.Inhalt_Id = new_antwortDP.Inhalt_Id;
+            new_antwort.Aufgaben = new List<Aufgabe>();
+            test_db.Antworten.Add(new_antwort);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+
 
 
 
