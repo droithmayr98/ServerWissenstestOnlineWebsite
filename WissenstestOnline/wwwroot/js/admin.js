@@ -515,27 +515,36 @@ function SelectAntworttyp() {
     var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
     console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
 
-    if (selectedAntworttyp != "noItemSelected") {
+    const url_getType = `/Admin/GetTypIdFromTyp`;
+    $.post(url_getType, {
+        typ: selectedAntworttyp
+    }).then(result => {
+        console.log(`ServerReply TypId: ${result}`);
+        selectedAntworttyp = result;
 
-        var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-        for (var i = 0; i < antwortLI_list.length; i++) {
-            var antwort_li = antwortLI_list[i];
-            var id_split = antwort_li.id.split("-");
-            if (id_split[1] != selectedAntworttyp) {
-                $(`#${antwort_li.id}`).hide();
-            } else {
+        if (selectedAntworttyp != "noItemSelected") {
+
+            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortLI_list.length; i++) {
+                var antwort_li = antwortLI_list[i];
+                var id_split = antwort_li.id.split("-");
+                if (id_split[1] != selectedAntworttyp) {
+                    $(`#${antwort_li.id}`).hide();
+                } else {
+                    $(`#${antwort_li.id}`).show();
+                }
+            }
+
+        } else {
+            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortLI_list.length; i++) {
+                var antwort_li = antwortLI_list[i];
                 $(`#${antwort_li.id}`).show();
             }
+
         }
 
-    } else {
-        var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-        for (var i = 0; i < antwortLI_list.length; i++) {
-            var antwort_li = antwortLI_list[i];
-            $(`#${antwort_li.id}`).show();
-        }
-
-    }
+    });
 
 
 }
@@ -681,7 +690,7 @@ function DeleteAufgabe() {
     });
 
 }
-
+//ARBEIT
 function SaveAntwortChanges() {
     console.log('enter SaveAntwortChanges');
     var selected_Typ_string = $('#antwortEditTypSelect').text();
@@ -806,10 +815,63 @@ function CreateAntwort() {
             });
             break;
         case "A_RB:T":
+            var right_option = $('#new_radiobuttons_rightVal').val();
 
+            var wrong_options = new Array();
+            var divs_falscheAntworten = $('#newAntwort_rbText_falsch').children();
+            //console.log("Right Options: " + divs_richtigeAntworten.length);
+            for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                var div = divs_falscheAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                wrong_options.push(input.value);
+            }
+
+            const url_RB = `/Admin/CreateAntwort_RB`;
+            $.post(url_RB, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                rightOption: right_option,
+                wrongOptions: wrong_options
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_RB: ${result}`);
+                location.reload();
+            });
             break;
         case "A_CB:T":
+            var right_options = new Array();
+            var divs_richtigeAntworten = $('#newAntwort_cbText_richtig').children();
+            //console.log("Right Options: " + divs_richtigeAntworten.length);
+            for (var i = 0; i < divs_richtigeAntworten.length; i++) {
+                var div = divs_richtigeAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                right_options.push(input.value);
+            }
 
+            var wrong_options = new Array();
+            var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
+            //console.log("Right Options: " + divs_richtigeAntworten.length);
+            for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                var div = divs_falscheAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                wrong_options.push(input.value);
+            }
+
+            const url_CB = `/Admin/CreateAntwort_CB`;
+            $.post(url_CB, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                rightOtions: right_options,
+                wrongOptions: wrong_options
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_CB: ${result}`);
+                location.reload();
+            });
             break;
         default:
             console.log('Keine Antwort zum Speichern');

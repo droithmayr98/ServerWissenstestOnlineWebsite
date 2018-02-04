@@ -475,13 +475,13 @@ namespace WissenstestOnline.Controllers
                 }
                 if (antwortEdit_Model.Antworttyp.Equals(typ_string))
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
                     antwortTypItem.Selected = true;
                     antwortTypenList.Add(antwortTypItem);
                 }
                 else
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
                     antwortTypenList.Add(antwortTypItem);
                 }
 
@@ -631,9 +631,9 @@ namespace WissenstestOnline.Controllers
         {
             Console.WriteLine("Selected AntwortType: " + typ_id);
 
-            string typ_string = test_db.Typendefinitionen.Single(x => x.Typ_Id.ToString().Equals(typ_id)).Typ;
+            //string typ_string = test_db.Typendefinitionen.Single(x => x.Typ_Id.ToString().Equals(typ_id)).Typ;
 
-            switch (typ_string)
+            switch (typ_id)
             {
                 case "A_T":
                     return PartialView("AntwortNew_PartialViews/AntwortNewTextPV");
@@ -789,9 +789,99 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public string CreateAntwort_CB(string antwortName, string antwortTyp, string[] rightOtions, string[] wrongOptions) {
 
+            Antwort new_antwort = new Antwort();
+            Antwort_CheckBox new_antwortCB = new Antwort_CheckBox();
 
+            new_antwortCB.Anzahl = rightOtions.Length + wrongOptions.Length;
+            new_antwortCB.CheckBoxes = new List<CheckBox>();
+            test_db.Antwort_CheckBoxes.Add(new_antwortCB);
+            test_db.SaveChanges();
 
+            foreach (string right_option in rightOtions) {
+                if (right_option != "") {
+                    CheckBox cb_right = new CheckBox();
+                    cb_right.Content = right_option;
+                    cb_right.CheckBoxVal = true;
+                    cb_right.Antwort_CheckBox = new_antwortCB;
+                    test_db.CheckBoxes.Add(cb_right);
+                    test_db.SaveChanges();
+                }
+            }
+
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    CheckBox cb_wrong = new CheckBox();
+                    cb_wrong.Content = wrong_option;
+                    cb_wrong.CheckBoxVal = false;
+                    cb_wrong.Antwort_CheckBox = new_antwortCB;
+                    test_db.CheckBoxes.Add(cb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            new_antwort.Antwort_Name = antwortName;
+            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            new_antwort.Inhalt_Id = new_antwortCB.Inhalt_Id;
+            new_antwort.Aufgaben = new List<Aufgabe>();
+            test_db.Antworten.Add(new_antwort);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        public string CreateAntwort_RB(string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
+        {
+            Antwort new_antwort = new Antwort();
+            Antwort_RadioButton new_antwortRB = new Antwort_RadioButton();
+
+            new_antwortRB.Anzahl = 1 + wrongOptions.Length;
+            new_antwortRB.RadioButtons = new List<RadioButton>();
+            test_db.Antwort_RadioButtons.Add(new_antwortRB);
+            test_db.SaveChanges();
+
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    RadioButton rb_wrong = new RadioButton();
+                    rb_wrong.Content = wrong_option;
+                    rb_wrong.IsTrue = false;
+                    rb_wrong.Antwort_RadioButton = new_antwortRB;
+                    test_db.RadioButtons.Add(rb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            RadioButton rb_right = new RadioButton();
+            rb_right.Content = rightOption;
+            rb_right.IsTrue = true;
+            rb_right.Antwort_RadioButton = new_antwortRB;
+            test_db.RadioButtons.Add(rb_right);
+            test_db.SaveChanges();
+
+            new_antwort.Antwort_Name = antwortName;
+            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            new_antwort.Inhalt_Id = new_antwortRB.Inhalt_Id;
+            new_antwort.Aufgaben = new List<Aufgabe>();
+            test_db.Antworten.Add(new_antwort);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        public string GetTypIdFromTyp(string typ) {
+            if (typ.Equals("noItemSelected"))
+            {
+                return "noItemSelected";
+            }
+            else { 
+            return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
+            }
+        }
 
 
 
