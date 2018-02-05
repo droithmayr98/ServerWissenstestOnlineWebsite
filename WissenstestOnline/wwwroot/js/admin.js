@@ -698,8 +698,11 @@ function DeleteAufgabe() {
 function SaveAntwortChanges() {
     console.log('enter SaveAntwortChanges');
     var antwort_id = $('#antwortEdit_Id').text();
-    var selected_Typ_string = $('#antwortEditTypSelect').text();
+    var antwort_name = $('#antwortEdit_Antwortname').val();
+    var selected_Typ_string = $('#antwortEditTypSelect').val();
     console.log('AntwortID: ' + antwort_id);
+    console.log('AntwortName: ' + antwort_name);
+    console.log('AntwortTyp: ' + selected_Typ_string);
 
     switch (selected_Typ_string) {
         case "A_T":
@@ -736,23 +739,171 @@ function SaveAntwortChanges() {
             break;
         case "A_S":
             if (editAntwortTypeChanged) {
+                var slider_min = $('#new_slider_min').val();
+                var slider_max = $('#new_slider_max').val();
+                var slider_sprungweite = $('#new_slider_sprungweite').val();
+                var slider_rightVal = $('#new_slider_rightVal').val();
+                var slider_titel = $('#new_slider_text').val();
+
+                if (slider_titel == null) {
+                    slider_titel = "";
+                }
+
+                console.log(`Werte: ${slider_min} + ${slider_max} + ${slider_sprungweite} + ${slider_rightVal} + ${slider_titel}`);
+
+                const url_sliderNew = `/Admin/EditNewAntwort_Slider`;
+                $.post(url_sliderNew, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    sliderMin: slider_min,
+                    sliderMax: slider_max,
+                    sliderSprungweite: slider_sprungweite,
+                    sliderRightVal: slider_rightVal,
+                    sliderTitel: slider_titel
+                }).then(result => {
+                    console.log(`ServerReply EditNewAntwort_Slider: ${result}`);
+                    location.reload();
+                });
 
             } else {
+                var slider_min = $('#edit_slider_min').val();
+                var slider_max = $('#edit_slider_max').val();
+                var slider_sprungweite = $('#edit_slider_sprungweite').val();
+                var slider_rightVal = $('#edit_slider_rightVal').val();
+                var slider_titel = $('#edit_slider_text').val();
+
+                if (slider_titel == null) {
+                    slider_titel = "";
+                }
+
+                console.log(`Werte: ${slider_min} + ${slider_max} + ${slider_sprungweite} + ${slider_rightVal} + ${slider_titel}`);
+
+                const url_sliderEdit1 = `/Admin/EditAntwort_Slider`;
+                $.post(url_sliderEdit1, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    sliderMin: slider_min,
+                    sliderMax: slider_max,
+                    sliderSprungweite: slider_sprungweite,
+                    sliderRightVal: slider_rightVal,
+                    sliderTitel: slider_titel
+                }).then(result => {
+                    console.log(`ServerReply EditAntwort_Slider: ${result}`);
+                    location.reload();
+                });
 
             }
             break;
         case "A_DP":
             if (editAntwortTypeChanged) {
+                var date_new = $('#newAntwortDatepicker').val();
+                console.log('Datum: ' + date_new);
 
+                const url_dateNew = `/Admin/EditNewAntwort_DP`;
+                $.post(url_dateNew, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    date: date_new
+                }).then(result => {
+                    console.log(`ServerReply EditNewAntwort_DP: ${result}`);
+                    location.reload();
+                });
             } else {
+                var date_edit = $('#datepickerEditAntwort').val();
+                console.log('Datum: ' + date_edit);
 
+                const url_dateEdit = `/Admin/EditAntwort_DP`;
+                $.post(url_dateEdit, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    date: date_edit
+                }).then(result => {
+                    console.log(`ServerReply EditAntwort_DP: ${result}`);
+                    location.reload();
+                });
             }
             break;
         case "A_RB:T":
-
+            if (editAntwortTypeChanged) {
+                
+            } else {
+                
+            }
             break;
         case "A_CB:T":
+            if (editAntwortTypeChanged) {
+                var right_options = new Array();
+                var divs_richtigeAntworten = $('#newAntwort_cbText_richtig').children();
+                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_richtigeAntworten.length; i++) {
+                    var div = divs_richtigeAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    right_options.push(input.value);
+                }
 
+                var wrong_options = new Array();
+                var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
+                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                    var div = divs_falscheAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    wrong_options.push(input.value);
+                }
+
+                const url_CBNew = `/Admin/EditNewAntwort_CB`;
+                $.post(url_CBNew, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    rightOptions: right_options,
+                    wrongOptions: wrong_options
+                }).then(result => {
+                    console.log(`ServerReply EditNewAntwort_CB: ${result}`);
+                    location.reload();
+                });
+            } else {
+                var right_options = new Array();
+                var divs_richtigeAntworten = $('#editAntwort_cbText_richtig').children();
+                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_richtigeAntworten.length; i++) {
+                    var div = divs_richtigeAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    right_options.push(input.value);
+                }
+
+                var wrong_options = new Array();
+                var divs_falscheAntworten = $('#editAntwort_cbText_falsch').children();
+                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                    var div = divs_falscheAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    wrong_options.push(input.value);
+                }
+
+                const url_CBEdit = `/Admin/EditAntwort_CB`;
+                $.post(url_CBEdit, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    rightOptions: right_options,
+                    wrongOptions: wrong_options
+                }).then(result => {
+                    console.log(`ServerReply EditAntwort_CB: ${result}`);
+                    location.reload();
+                });
+            }
             break;
         default:
             console.log('Keine Antwort zum Speichern');
@@ -909,7 +1060,7 @@ function CreateAntwort() {
             $.post(url_CB, {
                 antwortName: antwort_name,
                 antwortTyp: selected_Typ_string,
-                rightOtions: right_options,
+                rightOptions: right_options,
                 wrongOptions: wrong_options
             }).then(result => {
                 console.log(`ServerReply CreateAntwort_CB: ${result}`);

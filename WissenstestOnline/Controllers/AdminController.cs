@@ -752,7 +752,8 @@ namespace WissenstestOnline.Controllers
             {
                 new_antwortSlider.Slider_text = null;
             }
-            else {
+            else
+            {
                 new_antwortSlider.Slider_text = sliderTitel;
             }
 
@@ -769,7 +770,8 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string CreateAntwort_DP(string antwortName, string antwortTyp, string date) {
+        public string CreateAntwort_DP(string antwortName, string antwortTyp, string date)
+        {
 
             Antwort new_antwort = new Antwort();
             Antwort_DatePicker new_antwortDP = new Antwort_DatePicker();
@@ -789,18 +791,20 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string CreateAntwort_CB(string antwortName, string antwortTyp, string[] rightOtions, string[] wrongOptions) {
-
+        public string CreateAntwort_CB(string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
+        {
             Antwort new_antwort = new Antwort();
             Antwort_CheckBox new_antwortCB = new Antwort_CheckBox();
 
-            new_antwortCB.Anzahl = rightOtions.Length + wrongOptions.Length;
+            new_antwortCB.Anzahl = rightOptions.Length + wrongOptions.Length;
             new_antwortCB.CheckBoxes = new List<CheckBox>();
             test_db.Antwort_CheckBoxes.Add(new_antwortCB);
             test_db.SaveChanges();
 
-            foreach (string right_option in rightOtions) {
-                if (right_option != "") {
+            foreach (string right_option in rightOptions)
+            {
+                if (right_option != "")
+                {
                     CheckBox cb_right = new CheckBox();
                     cb_right.Content = right_option;
                     cb_right.CheckBoxVal = true;
@@ -873,34 +877,289 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string GetTypIdFromTyp(string typ) {
+        public string GetTypIdFromTyp(string typ)
+        {
             if (typ.Equals("noItemSelected"))
             {
                 return "noItemSelected";
             }
-            else { 
-            return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
+            else
+            {
+                return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
             }
         }
 
+        //--------------------------------------------------------------------------------------------------------------
         //bestehende Antwort bearbeiten
         //Textfeld + Text auf bestehende Antwort einstellen
-        public string EditNewAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText) {
-
+        public string EditNewAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText)
+        {
             Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            string a_typ = antwort_editNew.Typ.Typ;
+
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+
+            Antwort_Text new_antwortText = new Antwort_Text();
+            new_antwortText.Text = antwortText;
+            test_db.Antwort_Texte.Add(new_antwortText);
+            test_db.SaveChanges();
 
             antwort_editNew.Antwort_Name = antwortName;
             antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-
-            //test_db.SaveChanges();
+            antwort_editNew.Inhalt_Id = new_antwortText.Inhalt_Id;
+            test_db.SaveChanges();
 
             return "ok";
         }
 
         //Text des Textfeldes auf bestehende Antwort ändern
-        public string EditAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText) {
+        public string EditAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText)
+        {
+            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            Antwort_Text antwort_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            antwort_text.Text = antwortText;
+            antwort_edit.Antwort_Name = antwortName;
+            test_db.SaveChanges();
 
             return "ok";
+        }
+
+        //Slider auf bestehende Antwort einstellen
+        public string EditNewAntwort_Slider(int antwortId, string antwortName, string antwortTyp, int sliderMin,
+                int sliderMax,
+                int sliderSprungweite,
+                int sliderRightVal,
+                string sliderTitel){
+
+            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            string a_typ = antwort_editNew.Typ.Typ;
+
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+
+            Antwort_Slider new_antwortSlider = new Antwort_Slider();
+            new_antwortSlider.Min_val = sliderMin;
+            new_antwortSlider.Max_val = sliderMax;
+            new_antwortSlider.Sprungweite = sliderSprungweite;
+            new_antwortSlider.RightVal = sliderRightVal;
+            if (sliderTitel == "")
+            {
+                new_antwortSlider.Slider_text = null;
+            }
+            else
+            {
+                new_antwortSlider.Slider_text = sliderTitel;
+            }
+            test_db.Antwort_Sliders.Add(new_antwortSlider);
+            test_db.SaveChanges();
+
+            antwort_editNew.Antwort_Name = antwortName;
+            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            antwort_editNew.Inhalt_Id = new_antwortSlider.Inhalt_Id;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //Sliderwerte auf bestehende Antwort ändern
+        public string EditAntwort_Slider(int antwortId, string antwortName, string antwortTyp, int sliderMin,
+                int sliderMax,
+                int sliderSprungweite,
+                int sliderRightVal,
+                string sliderTitel){
+
+            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            Antwort_Slider antwort_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            antwort_slider.Min_val = sliderMin;
+            antwort_slider.Max_val = sliderMax;
+            antwort_slider.Sprungweite = sliderSprungweite;
+            antwort_slider.RightVal = sliderRightVal;
+            if (sliderTitel == "")
+            {
+                antwort_slider.Slider_text = null;
+            }
+            else
+            {
+                antwort_slider.Slider_text = sliderTitel;
+            }
+            antwort_edit.Antwort_Name = antwortName;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //DP auf bestehende Antwort einstellen
+        public string EditNewAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date) {
+            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            string a_typ = antwort_editNew.Typ.Typ;
+
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+
+            Antwort_DatePicker new_antwortDP = new Antwort_DatePicker();
+            new_antwortDP.Date = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            test_db.Antwort_DatePickerM.Add(new_antwortDP);
+            test_db.SaveChanges();
+
+            antwort_editNew.Antwort_Name = antwortName;
+            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            antwort_editNew.Inhalt_Id = new_antwortDP.Inhalt_Id;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //DP-Datum auf bestehende Antwort ändern
+        public string EditAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date) {
+            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            Antwort_DatePicker antwort_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            antwort_DP.Date = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            antwort_edit.Antwort_Name = antwortName;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //RB-Antwortart auf bestehende Antwort einstellen
+        public string EditNewAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions) {
+
+            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            string a_typ = antwort_editNew.Typ.Typ;
+
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+
+            Antwort_CheckBox new_antwortCB = new Antwort_CheckBox();
+            new_antwortCB.Anzahl = rightOptions.Length + wrongOptions.Length;
+            new_antwortCB.CheckBoxes = new List<CheckBox>();
+            test_db.Antwort_CheckBoxes.Add(new_antwortCB);
+            test_db.SaveChanges();
+
+            foreach (string right_option in rightOptions)
+            {
+                if (right_option != "")
+                {
+                    CheckBox cb_right = new CheckBox();
+                    cb_right.Content = right_option;
+                    cb_right.CheckBoxVal = true;
+                    cb_right.Antwort_CheckBox = new_antwortCB;
+                    test_db.CheckBoxes.Add(cb_right);
+                    test_db.SaveChanges();
+                }
+            }
+
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    CheckBox cb_wrong = new CheckBox();
+                    cb_wrong.Content = wrong_option;
+                    cb_wrong.CheckBoxVal = false;
+                    cb_wrong.Antwort_CheckBox = new_antwortCB;
+                    test_db.CheckBoxes.Add(cb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            antwort_editNew.Antwort_Name = antwortName;
+            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            antwort_editNew.Inhalt_Id = new_antwortCB.Inhalt_Id;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //RBs auf bestehende Antwort ändern
+        //Rotes X Konflict beim Holen der CBs --> scheint in Ordnung
+        public string EditAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
+        {
+            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            Antwort_CheckBox antwort_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            antwort_CB.Anzahl = rightOptions.Length + wrongOptions.Length;
+
+            List<CheckBox> checkBoxesOld = antwort_CB.CheckBoxes;
+            foreach (CheckBox cb in checkBoxesOld) {
+                test_db.CheckBoxes.Remove(cb);
+            }
+            test_db.SaveChanges();
+
+            antwort_CB.CheckBoxes = new List<CheckBox>();
+
+            foreach (string right_option in rightOptions)
+            {
+                if (right_option != "")
+                {
+                    CheckBox cb_right = new CheckBox();
+                    cb_right.Content = right_option;
+                    cb_right.CheckBoxVal = true;
+                    cb_right.Antwort_CheckBox = antwort_CB;
+                    test_db.CheckBoxes.Add(cb_right);
+                    test_db.SaveChanges();
+                }
+            }
+
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    CheckBox cb_wrong = new CheckBox();
+                    cb_wrong.Content = wrong_option;
+                    cb_wrong.CheckBoxVal = false;
+                    cb_wrong.Antwort_CheckBox = antwort_CB;
+                    test_db.CheckBoxes.Add(cb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            antwort_edit.Antwort_Name = antwortName;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //Alte Antwortdefinition löschen
+        public void DeleteOldAntwortDefinition(string a_typ, int inhalt_Id)
+        {
+            switch (a_typ)
+            {
+                case "A_T":
+                    Antwort_Text a_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_Texte.Remove(a_text);
+                    test_db.SaveChanges();
+                    break;
+                case "A_S":
+                    Antwort_Slider a_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_Sliders.Remove(a_slider);
+                    test_db.SaveChanges();
+                    break;
+                case "A_DP":
+                    Antwort_DatePicker a_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_DatePickerM.Remove(a_DP);
+                    test_db.SaveChanges();
+                    break;
+                case "A_RB:T":
+                    Antwort_RadioButton a_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_Id);
+                    List<RadioButton> radioButtons = a_RB.RadioButtons;
+                    foreach (RadioButton rb in radioButtons)
+                    {
+                        test_db.RadioButtons.Remove(rb);
+                        test_db.SaveChanges();
+                    }
+                    test_db.Antwort_RadioButtons.Remove(a_RB);
+                    test_db.SaveChanges();
+                    break;
+                case "A_CB:T":
+                    Antwort_CheckBox a_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_Id);
+                    List<CheckBox> checkboxes = a_CB.CheckBoxes;
+                    foreach (CheckBox cb in checkboxes)
+                    {
+                        test_db.CheckBoxes.Remove(cb);
+                        test_db.SaveChanges();
+                    }
+                    test_db.Antwort_CheckBoxes.Remove(a_CB);
+                    test_db.SaveChanges();
+                    break;
+                default:
+                    //nothing
+                    break;
+            }
         }
 
 
