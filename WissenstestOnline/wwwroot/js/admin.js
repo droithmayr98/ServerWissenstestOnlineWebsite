@@ -101,6 +101,8 @@ var id_cbEdit_AntwortRichtig = 100;
 var id_cbEdit_AntwortFalsch = 100;
 var id_rbEdit_AntwortFalsch = 100;
 
+var editAntwortTypeChanged = false;
+
 //LoginInformationen prüfen
 function CheckAdminInfo() {
     //Eingabewerte holten + Testausgabe
@@ -637,6 +639,8 @@ function AntwortEditDialogTypeChanged() {
         id_cbNew_AntwortFalsch = 1;
         id_rbNew_AntwortFalsch = 1;
 
+        editAntwortTypeChanged = true;
+
         //CB events newAntwortDialog
         $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
         $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
@@ -693,17 +697,56 @@ function DeleteAufgabe() {
 //ARBEIT
 function SaveAntwortChanges() {
     console.log('enter SaveAntwortChanges');
+    var antwort_id = $('#antwortEdit_Id').text();
     var selected_Typ_string = $('#antwortEditTypSelect').text();
+    console.log('AntwortID: ' + antwort_id);
 
     switch (selected_Typ_string) {
         case "A_T":
+            if (editAntwortTypeChanged) {
+                var antwort_text = $('#textfieldNewAntwortText').val();
+                console.log(`Antwort Text: ${antwort_text}`);
 
+                const url_textNew = `/Admin/EditNewAntwort_Text`;
+                $.post(url_textNew, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    antwortText: antwort_text
+                }).then(result => {
+                    console.log(`ServerReply EditNewAntwort_Text: ${result}`);
+                    location.reload();
+                });
+                break;
+            } else {
+                var antwort_text = $('#textfieldAntwortText').val();
+                console.log(`Antwort Text: ${antwort_text}`);
+
+                const url_textEdit = `/Admin/EditAntwort_Text`;
+                $.post(url_textEdit, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    antwortText: antwort_text
+                }).then(result => {
+                    console.log(`ServerReply EditAntwort_Text: ${result}`);
+                    location.reload();
+                });
+            }
             break;
         case "A_S":
+            if (editAntwortTypeChanged) {
 
+            } else {
+
+            }
             break;
         case "A_DP":
+            if (editAntwortTypeChanged) {
 
+            } else {
+
+            }
             break;
         case "A_RB:T":
 
@@ -1038,4 +1081,7 @@ function DeleteItemOption_Antwort(event) {
         $(`#${div_id}`).remove();
     }
 }
+
+
+
 

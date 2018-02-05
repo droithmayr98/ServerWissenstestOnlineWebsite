@@ -883,7 +883,25 @@ namespace WissenstestOnline.Controllers
             }
         }
 
+        //bestehende Antwort bearbeiten
+        //Textfeld + Text auf bestehende Antwort einstellen
+        public string EditNewAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText) {
 
+            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+
+            antwort_editNew.Antwort_Name = antwortName;
+            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+
+            //test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //Text des Textfeldes auf bestehende Antwort ändern
+        public string EditAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText) {
+
+            return "ok";
+        }
 
 
 
