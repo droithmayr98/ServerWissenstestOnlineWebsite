@@ -829,9 +829,55 @@ function SaveAntwortChanges() {
             break;
         case "A_RB:T":
             if (editAntwortTypeChanged) {
-                
+                var right_option = $('#new_radiobuttons_rightVal').val();
+
+                var wrong_options = new Array();
+                var divs_falscheAntworten = $('#newAntwort_rbText_falsch').children();
+                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                    var div = divs_falscheAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    wrong_options.push(input.value);
+                }
+
+                const url_RBNew = `/Admin/EditNewAntwort_RB`;
+                $.post(url_RBNew, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    rightOption: right_option,
+                    wrongOptions: wrong_options
+                }).then(result => {
+                    console.log(`ServerReply EditNewAntwort_RB: ${result}`);
+                    location.reload();
+                });
             } else {
-                
+                var right_option = $('#edit_radiobuttons_rightVal').val();
+
+                var wrong_options = new Array();
+                var divs_falscheAntworten = $('#editAntwort_rbText_falsch').children();
+                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
+                for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                    var div = divs_falscheAntworten[i].children;
+                    var div_children = div[0].children;
+                    var input = div_children[0];
+                    console.log("Input: " + input.value);
+                    wrong_options.push(input.value);
+                }
+
+                const url_RBEdit = `/Admin/EditAntwort_RB`;
+                $.post(url_RBEdit, {
+                    antwortId: antwort_id,
+                    antwortName: antwort_name,
+                    antwortTyp: selected_Typ_string,
+                    rightOption: right_option,
+                    wrongOptions: wrong_options
+                }).then(result => {
+                    console.log(`ServerReply EditAntwort_RB: ${result}`);
+                    location.reload();
+                });
             }
             break;
         case "A_CB:T":
@@ -849,7 +895,7 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
-                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;
@@ -883,7 +929,7 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#editAntwort_cbText_falsch').children();
-                //console.log("Right Options: " + divs_richtigeAntworten.length);
+                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;

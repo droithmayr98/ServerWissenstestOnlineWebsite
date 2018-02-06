@@ -929,7 +929,8 @@ namespace WissenstestOnline.Controllers
                 int sliderMax,
                 int sliderSprungweite,
                 int sliderRightVal,
-                string sliderTitel){
+                string sliderTitel)
+        {
 
             Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
             string a_typ = antwort_editNew.Typ.Typ;
@@ -965,7 +966,8 @@ namespace WissenstestOnline.Controllers
                 int sliderMax,
                 int sliderSprungweite,
                 int sliderRightVal,
-                string sliderTitel){
+                string sliderTitel)
+        {
 
             Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
             Antwort_Slider antwort_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
@@ -988,7 +990,8 @@ namespace WissenstestOnline.Controllers
         }
 
         //DP auf bestehende Antwort einstellen
-        public string EditNewAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date) {
+        public string EditNewAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date)
+        {
             Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
             string a_typ = antwort_editNew.Typ.Typ;
 
@@ -1008,7 +1011,8 @@ namespace WissenstestOnline.Controllers
         }
 
         //DP-Datum auf bestehende Antwort ändern
-        public string EditAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date) {
+        public string EditAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date)
+        {
             Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
             Antwort_DatePicker antwort_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
             antwort_DP.Date = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
@@ -1018,8 +1022,9 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        //RB-Antwortart auf bestehende Antwort einstellen
-        public string EditNewAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions) {
+        //CB-Antwortart auf bestehende Antwort einstellen
+        public string EditNewAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
+        {
 
             Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
             string a_typ = antwort_editNew.Typ.Typ;
@@ -1066,8 +1071,7 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        //RBs auf bestehende Antwort ändern
-        //Rotes X Konflict beim Holen der CBs --> scheint in Ordnung
+        //CBs auf bestehende Antwort ändern
         public string EditAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
         {
             Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
@@ -1075,8 +1079,9 @@ namespace WissenstestOnline.Controllers
             antwort_CB.Anzahl = rightOptions.Length + wrongOptions.Length;
 
             List<CheckBox> checkBoxesOld = antwort_CB.CheckBoxes;
-            foreach (CheckBox cb in checkBoxesOld) {
-                test_db.CheckBoxes.Remove(cb);
+            for (int i = checkBoxesOld.Count - 1; i >= 0; i--)
+            {
+                test_db.CheckBoxes.Remove(checkBoxesOld[i]);
             }
             test_db.SaveChanges();
 
@@ -1104,6 +1109,96 @@ namespace WissenstestOnline.Controllers
                     cb_wrong.CheckBoxVal = false;
                     cb_wrong.Antwort_CheckBox = antwort_CB;
                     test_db.CheckBoxes.Add(cb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            antwort_edit.Antwort_Name = antwortName;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //RB-Antwortart auf bestehende Antwort einstellen
+        public string EditNewAntwort_RB(int antwortId, string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
+        {
+            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            string a_typ = antwort_editNew.Typ.Typ;
+
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+
+            Antwort_RadioButton new_antwortRB = new Antwort_RadioButton();
+            new_antwortRB.Anzahl = 1 + wrongOptions.Length;
+            new_antwortRB.RadioButtons = new List<RadioButton>();
+            test_db.Antwort_RadioButtons.Add(new_antwortRB);
+            test_db.SaveChanges();
+
+            if (rightOption != "")
+            {
+                RadioButton rb_right = new RadioButton();
+                rb_right.Content = rightOption;
+                rb_right.IsTrue = true;
+                rb_right.Antwort_RadioButton = new_antwortRB;
+                test_db.RadioButtons.Add(rb_right);
+                test_db.SaveChanges();
+            }
+
+
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    RadioButton rb_wrong = new RadioButton();
+                    rb_wrong.Content = wrong_option;
+                    rb_wrong.IsTrue = false;
+                    rb_wrong.Antwort_RadioButton = new_antwortRB;
+                    test_db.RadioButtons.Add(rb_wrong);
+                    test_db.SaveChanges();
+                }
+            }
+
+            antwort_editNew.Antwort_Name = antwortName;
+            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
+            antwort_editNew.Inhalt_Id = new_antwortRB.Inhalt_Id;
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+        //RBs auf bestehende Antwort ändern
+        public string EditAntwort_RB(int antwortId, string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
+        {
+            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
+            Antwort_RadioButton antwort_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            antwort_RB.Anzahl = 1 + wrongOptions.Length;
+
+            List<RadioButton> radioButtonsOld = antwort_RB.RadioButtons;
+            for (int i = radioButtonsOld.Count - 1; i >= 0; i--)
+            {
+                test_db.RadioButtons.Remove(radioButtonsOld[i]);
+            }
+            test_db.SaveChanges();
+
+            antwort_RB.RadioButtons = new List<RadioButton>();
+
+            if (rightOption != "")
+            {
+                RadioButton rb_right = new RadioButton();
+                rb_right.Content = rightOption;
+                rb_right.IsTrue = true;
+                rb_right.Antwort_RadioButton = antwort_RB;
+                test_db.RadioButtons.Add(rb_right);
+                test_db.SaveChanges();
+            }
+            foreach (string wrong_option in wrongOptions)
+            {
+                if (wrong_option != "")
+                {
+                    RadioButton rb_wrong = new RadioButton();
+                    rb_wrong.Content = wrong_option;
+                    rb_wrong.IsTrue = false;
+                    rb_wrong.Antwort_RadioButton = antwort_RB;
+                    test_db.RadioButtons.Add(rb_wrong);
                     test_db.SaveChanges();
                 }
             }
