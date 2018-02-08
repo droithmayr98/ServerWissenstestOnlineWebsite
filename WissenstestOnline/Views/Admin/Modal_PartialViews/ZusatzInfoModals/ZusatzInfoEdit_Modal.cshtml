@@ -1,0 +1,55 @@
+@model WissenstestOnlineWebseite.AdminModels.ZusatzInfo_InfoModel
+
+<div class="modal fade" id="zusatzInfoEdit_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MyWarningHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ZusatzInfoEdit: @Model.ZusatzInfo_Name</h4>
+            </div>
+            <!-- Body Part -->
+            <div class="modal-body">
+
+                <h5><span style="font-weight: bold">ZusatzInfo ID:</span> <span id="zusatzInfoEdit_Id">@Model.ZusatzInfo_Id</span></h5>
+                <h5><span style="font-weight: bold">ZusatzInfo Typ:</span> <span id="zusatzInfoEdit_Typ">@Model.ZusatzInfo_Typ</span></h5>
+                <div class="form-group">
+                    <h5 style="font-weight: bold">ZusatzInfoName:</h5>
+                    <input placeholder="ZusatzInfoName" class="form-control input-field" type="text" value="@Model.ZusatzInfo_Name" id="zusatzInfoEdit_ZusatzInfoName" />
+                </div>
+
+
+                <hr />
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Inhalte:</h5>
+
+                    <div id="editZusatzInfo_infoContents">
+                        @{int i = 0;}
+                        @foreach (var infoC in Model.Texte)
+                        {
+                            i++;
+                            <div id="editZusatzInfo_infoContent_@i">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" value="@infoC.Heading" id="editZusatzInfo_infoContent_heading_@i" />
+                                    <button class="btn btn-danger" id="btn_editZusatzInfo_infoContent_@i"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="editZusatzInfo_infoContent_content_@i" style="width:500px; height:150px;">@infoC.Text</textarea>
+                                </div><br />
+                            </div>
+
+                        }
+                    </div>
+                    <button class="btn btn-success" id="editZusatzInfo_addInfoContent"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveZusatzInfoChanges">Speichern</button>
+            </div>
+        </div>
+
+    </div>
+</div>

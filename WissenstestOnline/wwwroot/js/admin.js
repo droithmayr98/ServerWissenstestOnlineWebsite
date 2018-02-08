@@ -66,6 +66,11 @@
     //ZusatzInfoItemButtons
     $('.info_Info').on('click', ZusatzInfo_InfoClicked);
     $('.info_danger').on('click', ZusatzInfo_DeleteClicked);
+    $('.info_warning').on('click', ZusatzInfo_EditClicked);
+
+    //neue ZusatzInfo
+    $('#newInfo_AufgabeEditView').on('click', CreateZusatzInfoClicked);
+    $('#create_zusatzInfo_button').on('click', CreateZusatzInfo);
 
     //new Antwort
     $('#newAntwort_AufgabeEditView').on('click', CreateAntwortClicked);
@@ -91,6 +96,10 @@
     //editAufgabe
     $('#adminEdit_bezirk_select').on('change', SetStandorteBezirk);
 
+    //ZusatzInfoNew Dialog Buttons
+    $('#newZusatzInfo_addInfoContentNew').on('click', AddNewInfoContent_ZusatzInfoNew);
+    $('#newZusatzInfo_infoContents').on('click', DeleteItemOption_X);
+
 });
 
 var id_cbNew_AntwortRichtig = 1;
@@ -100,6 +109,9 @@ var id_rbNew_AntwortFalsch = 1;
 var id_cbEdit_AntwortRichtig = 100;
 var id_cbEdit_AntwortFalsch = 100;
 var id_rbEdit_AntwortFalsch = 100;
+
+var id_infoContentNew = 1;
+var id_infoContentEdit = 100;
 
 var editAntwortTypeChanged = false;
 
@@ -598,12 +610,12 @@ function AntwortEditClicked(event) {
             //CB events editAntwortDialog
             $('#editAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortEdit);
             $('#editAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortEdit);
-            $('#editAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
-            $('#editAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+            $('#editAntwort_cbText_richtig').on('click', DeleteItemOption_X);
+            $('#editAntwort_cbText_falsch').on('click', DeleteItemOption_X);
 
             //RB events editAntwortDialog
             $('#editAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortEdit);
-            $('#editAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+            $('#editAntwort_rbText_falsch').on('click', DeleteItemOption_X);
 
         });
 
@@ -644,12 +656,12 @@ function AntwortEditDialogTypeChanged() {
         //CB events newAntwortDialog
         $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
         $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
-        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
-        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_X);
+        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_X);
 
         //RB events newAntwortDialog
         $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
-        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_X);
 
     });
 
@@ -978,12 +990,12 @@ function AntwortNewDialogTypeChanged() {
         //CB events newAntwortDialog
         $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
         $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
-        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_Antwort);
-        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_X);
+        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_X);
 
         //RB events newAntwortDialog
         $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
-        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_Antwort);
+        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_X);
 
     });
 }
@@ -1268,7 +1280,7 @@ function AddNewRBOption_FalscheAntwortEdit() {
     );
 }
 
-function DeleteItemOption_Antwort(event) {
+function DeleteItemOption_X(event) {
     console.log('enter DeleteNewCBOption_RichtigeAntwortNew');
     console.log(`Target ID BTN delete: ${event.target.id}`);
     var button_id = event.target.id;
@@ -1279,6 +1291,126 @@ function DeleteItemOption_Antwort(event) {
     }
 }
 
+function ZusatzInfo_EditClicked(event) {
+    console.log('ZusatzInfo_EditClicked');
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
 
+    const url = `/Admin/GetZusatzInfo_Edit?info_id=${id[1]}`;
+    $('#loadZusatzInfoModal').load(url, () => {
+        $('#zusatzInfoEdit_Modal').modal('show');
 
+        //Dialog Button Actions
+        $('#editZusatzInfo_addInfoContent').on('click', AddNewInfoContent_ZusatzInfoEdit);
+        $('#editZusatzInfo_infoContents').on('click', DeleteItemOption_X);
 
+        //Save Edit_ZusatzInfo
+        $('#saveZusatzInfoChanges').on('click', SaveZusatzInfoChanges);
+
+    });
+}
+
+function CreateZusatzInfoClicked() {
+    console.log('enter CreateZusatzInfoClicked');
+    $('#zusatzInfoCreate_Modal').modal('show');
+}
+
+function AddNewInfoContent_ZusatzInfoNew() {
+    console.log('enter AddNewInfoContent_ZusatzInfoNew');
+    id_infoContentNew++;
+    $('#newZusatzInfo_infoContents').append(
+        `
+        <div id="newZusatzInfo_infoContent_${id_infoContentNew}">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="newZusatzInfo_infoContent_heading_${id_infoContentNew}"/>
+                                    <button class="btn btn-danger" id="btn_newZusatzInfo_infoContent_${id_infoContentNew}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="newZusatzInfo_infoContent_content${id_infoContentNew}" style="width:500px; height:150px;"></textarea>
+                                </div><br />
+                            </div>
+        `
+    );
+}
+
+function AddNewInfoContent_ZusatzInfoEdit() {
+    console.log('enter AddNewInfoContent_ZusatzInfoEdit');
+    id_infoContentEdit++;
+    $('#editZusatzInfo_infoContents').append(
+        `
+        <div id="editZusatzInfo_infoContent_${id_infoContentEdit}">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="editZusatzInfo_infoContent_heading_${id_infoContentEdit}"/>
+                                    <button class="btn btn-danger" id="btn_editZusatzInfo_infoContent_${id_infoContentEdit}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="editZusatzInfo_infoContent_content${id_infoContentEdit}" style="width:500px; height:150px;"></textarea>
+                                </div><br />
+                            </div>
+        `
+    );
+}
+
+function CreateZusatzInfo() {
+    console.log('enter CreateZusatzInfo');
+
+    var zusatzInfo_name = $('#zusatzInfoNew_ZusatzInfoName').val();
+
+    var headings = [];
+    var contents = [];
+
+    var divs_infoContents = $('#newZusatzInfo_infoContents').children();
+    //console.log("Children: " + divs_infoContents.length);
+    for (var i = 0; i < divs_infoContents.length; i++) {
+        var div = divs_infoContents[i].children;
+        var div_children = div[0].children;
+
+        var heading = div_children[0];
+        var content = div_children[3];
+        console.log("Input: " + heading.value + " + " + content.value);
+        headings.push(heading.value);
+        contents.push(content.value);
+    }
+
+    const url_newZusatzInfo = `/Admin/CreateNewZusatzInfo`;
+    $.post(url_newZusatzInfo, {
+        zusatzInfoName: zusatzInfo_name,
+        headings: headings,
+        contents: contents
+    }).then(result => {
+        console.log(`ServerReply CreateNewZusatzInfo: ${result}`);
+        location.reload();
+    });
+}
+
+function SaveZusatzInfoChanges() {
+    console.log('enter SaveZusatzInfoChanges');
+
+    var zusatzInfo_name = $('#zusatzInfoEdit_ZusatzInfoName').val();
+    var zusatzInfo_id = $('#zusatzInfoEdit_Id').text();
+
+    var headings = [];
+    var contents = [];
+
+    var divs_infoContents = $('#editZusatzInfo_infoContents').children();
+    //console.log("Children: " + divs_infoContents.length);
+    for (var i = 0; i < divs_infoContents.length; i++) {
+        var div = divs_infoContents[i].children;
+        var div_children = div[0].children;
+
+        var heading = div_children[0];
+        var content = div_children[3];
+        console.log("Input: " + heading.value + " + " + content.value);
+        headings.push(heading.value);
+        contents.push(content.value);
+    }
+
+    const url_newZusatzInfo = `/Admin/EditZusatzInfo`;
+    $.post(url_newZusatzInfo, {
+        zusatzInfoId: zusatzInfo_id,
+        zusatzInfoName: zusatzInfo_name,
+        headings: headings,
+        contents: contents
+    }).then(result => {
+        console.log(`ServerReply EditZusatzInfo: ${result}`);
+        location.reload();
+    });
+}

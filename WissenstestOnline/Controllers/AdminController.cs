@@ -1257,7 +1257,123 @@ namespace WissenstestOnline.Controllers
             }
         }
 
+        public IActionResult GetZusatzInfo_Edit(int info_id) {
+            var editZusatzInfo_Model = FillInfoModel(info_id);
+            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoEdit_Modal", editZusatzInfo_Model);
+        }
 
+        public string CreateNewZusatzInfo(string zusatzInfoName, string[] headings, string[] contents) {
+
+            string type_generated = "I_";
+
+            for (int i = 0; i < contents.Length; i++) {
+                type_generated = type_generated + "T";              
+            }
+
+            Typendefinition typ = test_db.Typendefinitionen.SingleOrDefault(x => x.Typ.Equals(type_generated));
+            if (typ == null) {
+                typ = new Typendefinition();
+                typ.Typ = type_generated;
+                typ.Zusatzinfos = new List<Zusatzinfo>();
+                typ.Antworten = new List<Antwort>();
+                typ.Fragen = new List<Frage>();
+                test_db.Typendefinitionen.Add(typ);
+                test_db.SaveChanges();
+            }
+
+            Zusatzinfo new_zusatzInfo = new Zusatzinfo();
+            new_zusatzInfo.Aufgaben = new List<Aufgabe>();
+            new_zusatzInfo.InfoContentM = new List<InfoContent>();
+            new_zusatzInfo.Zusatzinfo_Name = zusatzInfoName;
+            new_zusatzInfo.Typ = typ;
+
+            test_db.Zusatzinfos.Add(new_zusatzInfo);
+            test_db.SaveChanges();
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (headings[i] == null)
+                {
+                    InfoContent ic = new InfoContent();
+                    ic.Zusatzinfo = new_zusatzInfo;
+                    ic.Info_Content = contents[i];
+                    test_db.InfoContentM.Add(ic);
+                    test_db.SaveChanges();
+                }
+                else
+                {
+                    InfoContent ic = new InfoContent();
+                    ic.Zusatzinfo = new_zusatzInfo;
+                    ic.Heading = headings[i];
+                    ic.Info_Content = contents[i];
+                    test_db.InfoContentM.Add(ic);
+                    test_db.SaveChanges();
+                }
+
+            }
+
+
+            return "ok";
+        }
+
+        public string EditZusatzInfo(int zusatzInfoId, string zusatzInfoName, string[] headings, string[] contents) {
+
+            string type_generated = "I_";
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                type_generated = type_generated + "T";
+            }
+
+            Typendefinition typ = test_db.Typendefinitionen.SingleOrDefault(x => x.Typ.Equals(type_generated));
+            if (typ == null)
+            {
+                typ = new Typendefinition();
+                typ.Typ = type_generated;
+                typ.Zusatzinfos = new List<Zusatzinfo>();
+                typ.Antworten = new List<Antwort>();
+                typ.Fragen = new List<Frage>();
+                test_db.Typendefinitionen.Add(typ);
+                test_db.SaveChanges();
+            }
+
+            Zusatzinfo edit_zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzInfoId);
+
+            List<InfoContent> old_infoC = edit_zusatzinfo.InfoContentM;
+            for (int i = 0; i < old_infoC.Count; i++) {
+                test_db.InfoContentM.Remove(old_infoC[i]);
+                test_db.SaveChanges();
+            }
+
+            edit_zusatzinfo.Zusatzinfo_Name = zusatzInfoName;
+            edit_zusatzinfo.Typ = typ;
+
+            test_db.SaveChanges();
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (headings[i] == null)
+                {
+                    InfoContent ic = new InfoContent();
+                    ic.Zusatzinfo = edit_zusatzinfo;
+                    ic.Info_Content = contents[i];
+                    test_db.InfoContentM.Add(ic);
+                    test_db.SaveChanges();
+                }
+                else
+                {
+                    InfoContent ic = new InfoContent();
+                    ic.Zusatzinfo = edit_zusatzinfo;
+                    ic.Heading = headings[i];
+                    ic.Info_Content = contents[i];
+                    test_db.InfoContentM.Add(ic);
+                    test_db.SaveChanges();
+                }
+
+            }
+
+            return "ok";
+        }
 
     }
 }

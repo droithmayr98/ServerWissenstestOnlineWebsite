@@ -415,3 +415,46 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<!--ZusatzInfo erstellen-->
+<div class="modal fade" role="dialog" id="zusatzInfoCreate_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Neue ZusatzInfo</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">ZusatzInfoName:</h5>
+                    <input placeholder="ZusatzInfoName" class="form-control input-field" type="text" id="zusatzInfoNew_ZusatzInfoName" />
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Inhalte:</h5>
+
+                    <div id="newZusatzInfo_infoContents">
+                            <div id="newZusatzInfo_infoContent_1">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="newZusatzInfo_infoContent_heading_1"/>
+                                    <button class="btn btn-danger" id="btn_newZusatzInfo_infoContent_1"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="newZusatzInfo_infoContent_content_1" style="width:500px; height:150px;"></textarea>
+                                </div><br />
+                            </div>
+
+                    </div>
+                    <button class="btn btn-success" id="newZusatzInfo_addInfoContentNew"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_zusatzInfo_button">Erstellen</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
