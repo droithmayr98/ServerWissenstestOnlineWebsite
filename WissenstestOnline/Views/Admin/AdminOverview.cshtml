@@ -14,15 +14,16 @@
     <div class="container well">
         <h3>Aufgabenübersicht</h3>
         <form asp-controller="Admin" asp-action="AdminOverview" method="post" style="margin-bottom:10px" id="formSearchAufgabe">
-            <div>
-                <select class="form-control" id="stations_admin" asp-items="@Model.Stationen" style="float:left;"></select>
-                <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField">
-                <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-                <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;">+ neue Aufgabe erstellen</button>
-            </div>
+            <select class="form-control" id="stations_admin" asp-items="@Model.Stationen" style="float:left;"></select>
         </form>
+        <div>
+            
+            <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField">
+            <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;">+ neue Aufgabe erstellen</button>
+        </div>
 
         <nav id="adminListAufgaben">
             <ul class="list-group" id="admin_aufgabenliste">

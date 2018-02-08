@@ -1,7 +1,7 @@
 ﻿$(document).ready(() => {
     console.log('jQuery Admin ready');
 
-    //Testdaten
+    //Testdaten befüllen
     $('#adminUsername').val('testadmin1');
     $('#adminPasswort').val('hallo123');
 
@@ -10,10 +10,10 @@
 
     //Suchtrigger Aufgaben
     $('#stations_admin').on('change', StationSelected);
-    $('#searchFrageText').on('click', SearchFrageText);
+    $('#searchFrageText').on('click', SearchAufgabeText);
 
-    $('#searchFrageField').bind('enterKey', SearchFrageText);
-    $('#searchFrageField').keydown(function (e) {
+    $('#searchFrageField').bind('enterKey', SearchAufgabeText);
+    $('#searchFrageField').keydown(function(e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey');
             e.preventDefault();
@@ -24,7 +24,7 @@
     $('#searchFrageText_AufgabeEditView').on('click', SearchFrageText_AufgabeEditView_Frage);
 
     $('#searchFrageField_AufgabeEditView').bind('enterKey2', SearchFrageText_AufgabeEditView_Frage);
-    $('#searchFrageField_AufgabeEditView').keydown(function (e) {
+    $('#searchFrageField_AufgabeEditView').keydown(function(e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey2');
             e.preventDefault();
@@ -35,7 +35,7 @@
     $('#searchAntwortText_AufgabeEditView').on('click', SearchAntwortText_AufgabeEditView_Antwort);
 
     $('#searchAntwortField_AufgabeEditView').bind('enterKey3', SearchAntwortText_AufgabeEditView_Antwort);
-    $('#searchAntwortField_AufgabeEditView').keydown(function (e) {
+    $('#searchAntwortField_AufgabeEditView').keydown(function(e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey3');
             e.preventDefault();
@@ -102,6 +102,7 @@
 
 });
 
+//Globale Variablen
 var id_cbNew_AntwortRichtig = 1;
 var id_cbNew_AntwortFalsch = 1;
 var id_rbNew_AntwortFalsch = 1;
@@ -143,61 +144,138 @@ function CheckAdminInfo() {
 
 }
 
+//Suchfunktion Aufgabe
+//FEHLER
 function StationSelected() {
+    console.log('enter StationSelected');
     var selectedStation = $('#stations_admin').val();
     console.log(`Selected Station: ${selectedStation}`);
 
+    var eingabe = $('#searchFrageField').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
     if (selectedStation != "noItemSelected") {
 
-        var aufgabenLI_list = $('#admin_aufgabenliste').children();
-        for (var i = 0; i < aufgabenLI_list.length; i++) {
-            var aufgabe_li = aufgabenLI_list[i];
-            var id_split = aufgabe_li.id.split("-");
-            if (id_split[1] != selectedStation) {
-                $(`#${aufgabe_li.id}`).hide();
-            } else {
+        if (eingabe != "") {
+            var aufgabenLI_list_filtered = [];
+            var aufgabenLI_list = $('#admin_aufgabenliste').children();
+            for (var i = 0; i < aufgabenLI_list.length; i++) {
+                var aufgabe_li = aufgabenLI_list[i];
+                var id_split = aufgabe_li.id.split("-");
+                if (id_split[1] == selectedStation) {
+                    aufgabenLI_list_filtered.push(aufgabe_li);
+                } else {
+                    $(`#${aufgabe_li.id}`).hide();
+                }
+            }
+
+            for (var i = 0; i < aufgabenLI_list_filtered.length; i++) {
+                var aufgabe_li = aufgabenLI_list_filtered[i];
+                var span_frage = $(`#${aufgabe_li.id}`).children().first();
+                if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${aufgabe_li.id}`).show();
+                } else {
+                    $(`#${aufgabe_li.id}`).hide();
+                }
+            }
+
+        } else {
+
+            var aufgabenLI_list = $('#admin_aufgabenliste').children();
+            for (var i = 0; i < aufgabenLI_list.length; i++) {
+                var aufgabe_li = aufgabenLI_list[i];
+                var id_split = aufgabe_li.id.split("-");
+                if (id_split[1] != selectedStation) {
+                    $(`#${aufgabe_li.id}`).hide();
+                } else {
+                    $(`#${aufgabe_li.id}`).show();
+                }
+            }
+
+        }
+
+    } else {
+        if (eingabe != "") {
+            var aufgabenLI_list = $('#admin_aufgabenliste').children();
+
+            for (var i = 0; i < aufgabenLI_list.length; i++) {
+                var aufgabe_li = aufgabenLI_list[i];
+                var span_frage = $(`#${aufgabe_li.id}`).children().first();
+                if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${aufgabe_li.id}`).show();
+                } else {
+                    $(`#${aufgabe_li.id}`).hide();
+                }
+            }
+
+        } else {
+            var aufgabenLI_list = $('#admin_aufgabenliste').children();
+            for (var i = 0; i < aufgabenLI_list.length; i++) {
+                var aufgabe_li = aufgabenLI_list[i];
                 $(`#${aufgabe_li.id}`).show();
             }
         }
 
-    } else {
-        var aufgabenLI_list = $('#admin_aufgabenliste').children();
-        for (var i = 0; i < aufgabenLI_list.length; i++) {
-            var aufgabe_li = aufgabenLI_list[i];
-            $(`#${aufgabe_li.id}`).show();
-        }
-
     }
 
 }
 
-function SearchFrageText() {
+//FEHLER
+function SearchAufgabeText() {
+    console.log('enter SearchAufgabeText');
     var eingabe = $('#searchFrageField').val();
     console.log(`Eingegebener Text: ${eingabe}`);
 
-    var aufgabenLI_list = $('#admin_aufgabenliste').children();
-    for (var i = 0; i < aufgabenLI_list.length; i++) {
-        var aufgabe_li = aufgabenLI_list[i];
-        var span_frage = $(`#${aufgabe_li.id}`).children().first();
-        if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-            $(`#${aufgabe_li.id}`).show();
-        } else {
-            $(`#${aufgabe_li.id}`).hide();
+    var station_selected = $('#stations_admin').val();
+    console.log(`Ausgewählte Station: ${station_selected}`);
+
+    if (station_selected == "noItemSelected") {
+        var aufgabenLI_list = $('#admin_aufgabenliste').children();
+        for (var i = 0; i < aufgabenLI_list.length; i++) {
+            var aufgabe_li = aufgabenLI_list[i];
+            var span_frage = $(`#${aufgabe_li.id}`).children().first();
+            if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${aufgabe_li.id}`).show();
+            } else {
+                $(`#${aufgabe_li.id}`).hide();
+            }
         }
+    } else {
+
+        var aufgabenLI_list_filtered = [];
+        var aufgabenLI_list = $('#admin_aufgabenliste').children();
+        for (var i = 0; i < aufgabenLI_list.length; i++) {
+            var aufgabe_li = aufgabenLI_list[i];
+            var id_split = aufgabe_li.id.split("-");
+            if (id_split[1] == station_selected) {
+                aufgabenLI_list_filtered.push(aufgabe_li);
+            } else {
+                $(`#${aufgabe_li.id}`).hide();
+            }
+        }
+
+        for (var i = 0; i < aufgabenLI_list_filtered.length; i++) {
+            var aufgabe_li = aufgabenLI_list_filtered[i];
+            var span_frage = $(`#${aufgabe_li.id}`).children().first();
+            if (span_frage.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${aufgabe_li.id}`).show();
+            } else {
+                $(`#${aufgabe_li.id}`).hide();
+            }
+        }
+
     }
 
 }
 
-//FEHLER ComboBox wird nicht beachtet
+//Suchfunktion Frage
 function SearchFrageText_AufgabeEditView_Frage() {
+    console.log('enter SearchFrageText_AufgabeEditView_Frage');
     var eingabe = $('#searchFrageField_AufgabeEditView').val();
     console.log(`Eingegebener Text: ${eingabe}`);
 
     var station_selected = $('#stations_admin').val();
     console.log(`Ausgewählte Station: ${station_selected}`);
-    if (station_selected != "noItemSelected") {
-
-    }
 
     var fragenLI_list = $('#frageliste_aufgabeEditView').children();
     for (var i = 0; i < fragenLI_list.length; i++) {
@@ -214,8 +292,48 @@ function SearchFrageText_AufgabeEditView_Frage() {
 
 }
 
+//Suchfunktion Antwort
+//FEHLER
+function SelectAntworttyp() {
+    console.log('enter SelectAntworttyp');
 
-//FEHLER ComboBox wird nicht beachtet
+    var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
+    console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
+
+    const url_getType = `/Admin/GetTypIdFromTyp`;
+    $.post(url_getType, {
+        typ: selectedAntworttyp
+    }).then(result => {
+        console.log(`ServerReply TypId: ${result}`);
+        selectedAntworttyp = result;
+
+        if (selectedAntworttyp != "noItemSelected") {
+
+            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortLI_list.length; i++) {
+                var antwort_li = antwortLI_list[i];
+                var id_split = antwort_li.id.split("-");
+                if (id_split[1] != selectedAntworttyp) {
+                    $(`#${antwort_li.id}`).hide();
+                } else {
+                    $(`#${antwort_li.id}`).show();
+                }
+            }
+
+        } else {
+            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortLI_list.length; i++) {
+                var antwort_li = antwortLI_list[i];
+                $(`#${antwort_li.id}`).show();
+            }
+
+        }
+
+    });
+
+
+}
+//FEHLER
 function SearchAntwortText_AufgabeEditView_Antwort() {
     var eingabe = $('#searchAntwortField_AufgabeEditView').val();
     console.log(`Eingegebener Text: ${eingabe}`);
@@ -523,46 +641,6 @@ function SelectFrage(event) {
 
 }
 
-function SelectAntworttyp() {
-    console.log('enter SelectAntworttyp');
-
-    var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
-    console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
-
-    const url_getType = `/Admin/GetTypIdFromTyp`;
-    $.post(url_getType, {
-        typ: selectedAntworttyp
-    }).then(result => {
-        console.log(`ServerReply TypId: ${result}`);
-        selectedAntworttyp = result;
-
-        if (selectedAntworttyp != "noItemSelected") {
-
-            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-            for (var i = 0; i < antwortLI_list.length; i++) {
-                var antwort_li = antwortLI_list[i];
-                var id_split = antwort_li.id.split("-");
-                if (id_split[1] != selectedAntworttyp) {
-                    $(`#${antwort_li.id}`).hide();
-                } else {
-                    $(`#${antwort_li.id}`).show();
-                }
-            }
-
-        } else {
-            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-            for (var i = 0; i < antwortLI_list.length; i++) {
-                var antwort_li = antwortLI_list[i];
-                $(`#${antwort_li.id}`).show();
-            }
-
-        }
-
-    });
-
-
-}
-
 //AntwortButtonFunctions
 function AntwortInfoClicked(event) {
     console.log('AntwortInfoClicked');
@@ -706,7 +784,7 @@ function DeleteAufgabe() {
     });
 
 }
-//ARBEIT
+
 function SaveAntwortChanges() {
     console.log('enter SaveAntwortChanges');
     var antwort_id = $('#antwortEdit_Id').text();
