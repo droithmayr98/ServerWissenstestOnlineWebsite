@@ -98,7 +98,7 @@
     <!--Fragen ändern oder neue Frage oder Frage bearbeiten???     -> Fragebaukasten -->
     <hr />
     <h3>Frage:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Frage:</span> @Model.AufgabeInfo_Model.Frage.Fragetext</h4>
+    <h4><span style="font-weight: bold">Ausgewählte Frage:</span> <span id="selected_frage">@Model.AufgabeInfo_Model.Frage.Fragetext</span></h4>
 
     <div class="well">
 
@@ -117,7 +117,7 @@
                 {
                     @if (frage.Frage_Id == Model.AufgabeInfo_Model.Frage.Frage_Id)
                 {
-                        <li class="list-group-item" style="background-color: green" id="li_@frage.Frage_Id">
+                        <li class="list-group-item li_frage" style="background-color: green" id="li_@frage.Frage_Id">
                             <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -128,7 +128,7 @@
                     }
                     else
                     {
-                        <li class="list-group-item" id="li_@frage.Frage_Id">
+                        <li class="list-group-item li_frage" id="li_@frage.Frage_Id">
                             <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -151,7 +151,7 @@
 
     <hr />
     <h3>Antwort:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Antwort:</span> @Model.AufgabeInfo_Model.Antwort_Name</h4>
+    <h4><span style="font-weight: bold">Ausgewählte Antwort:</span> <span id="selected_antwort">@Model.AufgabeInfo_Model.Antwort_Name</span></h4>
 
     <div class="well">
 
@@ -175,7 +175,7 @@
                 {
                     @if (antwort.Antwort_Id == Model.AufgabeInfo_Model.Antwort_Id)
                 {
-                        <li class="list-group-item" style="background-color: green" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
+                        <li class="list-group-item li_antwort" style="background-color: green" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
                             <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -186,7 +186,7 @@
                     }
                     else
                     {
-                        <li class="list-group-item" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
+                        <li class="list-group-item li_antwort" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
                             <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -209,7 +209,7 @@
     <hr />
 
     <h3>ZusatzInfo:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Zusatzinfo:</span> @Model.AufgabeInfo_Model.Zusatzinfo.Zusatzinfo_Name</h4>
+    <h4><span style="font-weight: bold">Ausgewählte Zusatzinfo:</span> <span id="selected_zusatzInfo">@Model.AufgabeInfo_Model.Zusatzinfo.Zusatzinfo_Name</span></h4>
 
     <div class="well">
 
@@ -233,7 +233,7 @@
                 {
                     @if (info.Zusatzinfo_Id == Model.AufgabeInfo_Model.Zusatzinfo.Zusatzinfo_Id)
                 {
-                        <li class="list-group-item" style="background-color: green" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
+                        <li class="list-group-item li_zusatzInfo" style="background-color: green" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
                             <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -244,7 +244,7 @@
                     }
                     else
                     {
-                        <li class="list-group-item" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
+                        <li class="list-group-item li_zusatzInfo" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
                             <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
                             <div class="btn-group" style="float:right">
                                 <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>

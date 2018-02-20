@@ -409,6 +409,7 @@ namespace WissenstestOnline.Controllers
 
             Frage new_frage = new Frage();
             new_frage.Fragetext = fragetext;
+            new_frage.Aufgaben = new List<Aufgabe>();
             new_frage.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals("F_T"));
 
             test_db.Fragen.Add(new_frage);

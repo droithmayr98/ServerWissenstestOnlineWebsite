@@ -13,7 +13,7 @@
     $('#searchFrageText').on('click', SearchAufgabeText);
 
     $('#searchFrageField').bind('enterKey', SearchAufgabeText);
-    $('#searchFrageField').keydown(function(e) {
+    $('#searchFrageField').keydown(function (e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey');
             e.preventDefault();
@@ -24,7 +24,7 @@
     $('#searchFrageText_AufgabeEditView').on('click', SearchFrageText_AufgabeEditView_Frage);
 
     $('#searchFrageField_AufgabeEditView').bind('enterKey2', SearchFrageText_AufgabeEditView_Frage);
-    $('#searchFrageField_AufgabeEditView').keydown(function(e) {
+    $('#searchFrageField_AufgabeEditView').keydown(function (e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey2');
             e.preventDefault();
@@ -35,13 +35,23 @@
     $('#searchAntwortText_AufgabeEditView').on('click', SearchAntwortText_AufgabeEditView_Antwort);
 
     $('#searchAntwortField_AufgabeEditView').bind('enterKey3', SearchAntwortText_AufgabeEditView_Antwort);
-    $('#searchAntwortField_AufgabeEditView').keydown(function(e) {
+    $('#searchAntwortField_AufgabeEditView').keydown(function (e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey3');
             e.preventDefault();
         }
     });
 
+    //Suchtrigger ZusatzInfo
+    $('#searchInfoText_AufgabeEditView').on('click', SearchZusatzInfoText_AufgabeEditView_Antwort);
+
+    $('#searchInfoField_AufgabeEditView').bind('enterKey4', SearchZusatzInfoText_AufgabeEditView_Antwort);
+    $('#searchInfoField_AufgabeEditView').keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(this).trigger('enterKey4');
+            e.preventDefault();
+        }
+    });
 
     //AufgabeItemButtons
     $('.aufgabe_Info').on('click', AufgabeInfoClicked);
@@ -80,11 +90,16 @@
     $('#newFrage_AufgabeEditView').on('click', CreateFrageClicked);
     $('#create_frage_button').on('click', CreateFrage);
 
-    //Frage auswählen
+    //Auswählen einer Frage/Antwort/ZusatzInfo
     $('.frageobject').on('click', SelectFrage);
+    $('.antwortobject').on('click', SelectAntwort);
+    $('.infoobject').on('click', SelectZusatzInfo);
 
     //Antworttyp Select
     $('#aufgabeEdit_antworttyp_select').on('change', SelectAntworttyp);
+
+    //ZusatzInfoTyp Select
+    $('#aufgabeEdit_infotyp_select').on('change', SelectZusatzInfo_Typ);
 
     //AntwortDialog Neu Select Typ
     $('#antwortTypSelectNew').on('change', AntwortNewDialogTypeChanged);
@@ -113,6 +128,15 @@ var id_rbEdit_AntwortFalsch = 100;
 
 var id_infoContentNew = 1;
 var id_infoContentEdit = 100;
+
+var frage_oldLI = -1;
+var frage_selected = -1;
+
+var antwort_oldLI = -1;
+var antwort_selected = -1;
+
+var zusatzInfo_oldLI = -1;
+var zusatzInfo_selected = -1;
 
 var editAntwortTypeChanged = false;
 
@@ -145,7 +169,7 @@ function CheckAdminInfo() {
 }
 
 //Suchfunktion Aufgabe
-//FEHLER
+//FEHLER gelöst
 function StationSelected() {
     console.log('enter StationSelected');
     var selectedStation = $('#stations_admin').val();
@@ -220,7 +244,7 @@ function StationSelected() {
 
 }
 
-//FEHLER
+//FEHLER gelöst
 function SearchAufgabeText() {
     console.log('enter SearchAufgabeText');
     var eingabe = $('#searchFrageField').val();
@@ -293,12 +317,15 @@ function SearchFrageText_AufgabeEditView_Frage() {
 }
 
 //Suchfunktion Antwort
-//FEHLER
+//FEHLER gelöst
 function SelectAntworttyp() {
     console.log('enter SelectAntworttyp');
 
     var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
     console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
+
+    var eingabe = $('#searchAntwortField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
 
     const url_getType = `/Admin/GetTypIdFromTyp`;
     $.post(url_getType, {
@@ -307,55 +334,130 @@ function SelectAntworttyp() {
         console.log(`ServerReply TypId: ${result}`);
         selectedAntworttyp = result;
 
+
         if (selectedAntworttyp != "noItemSelected") {
 
-            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-            for (var i = 0; i < antwortLI_list.length; i++) {
-                var antwort_li = antwortLI_list[i];
-                var id_split = antwort_li.id.split("-");
-                if (id_split[1] != selectedAntworttyp) {
-                    $(`#${antwort_li.id}`).hide();
-                } else {
+            if (eingabe != "") {
+
+                var antwortenLI_list_filtered = [];
+                var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+                for (var i = 0; i < antwortenLI_list.length; i++) {
+                    var antwort_li = antwortenLI_list[i];
+                    var id_split = antwort_li.id.split("-");
+                    if (id_split[1] == selectedAntworttyp) {
+                        antwortenLI_list_filtered.push(antwort_li);
+                    } else {
+                        $(`#${antwort_li.id}`).hide();
+                    }
+                }
+
+                for (var i = 0; i < antwortenLI_list_filtered.length; i++) {
+                    var antwort_li = antwortenLI_list_filtered[i];
+                    var span_antwort = $(`#${antwort_li.id}`).children().first();
+                    if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                        $(`#${antwort_li.id}`).show();
+                    } else {
+                        $(`#${antwort_li.id}`).hide();
+                    }
+                }
+
+            } else {
+
+                var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+                for (var i = 0; i < antwortenLI_list.length; i++) {
+                    var antwort_li = antwortenLI_list[i];
+                    var id_split = antwort_li.id.split("-");
+                    if (id_split[1] != selectedAntworttyp) {
+                        $(`#${antwort_li.id}`).hide();
+                    } else {
+                        $(`#${antwort_li.id}`).show();
+                    }
+                }
+
+            }
+
+        } else {
+            if (eingabe != "") {
+                var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+
+                for (var i = 0; i < antwortenLI_list.length; i++) {
+                    var antwort_li = antwortenLI_list[i];
+                    var span_antwort = $(`#${antwort_li.id}`).children().first();
+                    if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                        $(`#${antwort_li.id}`).show();
+                    } else {
+                        $(`#${antwort_li.id}`).hide();
+                    }
+                }
+
+            } else {
+                var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+                for (var i = 0; i < antwortenLI_list.length; i++) {
+                    var antwort_li = antwortenLI_list[i];
                     $(`#${antwort_li.id}`).show();
                 }
             }
 
+        }
+
+
+    });
+
+}
+//FEHLER gelöst
+function SearchAntwortText_AufgabeEditView_Antwort() {
+    console.log('enter SearchAntwortText_AufgabeEditView_Antwort');
+
+    var selectedAntworttyp = $('#aufgabeEdit_antworttyp_select').val();
+    console.log(`Selected Antworttyp: ${selectedAntworttyp}`);
+
+    var eingabe = $('#searchAntwortField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    const url_getType = `/Admin/GetTypIdFromTyp`;
+    $.post(url_getType, {
+        typ: selectedAntworttyp
+    }).then(result => {
+        console.log(`ServerReply TypId: ${result}`);
+        selectedAntworttyp = result;
+
+        if (selectedAntworttyp == "noItemSelected") {
+            var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortenLI_list.length; i++) {
+                var antwort_li = antwortenLI_list[i];
+                var span_antwort = $(`#${antwort_li.id}`).children().first();
+                if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${antwort_li.id}`).show();
+                } else {
+                    $(`#${antwort_li.id}`).hide();
+                }
+            }
         } else {
-            var antwortLI_list = $('#antwortliste_aufgabeEditView').children();
-            for (var i = 0; i < antwortLI_list.length; i++) {
-                var antwort_li = antwortLI_list[i];
-                $(`#${antwort_li.id}`).show();
+            var antwortenLI_list_filtered = [];
+            var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
+            for (var i = 0; i < antwortenLI_list.length; i++) {
+                var antwort_li = antwortenLI_list[i];
+                var id_split = antwort_li.id.split("-");
+                if (id_split[1] == selectedAntworttyp) {
+                    antwortenLI_list_filtered.push(antwort_li);
+                } else {
+                    $(`#${antwort_li.id}`).hide();
+                }
+            }
+
+            for (var i = 0; i < antwortenLI_list_filtered.length; i++) {
+                var antwort_li = antwortenLI_list_filtered[i];
+                var span_antwort = $(`#${antwort_li.id}`).children().first();
+                if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${antwort_li.id}`).show();
+                } else {
+                    $(`#${antwort_li.id}`).hide();
+                }
             }
 
         }
 
     });
-
-
-}
-//FEHLER
-function SearchAntwortText_AufgabeEditView_Antwort() {
-    var eingabe = $('#searchAntwortField_AufgabeEditView').val();
-    console.log(`Eingegebener Text: ${eingabe}`);
-
-    var antworttyp_selected = $('#aufgabeEdit_antworttyp_select').val();
-    console.log(`Antworttyp Selected: ${antworttyp_selected}`);
-    if (antworttyp_selected != "noItemSelected") {
-
-    }
-
-    var antwortenLI_list = $('#antwortliste_aufgabeEditView').children();
-    for (var i = 0; i < antwortenLI_list.length; i++) {
-        var antwort_li = antwortenLI_list[i];
-
-        var span_antwort = $(`#${antwort_li.id}`).children().first();
-
-        if (span_antwort.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-            $(`#${antwort_li.id}`).show();
-        } else {
-            $(`#${antwort_li.id}`).hide();
-        }
-    }
 }
 
 //AufgabeButtonFunctions
@@ -629,15 +731,6 @@ function DeleteFrage() {
         }
 
     });
-
-}
-
-function SelectFrage(event) {
-    console.log('enter SelectFrage');
-    var id = event.target.id;
-    console.log(`Target_ID: ${id}`);
-
-    $(`#li_${id}`).css("background-color", "green");
 
 }
 
@@ -1491,4 +1584,199 @@ function SaveZusatzInfoChanges() {
         console.log(`ServerReply EditZusatzInfo: ${result}`);
         location.reload();
     });
+}
+
+function SelectFrage(event) {
+    console.log('enter SelectFrage');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+
+    if (frage_oldLI == -1) {
+        $(`.li_frage`).css("background-color", "white");
+        $(`#li_${id}`).css("background-color", "green");
+        frage_oldLI = id;
+    } else {
+        $(`#li_${frage_oldLI}`).css("background-color", "white");
+        $(`#li_${id}`).css("background-color", "green");
+        frage_oldLI = id;
+    }
+
+    var childrenLI = $(`#li_${id}`).children();
+    //console.log(childrenLI[0].innerText);
+    $('#selected_frage').text(childrenLI[0].innerText);
+
+    frage_selected = id;
+
+}
+
+function SelectAntwort(event) {
+    console.log('enter SelectAntwort');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    var li_ID = $(event.target).parent().attr('id');
+    //console.log(li_ID);
+
+    if (antwort_oldLI == -1) {
+        $(`.li_antwort`).css("background-color", "white");
+        $(`#${li_ID}`).css("background-color", "green");
+        antwort_oldLI = li_ID;
+    } else {
+        $(`#${antwort_oldLI}`).css("background-color", "white");
+        $(`#${li_ID}`).css("background-color", "green");
+        antwort_oldLI = li_ID;
+    }
+
+    var childrenLI = $(`#${li_ID}`).children();
+    //console.log(childrenLI[0].innerText);
+    $('#selected_antwort').text(childrenLI[0].innerText);
+
+    antwort_selected = id;
+}
+
+function SelectZusatzInfo(event) {
+    console.log('enter SelectZusatzInfo');
+    var id = event.target.id;
+    console.log(`Target_ID: ${id}`);
+    var li_ID = $(event.target).parent().attr('id');
+    //console.log(li_ID);
+
+    if (zusatzInfo_oldLI == -1) {
+        $(`.li_zusatzInfo`).css("background-color", "white");
+        $(`#${li_ID}`).css("background-color", "green");
+        zusatzInfo_oldLI = li_ID;
+    } else {
+        $(`#${zusatzInfo_oldLI}`).css("background-color", "white");
+        $(`#${li_ID}`).css("background-color", "green");
+        zusatzInfo_oldLI = li_ID;
+    }
+
+    var childrenLI = $(`#${li_ID}`).children();
+    //console.log(childrenLI[0].innerText);
+    $('#selected_zusatzInfo').text(childrenLI[0].innerText);
+
+    zusatzInfo_selected = id;
+}
+
+function SelectZusatzInfo_Typ() {
+    console.log("enter SelectZusatzInfo_Typ");
+
+    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
+    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
+
+    var eingabe = $('#searchInfoField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    if (selectedZusatzInfo_Typ != "noItemSelected") {
+
+        if (eingabe != "") {
+
+            var infoLI_list_filtered = [];
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var id_split = info_li.id.split("-");
+                if (id_split[1] == selectedZusatzInfo_Typ) {
+                    infoLI_list_filtered.push(info_li);
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+            for (var i = 0; i < infoLI_list_filtered.length; i++) {
+                var info_li = infoLI_list_filtered[i];
+                var span_info = $(`#${info_li.id}`).children().first();
+                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${info_li.id}`).show();
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+        } else {
+
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var id_split = info_li.id.split("-");
+                if (id_split[1] != selectedZusatzInfo_Typ) {
+                    $(`#${info_li.id}`).hide();
+                } else {
+                    $(`#${info_li.id}`).show();
+                }
+            }
+
+        }
+
+    } else {
+        if (eingabe != "") {
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var span_info = $(`#${info_li.id}`).children().first();
+                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${info_li.id}`).show();
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+        } else {
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                $(`#${info_li.id}`).show();
+            }
+        }
+
+    }
+
+}
+
+function SearchZusatzInfoText_AufgabeEditView_Antwort() {
+    console.log("SearchZusatzInfoText_AufgabeEditView_Antwort");
+
+    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
+    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
+
+    var eingabe = $('#searchInfoField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    if (selectedZusatzInfo_Typ == "noItemSelected") {
+        var infoLI_list = $('#infoliste_aufgabeEditView').children();
+        for (var i = 0; i < infoLI_list.length; i++) {
+            var info_li = infoLI_list[i];
+            var span_info = $(`#${info_li.id}`).children().first();
+            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${info_li.id}`).show();
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+    } else {
+        var infoLI_list_filtered = [];
+        var infoLI_list = $('#infoliste_aufgabeEditView').children();
+        for (var i = 0; i < infoLI_list.length; i++) {
+            var info_li = infoLI_list[i];
+            var id_split = info_li.id.split("-");
+            if (id_split[1] == selectedZusatzInfo_Typ) {
+                infoLI_list_filtered.push(info_li);
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+
+        for (var i = 0; i < infoLI_list_filtered.length; i++) {
+            var info_li = infoLI_list_filtered[i];
+            var span_info = $(`#${info_li.id}`).children().first();
+            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${info_li.id}`).show();
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+
+    }
+
+
 }
