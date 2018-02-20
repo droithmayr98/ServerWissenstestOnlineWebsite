@@ -58,6 +58,9 @@
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
     $('.aufgabe_danger').on('click', AufgabeDeleteClicked);
 
+    //save AufgabeEdit
+    $('#aufgabeEdit_save').on('click', SaveAufgabeEdit);
+
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
     $('.admin_warning').on('click', AdminEditClicked);
@@ -169,7 +172,6 @@ function CheckAdminInfo() {
 }
 
 //Suchfunktion Aufgabe
-//FEHLER gelöst
 function StationSelected() {
     console.log('enter StationSelected');
     var selectedStation = $('#stations_admin').val();
@@ -244,7 +246,6 @@ function StationSelected() {
 
 }
 
-//FEHLER gelöst
 function SearchAufgabeText() {
     console.log('enter SearchAufgabeText');
     var eingabe = $('#searchFrageField').val();
@@ -317,7 +318,6 @@ function SearchFrageText_AufgabeEditView_Frage() {
 }
 
 //Suchfunktion Antwort
-//FEHLER gelöst
 function SelectAntworttyp() {
     console.log('enter SelectAntworttyp');
 
@@ -404,7 +404,7 @@ function SelectAntworttyp() {
     });
 
 }
-//FEHLER gelöst
+
 function SearchAntwortText_AufgabeEditView_Antwort() {
     console.log('enter SearchAntwortText_AufgabeEditView_Antwort');
 
@@ -1779,4 +1779,8 @@ function SearchZusatzInfoText_AufgabeEditView_Antwort() {
     }
 
 
+}
+
+function SaveAufgabeEdit() {
+    console.log('enter SaveAufgabeEdit');
 }
