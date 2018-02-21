@@ -179,6 +179,87 @@ namespace WissenstestOnline.Controllers
             return View(aufgabe_edit_main_Model);
         }
 
+        public IActionResult AufgabeNew()
+        {
+            //Stationen
+            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<SelectListItem> stationsList = new List<SelectListItem>();
+            foreach (Station s in stations)
+            {
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                stationsList.Add(stationItem);
+            }
+
+            //FFs_1
+            List<Ort> standorte_ff = new List<Ort>();
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
+
+            //Bezirke
+            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
+            foreach (Bezirk b in bezirke)
+            {
+                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                bezirkeList.Add(bezirkItem);
+            }
+
+            //FFs_2
+            foreach (Ort o in standorte_ff)
+            {
+                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                standorteList.Add(standortItem);
+            }
+
+            //Fragen
+            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
+
+            //Antworten
+            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
+
+            //Zusatzinfo
+            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
+
+            //AntwortTypen
+            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
+
+            List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
+            antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in antwort_typen)
+            {
+                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
+                antwort_typen_list.Add(antwortTypItem);
+            }
+
+            //ZusatzinfoTypen
+            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
+
+            List<SelectListItem> info_typen_list = new List<SelectListItem>();
+            info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in info_typen)
+            {
+                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                info_typen_list.Add(infoTypItem);
+            }
+
+            var aufgabe_view_Model = new AufgabeEditView_Model();
+
+            aufgabe_view_Model.Stationen = stationsList;
+            aufgabe_view_Model.Bezirke = bezirkeList;
+            aufgabe_view_Model.Standorte = standorteList;
+            aufgabe_view_Model.Fragen = fragen;
+            aufgabe_view_Model.Antworten = antworten;
+            aufgabe_view_Model.Infos = infos;
+            aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
+            aufgabe_view_Model.Info_Typen = info_typen_list;
+
+            var aufgabeNew_Model = new AufgabeEditMain_Model();
+            aufgabeNew_Model.AufgabeInfo_Model = null;
+            aufgabeNew_Model.AufgabeEditView_Model = aufgabe_view_Model;
+            return View(aufgabeNew_Model);
+        }
+
         public IActionResult Logout()
         {
 
@@ -1392,7 +1473,7 @@ namespace WissenstestOnline.Controllers
         int aufgabe_frage,
         string aufgabe_antwort,
         string aufgabe_zusatzinfo)
-        {      
+        {
 
             Aufgabe aufgabe_edit = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
 
@@ -1420,7 +1501,7 @@ namespace WissenstestOnline.Controllers
                 int zusatzinfo = Convert.ToInt32(zusatzinfo_split[1]);
                 aufgabe_edit.Zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzinfo);
             }
-            
+
 
             test_db.SaveChanges();
 

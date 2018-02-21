@@ -163,6 +163,36 @@ textarea {
     overflow-y: scroll;
 }
 
+#aufgabeNewFragen ul {
+    height: 200px;
+    width: 100%;
+}
+
+#aufgabeNewFragen ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#aufgabeNewAntworten ul {
+    height: 200px;
+    width: 100%;
+}
+
+#aufgabeNewAntworten ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#aufgabeNewInfo ul {
+    height: 200px;
+    width: 100%;
+}
+
+#aufgabeNewInfo ul {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
 
 /*Modal Dialogs Headings*/
 .MyInfoHeader {

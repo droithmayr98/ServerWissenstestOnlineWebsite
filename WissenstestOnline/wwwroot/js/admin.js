@@ -488,9 +488,6 @@ function AufgabeEditClicked(event) {
     console.log(`Target_ID: ${id}`);
 
     window.open(`AufgabeEditView?aufgabe_id=${id}`);
-    //$('#aufgabeEdit_Modal').modal('show');
-
-
 }
 
 function AufgabeDeleteClicked(event) {
@@ -1862,4 +1859,5 @@ function ReloadSite() {
 
 function CreateAufgabeClicked() {
     console.log("enter CreateAufgabeClicked");
+    window.open('AufgabeNew');
 }
