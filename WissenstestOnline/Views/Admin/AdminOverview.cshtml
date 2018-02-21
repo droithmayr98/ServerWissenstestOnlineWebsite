@@ -12,7 +12,8 @@
 
     <!--Aufgabenliste-->
     <div class="container well">
-        <h3>Aufgabenübersicht</h3>
+            <h3>Aufgabenübersicht <button id="refreshButton" type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span></button></h3>
+        
         <form asp-controller="Admin" asp-action="AdminOverview" method="post" style="margin-bottom:10px" id="formSearchAufgabe">
             <select class="form-control" id="stations_admin" asp-items="@Model.Stationen" style="float:left;"></select>
         </form>
@@ -22,7 +23,7 @@
             <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText">
                 <span class="glyphicon glyphicon-search"></span>
             </button>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;">+ neue Aufgabe erstellen</button>
+            <button id="createAufgabe" class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;">+ neue Aufgabe erstellen</button>
         </div>
 
         <nav id="adminListAufgaben">
@@ -30,7 +31,7 @@
                 @foreach (var aufgabe in Model.Aufgaben)
                 {
                     <li class="list-group-item" id="@aufgabe.Aufgabe_Id-@aufgabe.Station.Station_Id">
-                        <span>@aufgabe.Frage.Fragetext</span>
+                        <span>@aufgabe.Aufgabe_Id: @aufgabe.Frage.Fragetext</span>
                         <div class="btn-group" style="float:right">
                             <button class="btn btn-info aufgabe_Info" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
                             <button class="btn btn-warning aufgabe_warning" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-pencil"></span></button>

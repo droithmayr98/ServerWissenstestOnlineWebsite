@@ -7,7 +7,7 @@
 <div class="container">
     <h1>Aufgabenbearbeitungsmodus</h1>
 
-    <h4><span style="font-weight: bold">Aufgabe ID:</span> @Model.AufgabeInfo_Model.Aufgabe_Id</h4>
+    <h4><span style="font-weight: bold">Aufgabe ID:</span> <span id="aufgabeEdit_aufgabeID">@Model.AufgabeInfo_Model.Aufgabe_Id</span></h4>
 
 
     <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
@@ -22,13 +22,13 @@
         {
             <div class="btn-group" data-toggle="buttons" id="stufen">
                 <label class="btn btn-secondary active buttons_stufen">
-                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze" checked>Bronze
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
                 </label>
                 <label class="btn btn-secondary buttons_stufen">
-                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
                 </label>
                 <label class="btn btn-secondary buttons_stufen">
-                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
                 </label>
             </div>
         }
@@ -85,7 +85,7 @@
             </div>
         }
 
-        <h4>Teilaufgabe von: @Model.AufgabeInfo_Model.TeilAufgabeVon</h4>
+        <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="@Model.AufgabeInfo_Model.TeilAufgabeVon" id="aufgabeEdit_teilaufgabe"/>
 
         <h4>Bezirk:</h4>
         <select id="adminEdit_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
@@ -265,6 +265,7 @@
     <!-- Ende Info -->
 
     <button class="btn btn-lg btn-success" id="aufgabeEdit_save">SPEICHERN</button>
+    <button class="btn btn-lg btn-danger" id="aufgabeEdit_close">CLOSE</button>
 
 </div>
 

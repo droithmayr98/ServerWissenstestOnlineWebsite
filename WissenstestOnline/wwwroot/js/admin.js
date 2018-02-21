@@ -58,8 +58,14 @@
     $('.aufgabe_warning').on('click', AufgabeEditClicked);
     $('.aufgabe_danger').on('click', AufgabeDeleteClicked);
 
+    //neue Aufgabe erstellen
+    $('#createAufgabe').on('click', CreateAufgabeClicked);
+
     //save AufgabeEdit
     $('#aufgabeEdit_save').on('click', SaveAufgabeEdit);
+
+    //close AufgabeEdit
+    $('#aufgabeEdit_close').on('click', CloseAufgabeEdit);
 
     //AdminItemButtons
     $('.admin_Info').on('click', AdminInfoClicked);
@@ -117,6 +123,9 @@
     //ZusatzInfoNew Dialog Buttons
     $('#newZusatzInfo_addInfoContentNew').on('click', AddNewInfoContent_ZusatzInfoNew);
     $('#newZusatzInfo_infoContents').on('click', DeleteItemOption_X);
+
+    //zusätzliches
+    $('#refreshButton').on('click', ReloadSite);
 
 });
 
@@ -1783,4 +1792,74 @@ function SearchZusatzInfoText_AufgabeEditView_Antwort() {
 
 function SaveAufgabeEdit() {
     console.log('enter SaveAufgabeEdit');
+
+    var aufgabe_id = $('#aufgabeEdit_aufgabeID').html();
+    var aufgabe_station = $('#adminEdit_station_select').val();
+    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
+    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
+    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
+    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
+    var aufgabe_ort = $('#adminEdit_ort_select').val();
+    var aufgabe_frage = frage_selected;
+    var aufgabe_antwort = antwort_selected;
+    var aufgabe_zusatzinfo = zusatzInfo_selected;
+
+    if (teilaufgabeVon == "-") {
+        teilaufgabeVon = null;
+    }
+
+    if (aufgabe_bezirk == "noBezirkSelected"){
+        aufgabe_bezirk = null;
+    }
+
+    if (aufgabe_ort == "noStandortSelected"){
+        aufgabe_ort = null;
+    }
+
+    console.log("AufgabeEdit_Save Testwerte:");
+    console.log("AufgabeID: " + aufgabe_id);
+    console.log("AufgabeStation: " + aufgabe_station);
+    console.log("AufgabeStufe: " + aufgabe_stufe);
+    console.log("Pflichtaufgabe: " + pflichtaufgabe);
+    console.log("TeilaufgabeVon: " + teilaufgabeVon);
+    console.log("AufgabeBezirk: " + aufgabe_bezirk);
+    console.log("AufgabeOrt: " + aufgabe_ort);
+    console.log("AufgabeFrage: " + aufgabe_frage);
+    console.log("AufgabeAntwort: " + aufgabe_antwort);
+    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
+
+    //BIG Ajax
+    const url_editAufgabe = `/Admin/EditAufgabe`;
+    $.post(url_editAufgabe, {
+        aufgabe_id: aufgabe_id,
+        aufgabe_station: aufgabe_station,
+        aufgabe_stufe: aufgabe_stufe,
+        pflichtaufgabe: pflichtaufgabe,
+        teilaufgabeVon: teilaufgabeVon,
+        aufgabe_bezirk: aufgabe_bezirk,
+        aufgabe_ort: aufgabe_ort,
+        aufgabe_frage: aufgabe_frage,
+        aufgabe_antwort: aufgabe_antwort,
+        aufgabe_zusatzinfo: aufgabe_zusatzinfo
+    }).then(result => {
+        console.log(`ServerReply EditAufgabe: ${result}`);
+        if (result === "ok") {
+            window.close();
+        }
+    });
+
+
+}
+
+function CloseAufgabeEdit() {
+    console.log('enter CloseAufgabeEdit');
+    window.close();
+}
+
+function ReloadSite() {
+    location.reload();
+}
+
+function CreateAufgabeClicked() {
+    console.log("enter CreateAufgabeClicked");
 }

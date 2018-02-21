@@ -1258,21 +1258,25 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-        public IActionResult GetZusatzInfo_Edit(int info_id) {
+        public IActionResult GetZusatzInfo_Edit(int info_id)
+        {
             var editZusatzInfo_Model = FillInfoModel(info_id);
             return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoEdit_Modal", editZusatzInfo_Model);
         }
 
-        public string CreateNewZusatzInfo(string zusatzInfoName, string[] headings, string[] contents) {
+        public string CreateNewZusatzInfo(string zusatzInfoName, string[] headings, string[] contents)
+        {
 
             string type_generated = "I_";
 
-            for (int i = 0; i < contents.Length; i++) {
-                type_generated = type_generated + "T";              
+            for (int i = 0; i < contents.Length; i++)
+            {
+                type_generated = type_generated + "T";
             }
 
             Typendefinition typ = test_db.Typendefinitionen.SingleOrDefault(x => x.Typ.Equals(type_generated));
-            if (typ == null) {
+            if (typ == null)
+            {
                 typ = new Typendefinition();
                 typ.Typ = type_generated;
                 typ.Zusatzinfos = new List<Zusatzinfo>();
@@ -1317,7 +1321,8 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string EditZusatzInfo(int zusatzInfoId, string zusatzInfoName, string[] headings, string[] contents) {
+        public string EditZusatzInfo(int zusatzInfoId, string zusatzInfoName, string[] headings, string[] contents)
+        {
 
             string type_generated = "I_";
 
@@ -1341,7 +1346,8 @@ namespace WissenstestOnline.Controllers
             Zusatzinfo edit_zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzInfoId);
 
             List<InfoContent> old_infoC = edit_zusatzinfo.InfoContentM;
-            for (int i = 0; i < old_infoC.Count; i++) {
+            for (int i = 0; i < old_infoC.Count; i++)
+            {
                 test_db.InfoContentM.Remove(old_infoC[i]);
                 test_db.SaveChanges();
             }
@@ -1375,6 +1381,54 @@ namespace WissenstestOnline.Controllers
 
             return "ok";
         }
+
+        public string EditAufgabe(int aufgabe_id,
+        int aufgabe_station,
+        string aufgabe_stufe,
+        bool pflichtaufgabe,
+        int teilaufgabeVon,
+        string aufgabe_bezirk,
+        string aufgabe_ort,
+        int aufgabe_frage,
+        string aufgabe_antwort,
+        string aufgabe_zusatzinfo)
+        {      
+
+            Aufgabe aufgabe_edit = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
+
+            aufgabe_edit.Station = test_db.Stationen.Single(x => x.Station_Id == aufgabe_station);
+            aufgabe_edit.Stufe = test_db.Stufen.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
+            aufgabe_edit.Pflichtaufgabe = pflichtaufgabe;
+            aufgabe_edit.TeilaufgabeVon = test_db.Aufgaben.SingleOrDefault(x => x.Aufgabe_Id == teilaufgabeVon);
+            aufgabe_edit.AufgabeBezirk = aufgabe_bezirk;
+            aufgabe_edit.AufgabeOrt = aufgabe_ort;
+            if (aufgabe_frage != -1)
+            {
+                aufgabe_edit.Frage = test_db.Fragen.Single(x => x.Frage_Id == aufgabe_frage);
+            }
+
+            if (!aufgabe_antwort.Equals("-1"))
+            {
+                string[] antwort_split = aufgabe_antwort.Split('_');
+                int antwort = Convert.ToInt32(antwort_split[1]);
+                aufgabe_edit.Antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort);
+            }
+
+            if (!aufgabe_zusatzinfo.Equals("-1"))
+            {
+                string[] zusatzinfo_split = aufgabe_zusatzinfo.Split('_');
+                int zusatzinfo = Convert.ToInt32(zusatzinfo_split[1]);
+                aufgabe_edit.Zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzinfo);
+            }
+            
+
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+
+
 
     }
 }
