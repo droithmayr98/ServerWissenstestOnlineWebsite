@@ -1508,7 +1508,38 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public string CreateAufgabe(int aufgabe_station,
+        string aufgabe_stufe,
+        bool pflichtaufgabe,
+        int teilaufgabeVon,
+        string aufgabe_bezirk,
+        string aufgabe_ort,
+        int aufgabe_frage,
+        string aufgabe_antwort,
+        string aufgabe_zusatzinfo)
+        {
 
+            string[] antwort_split = aufgabe_antwort.Split('_');
+            int antwort = Convert.ToInt32(antwort_split[1]);
+            string[] zusatzinfo_split = aufgabe_zusatzinfo.Split('_');
+            int zusatzinfo = Convert.ToInt32(zusatzinfo_split[1]);
+
+            Aufgabe new_aufgabe = new Aufgabe();
+            new_aufgabe.Station = test_db.Stationen.Single(x => x.Station_Id == aufgabe_station);
+            new_aufgabe.Stufe = test_db.Stufen.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
+            new_aufgabe.Pflichtaufgabe = pflichtaufgabe;
+            new_aufgabe.TeilaufgabeVon = test_db.Aufgaben.SingleOrDefault(x => x.Aufgabe_Id == teilaufgabeVon);
+            new_aufgabe.AufgabeBezirk = aufgabe_bezirk;
+            new_aufgabe.AufgabeOrt = aufgabe_ort;
+            new_aufgabe.Frage = test_db.Fragen.Single(x => x.Frage_Id == aufgabe_frage);
+            new_aufgabe.Antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort);
+            new_aufgabe.Zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzinfo);
+
+            test_db.Aufgaben.Add(new_aufgabe);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
 
 
     }

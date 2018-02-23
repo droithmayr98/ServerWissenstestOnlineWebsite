@@ -10,18 +10,18 @@
     <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
 
         <h4>Station:</h4>
-        <select id="aufgabeNew_SelectStation" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
+        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
 
         <h4>Stufe:</h4>
         <div class="btn-group" data-toggle="buttons" id="stufen">
             <label class="btn btn-secondary active buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeNew" value="B" checked>Bronze
+                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
             </label>
             <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeNew" value="S">Silver
+                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
             </label>
             <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeNew" value="G">Gold
+                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
             </label>
         </div>
 
@@ -35,13 +35,13 @@
             </label>
         </div>
 
-        <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="-" id="aufgabeNew_teilaufgabe" />
+        <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="-" id="aufgabeEdit_teilaufgabe" />
 
         <h4>Bezirk:</h4>
-        <select id="aufgabeNew_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
+        <select id="adminEdit_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
 
         <h4>Ort:</h4>
-        <select id="aufgabeNew_ort_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Standorte"></select>
+        <select id="adminEdit_ort_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Standorte"></select>
 
     </form>
 
@@ -52,15 +52,15 @@
     <div class="well">
 
         <div>
-            <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField_AufgabeNew">
-            <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText_AufgabeNew">
+            <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField_AufgabeEditView">
+            <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText_AufgabeEditView">
                 <span class="glyphicon glyphicon-search"></span>
             </button>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newFrage_AufgabeNew">+ neue Frage erstellen</button>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newFrage_AufgabeEditView">+ neue Frage erstellen</button>
         </div>
 
-        <nav id="aufgabeNewFragen">
-            <ul class="list-group" id="frageliste_aufgabeNew">
+        <nav id="aufgabeEditFragen">
+            <ul class="list-group" id="frageliste_aufgabeEditView">
 
                 @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
                 {
@@ -89,19 +89,19 @@
 
         <div>
             <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
-                <select id="aufgabeNew_antworttyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
+                <select id="aufgabeEdit_antworttyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
 
-                <input type="text" class="form-control input" placeholder="Antwort eingeben..." style="float:left;" id="searchAntwortField_AufgabeNew">
-                <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeNew">
+                <input type="text" class="form-control input" placeholder="Antwort eingeben..." style="float:left;" id="searchAntwortField_AufgabeEditView">
+                <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeEditView">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </form>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeNew">+ neue Antwort erstellen</button>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
 
         </div>
 
-        <nav id="aufgabeNewAntworten">
-            <ul class="list-group" id="antwortliste_aufgabeNew">
+        <nav id="aufgabeEditAntworten">
+            <ul class="list-group" id="antwortliste_aufgabeEditView">
 
                 @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
                 {
@@ -132,19 +132,19 @@
 
         <div>
             <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
-                <select id="aufgabeNew_infotyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Info_Typen"></select>
+                <select id="aufgabeEdit_infotyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Info_Typen"></select>
 
-                <input type="text" class="form-control input" placeholder="Zusatzinfo eingeben..." style="float:left;" id="searchInfoField_AufgabeNew">
-                <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeNew">
+                <input type="text" class="form-control input" placeholder="Zusatzinfo eingeben..." style="float:left;" id="searchInfoField_AufgabeEditView">
+                <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeEditView">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </form>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeNew">+ neue Zusatzinfo erstellen</button>
+            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
 
         </div>
 
-        <nav id="aufgabeNewInfo">
-            <ul class="list-group" id="infoliste_aufgabeNew">
+        <nav id="aufgabeEditInfo">
+            <ul class="list-group" id="infoliste_aufgabeEditView">
 
                 @foreach (var info in Model.AufgabeEditView_Model.Infos)
                 {
@@ -165,7 +165,242 @@
 
     </div>
 
-    <button class="btn btn-lg btn-success" id="aufgabeEdit_save">ERSTELLEN</button>
+    <button class="btn btn-lg btn-success" id="aufgabeNew_create">ERSTELLEN</button>
     <button class="btn btn-lg btn-danger" id="aufgabeEdit_close">CLOSE</button>
 
 </div>
+
+<div id="loadFrageModal"></div>
+<div id="loadAntwortModal"></div>
+<div id="loadZusatzInfoModal"></div>
+
+@section scripts{
+
+    <script src="~/js/admin.js"></script>
+    <script src="~/js/otherFunctions.js"></script>
+    <script src="~/js/date.js"></script>
+}
+
+
+<!--create new Frage-->
+<div class="modal fade" id="frageCreate_Modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Neue Frage</h4>
+            </div>
+            <!-- Body Part -->
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Fragetext:</h5>
+                    <input placeholder="Frage eingeben" class="form-control input-field" type="text" id="newFrage_Fragetext" />
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_frage_button">Erstellen</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--ErrorMessage: Frage darf nicht gelöscht werden-->
+<div class="modal fade" role="dialog" id="frageDeleteError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Frage kann nicht gelöscht werden!</h4>
+                <p>Ausgewählte Frage kommt in einer oder mehreren Aufgabe(n) vor.</p>
+                <p>Löschen sie zuerst die Aufgabe(n) mit der dazugehörigen Frage oder ändern sie die Frage der Aufgabe(n).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ErrorMessage: Antwort darf nicht gelöscht werden-->
+<div class="modal fade" role="dialog" id="antwortDeleteError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Antwort kann nicht gelöscht werden!</h4>
+                <p>Ausgewählte Antwort kommt in einer oder mehreren Aufgabe(n) vor.</p>
+                <p>Löschen sie zuerst die Aufgabe(n) mit der dazugehörigen Antwort oder ändern sie die Antwort der Aufgabe(n).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--Antwort erstellen-->
+<div class="modal fade" role="dialog" id="antwortCreate_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Neue Antwort</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Antwortname:</h5>
+                    <input placeholder="Antwortname" class="form-control input-field" type="text" id="antwortNew_AntwortnameNew" />
+                </div>
+
+                <form asp-controller="Admin" asp-action="GetAntwortEdit" method="post">
+                    <div class="form-group" id="InputValueLogin">
+                        <h5 id="headingBezirk">Antworttyp:</h5>
+                        <select id="antwortTypSelectNew" class="form-control" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
+                    </div>
+                </form>
+
+                <hr />
+
+                <div>
+                    <div id="partialViewAntwortenNew">Kein Antworttyp ausgewählt!</div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_antwort_button">Erstellen</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ErrorMessage: ZusatzInfo darf nicht gelöscht werden-->
+<div class="modal fade" role="dialog" id="zusatzInfoDeleteError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>ZusatzInfo kann nicht gelöscht werden!</h4>
+                <p>Ausgewählte ZusatzInfo kommt in einer oder mehreren Aufgabe(n) vor.</p>
+                <p>Löschen sie zuerst die Aufgabe(n) mit der dazugehörigen ZusatzInfo oder ändern sie die ZusatzInfo der Aufgabe(n).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ZusatzInfo erstellen-->
+<div class="modal fade" role="dialog" id="zusatzInfoCreate_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MySuccessHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Neue ZusatzInfo</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">ZusatzInfoName:</h5>
+                    <input placeholder="ZusatzInfoName" class="form-control input-field" type="text" id="zusatzInfoNew_ZusatzInfoName" />
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <h5 style="font-weight: bold">Inhalte:</h5>
+
+                    <div id="newZusatzInfo_infoContents">
+                        <div id="newZusatzInfo_infoContent_1">
+                            <div>
+                                <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="newZusatzInfo_infoContent_heading_1" />
+                                <button class="btn btn-danger" id="btn_newZusatzInfo_infoContent_1"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                <textarea class="form-control" id="newZusatzInfo_infoContent_content_1" style="width:500px; height:150px;"></textarea>
+                            </div><br />
+                        </div>
+
+                    </div>
+                    <button class="btn btn-success" id="newZusatzInfo_addInfoContentNew"><span class="glyphicon glyphicon glyphicon-plus"></span></button>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="create_zusatzInfo_button">Erstellen</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ErrorMessage: keine Frage ausgewählt-->
+<div class="modal fade" role="dialog" id="noFrageSelectedError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Keine Frage ausgewählt!</h4>
+                <p>Eine Aufgabe muss eine Frage beinhalten.</p>
+                <p>Bitte wählen sie eine Frage aus.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ErrorMessage: keine Antwort ausgewählt-->
+<div class="modal fade" role="dialog" id="noAntwortSelectedError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Keine Antwort ausgewählt!</h4>
+                <p>Eine Aufgabe muss eine Antwort beinhalten.</p>
+                <p>Bitte wählen sie eine Antwort aus.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--ErrorMessage: keine ZusatzInfo ausgewählt-->
+<div class="modal fade" role="dialog" id="noZusatzInfoSelectedError_Modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header MyDangerHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ErrorMessage</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Keine Zusatzinfo ausgewählt!</h4>
+                <p>Eine Aufgabe muss eine Zusatzinfo beinhalten.</p>
+                <p>Bitte wählen sie eine Zusatzinfo aus.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

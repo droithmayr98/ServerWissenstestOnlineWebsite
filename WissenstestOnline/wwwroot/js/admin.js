@@ -60,6 +60,7 @@
 
     //neue Aufgabe erstellen
     $('#createAufgabe').on('click', CreateAufgabeClicked);
+    $('#aufgabeNew_create').on('click', CreateAufgabe);
 
     //save AufgabeEdit
     $('#aufgabeEdit_save').on('click', SaveAufgabeEdit);
@@ -1860,4 +1861,71 @@ function ReloadSite() {
 function CreateAufgabeClicked() {
     console.log("enter CreateAufgabeClicked");
     window.open('AufgabeNew');
+}
+
+function CreateAufgabe() {
+    console.log('enter CreateAufgabe');
+
+    var aufgabe_station = $('#adminEdit_station_select').val();
+    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
+    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
+    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
+    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
+    var aufgabe_ort = $('#adminEdit_ort_select').val();
+    var aufgabe_frage = frage_selected;
+    var aufgabe_antwort = antwort_selected;
+    var aufgabe_zusatzinfo = zusatzInfo_selected;
+
+    if (teilaufgabeVon == "-") {
+        teilaufgabeVon = null;
+    }
+
+    if (aufgabe_bezirk == "noBezirkSelected") {
+        aufgabe_bezirk = null;
+    }
+
+    if (aufgabe_ort == "noStandortSelected") {
+        aufgabe_ort = null;
+    }
+
+    console.log("AufgabeNew_Create Testwerte:");
+    console.log("AufgabeStation: " + aufgabe_station);
+    console.log("AufgabeStufe: " + aufgabe_stufe);
+    console.log("Pflichtaufgabe: " + pflichtaufgabe);
+    console.log("TeilaufgabeVon: " + teilaufgabeVon);
+    console.log("AufgabeBezirk: " + aufgabe_bezirk);
+    console.log("AufgabeOrt: " + aufgabe_ort);
+    console.log("AufgabeFrage: " + aufgabe_frage);
+    console.log("AufgabeAntwort: " + aufgabe_antwort);
+    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
+
+    if (aufgabe_frage == -1) {
+        $('#noFrageSelectedError_Modal').modal('show');
+    } else if (aufgabe_antwort == -1) {
+        $('#noAntwortSelectedError_Modal').modal('show');
+    } else if (aufgabe_zusatzinfo == -1) {
+        $('#noZusatzInfoSelectedError_Modal').modal('show');
+    } else {
+        //BIG Ajax
+        const url_newAufgabe = `/Admin/CreateAufgabe`;
+        $.post(url_newAufgabe, {
+            aufgabe_station: aufgabe_station,
+            aufgabe_stufe: aufgabe_stufe,
+            pflichtaufgabe: pflichtaufgabe,
+            teilaufgabeVon: teilaufgabeVon,
+            aufgabe_bezirk: aufgabe_bezirk,
+            aufgabe_ort: aufgabe_ort,
+            aufgabe_frage: aufgabe_frage,
+            aufgabe_antwort: aufgabe_antwort,
+            aufgabe_zusatzinfo: aufgabe_zusatzinfo
+        }).then(result => {
+            console.log(`ServerReply CreateAufgabe: ${result}`);
+            if (result === "ok") {
+                window.close();
+            }
+        });
+
+    }
+
+
 }
