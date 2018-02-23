@@ -28,11 +28,11 @@ namespace WissenstestOnline.Controllers
         //Admin Login Page
         public IActionResult Login()
         {
-            logger.LogInformation("Testlog Admincontroller");
             return View();
         }
 
 
+        //AdminSeiten
         public IActionResult AdminOverview()
         {
             //Alle Aufgaben holen und in Model speichern
@@ -55,214 +55,30 @@ namespace WissenstestOnline.Controllers
             List<Admintable> alle_admins = test_db.Admins.Select(x => x).OrderBy(x => x.Username).ToList();
             adminOverwiew_model.Admins = alle_admins;
 
-            //Aktuellen Admin holen
-
             return View(adminOverwiew_model);
 
         }
 
         public IActionResult AufgabeEditView(int aufgabe_id)
         {
-            logger.LogInformation("Selected Aufgabe ID: " + aufgabe_id);
-
             var aufgabeInfo_edit_Model = FillAufgabeModel(aufgabe_id);
-
-
-            //Stationen
-            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
-            List<SelectListItem> stationsList = new List<SelectListItem>();
-            foreach (Station s in stations)
-            {
-                if (s.Stationsname == aufgabeInfo_edit_Model.Station)
-                {
-                    SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
-                    stationItem.Selected = true;
-                    stationsList.Add(stationItem);
-                }
-                else
-                {
-                    SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
-                    stationsList.Add(stationItem);
-                }
-            }
-
-            //FFs_1
-            List<Ort> standorte_ff = new List<Ort>();
-            List<SelectListItem> standorteList = new List<SelectListItem>();
-            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
-
-            //Bezirke
-            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
-            List<SelectListItem> bezirkeList = new List<SelectListItem>();
-            bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
-            foreach (Bezirk b in bezirke)
-            {
-                if (b.Bezirksname == aufgabeInfo_edit_Model.Bezirk)
-                {
-                    SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
-                    bezirkItem.Selected = true;
-                    bezirkeList.Add(bezirkItem);
-                    standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirk_Id == b.Bezirk_Id).ToList();
-                }
-                else
-                {
-                    SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
-                    bezirkeList.Add(bezirkItem);
-                }
-            }
-
-            //FFs_2
-            foreach (Ort o in standorte_ff)
-            {
-                if (o.Ortsname == aufgabeInfo_edit_Model.Ort)
-                {
-                    SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
-                    standortItem.Selected = true;
-                    standorteList.Add(standortItem);
-                }
-                else
-                {
-                    SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
-                    standorteList.Add(standortItem);
-                }
-            }
-
-            //Fragen
-            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
-
-            //Antworten
-            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
-
-            //Zusatzinfo
-            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
-
-            //AntwortTypen
-            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
-
-            List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
-            antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in antwort_typen)
-            {
-                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
-                antwort_typen_list.Add(antwortTypItem);
-            }
-
-
-            //ZusatzinfoTypen
-            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
-
-            List<SelectListItem> info_typen_list = new List<SelectListItem>();
-            info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in info_typen)
-            {
-                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
-                info_typen_list.Add(infoTypItem);
-            }
-
-
-            var aufgabe_view_Model = new AufgabeEditView_Model();
-
-            aufgabe_view_Model.Stationen = stationsList;
-            aufgabe_view_Model.Bezirke = bezirkeList;
-            aufgabe_view_Model.Standorte = standorteList;
-            aufgabe_view_Model.Fragen = fragen;
-            aufgabe_view_Model.Antworten = antworten;
-            aufgabe_view_Model.Infos = infos;
-            aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
-            aufgabe_view_Model.Info_Typen = info_typen_list;
-
-
 
             var aufgabe_edit_main_Model = new AufgabeEditMain_Model();
             aufgabe_edit_main_Model.AufgabeInfo_Model = aufgabeInfo_edit_Model;
-            aufgabe_edit_main_Model.AufgabeEditView_Model = aufgabe_view_Model;
+            aufgabe_edit_main_Model.AufgabeEditView_Model = FillSiteModel();
             return View(aufgabe_edit_main_Model);
         }
 
         public IActionResult AufgabeNew()
         {
-            //Stationen
-            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
-            List<SelectListItem> stationsList = new List<SelectListItem>();
-            foreach (Station s in stations)
-            {
-                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
-                stationsList.Add(stationItem);
-            }
-
-            //FFs_1
-            List<Ort> standorte_ff = new List<Ort>();
-            List<SelectListItem> standorteList = new List<SelectListItem>();
-            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
-
-            //Bezirke
-            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
-            List<SelectListItem> bezirkeList = new List<SelectListItem>();
-            bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
-            foreach (Bezirk b in bezirke)
-            {
-                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
-                bezirkeList.Add(bezirkItem);
-            }
-
-            //FFs_2
-            foreach (Ort o in standorte_ff)
-            {
-                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
-                standorteList.Add(standortItem);
-            }
-
-            //Fragen
-            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
-
-            //Antworten
-            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
-
-            //Zusatzinfo
-            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
-
-            //AntwortTypen
-            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
-
-            List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
-            antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in antwort_typen)
-            {
-                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
-                antwort_typen_list.Add(antwortTypItem);
-            }
-
-            //ZusatzinfoTypen
-            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
-
-            List<SelectListItem> info_typen_list = new List<SelectListItem>();
-            info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in info_typen)
-            {
-                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
-                info_typen_list.Add(infoTypItem);
-            }
-
-            var aufgabe_view_Model = new AufgabeEditView_Model();
-
-            aufgabe_view_Model.Stationen = stationsList;
-            aufgabe_view_Model.Bezirke = bezirkeList;
-            aufgabe_view_Model.Standorte = standorteList;
-            aufgabe_view_Model.Fragen = fragen;
-            aufgabe_view_Model.Antworten = antworten;
-            aufgabe_view_Model.Infos = infos;
-            aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
-            aufgabe_view_Model.Info_Typen = info_typen_list;
-
             var aufgabeNew_Model = new AufgabeEditMain_Model();
             aufgabeNew_Model.AufgabeInfo_Model = null;
-            aufgabeNew_Model.AufgabeEditView_Model = aufgabe_view_Model;
+            aufgabeNew_Model.AufgabeEditView_Model = FillSiteModel();
             return View(aufgabeNew_Model);
         }
 
         public IActionResult Logout()
         {
-
             return RedirectToAction("Start", "Main");
         }
 
@@ -270,7 +86,6 @@ namespace WissenstestOnline.Controllers
         //Ajax calls
         public string CheckAdminInfo(string username, string password)
         {
-
             Admintable admin = test_db.Admins.SingleOrDefault(x => x.Username.Equals(username));
             if (admin == null)
             {
@@ -286,6 +101,8 @@ namespace WissenstestOnline.Controllers
             }
         }
 
+
+        //AdminInteractions
         public IActionResult GetAdminInfo(string admin_id)
         {
             int adminId_int = Convert.ToInt32(admin_id);
@@ -300,88 +117,8 @@ namespace WissenstestOnline.Controllers
             return PartialView("Modal_PartialViews/AdminModals/AdminEdit_Modal", adminInfo_model);
         }
 
-        public IActionResult GetAdminDelete(string admin_id)
-        {
-            int adminId_int = Convert.ToInt32(admin_id);
-            var adminInfo_model = FillAdminModel(adminId_int);
-            return PartialView("Modal_PartialViews/AdminModals/AdminDelete_Modal", adminInfo_model);
-        }
-
-        public IActionResult GetAufgabeInfo(string aufgabe_id)
-        {
-            int aufgabeId_int = Convert.ToInt32(aufgabe_id);
-            var aufgabeInfo_model = FillAufgabeModel(aufgabeId_int);
-            return PartialView("Modal_PartialViews/AufgabeInfo_Modal", aufgabeInfo_model);
-        }
-
-        public AdminInfo_Model FillAdminModel(int adminId_int)
-        {
-
-            Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
-            var adminInfo_model = new AdminInfo_Model();
-            adminInfo_model.Id = admin.Admin_Id;
-            adminInfo_model.Username = admin.Username;
-            adminInfo_model.Password = admin.Password;
-            adminInfo_model.Can_create_acc = admin.Can_create_acc;
-            adminInfo_model.Can_edit_acc = admin.Can_edit_acc;
-            adminInfo_model.Can_delete_acc = admin.Can_delete_acc;
-            return adminInfo_model;
-        }
-
-        public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int)
-        {
-            Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
-            var aufgabeInfo_model = new AufgabeInfo_Model();
-            aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
-            aufgabeInfo_model.Station = aufgabe.Station.Stationsname;
-            aufgabeInfo_model.Stufe = aufgabe.Stufe.Stufenname;
-            aufgabeInfo_model.IsPflichtaufgabe = aufgabe.Pflichtaufgabe;
-            aufgabeInfo_model.Bezirk = aufgabe.AufgabeBezirk == null ? "-" : aufgabe.AufgabeBezirk;
-            aufgabeInfo_model.Ort = aufgabe.AufgabeOrt == null ? "-" : aufgabe.AufgabeOrt;
-            aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilaufgabeVon == null ? "-" : aufgabe.TeilaufgabeVon.Aufgabe_Id.ToString();
-            aufgabeInfo_model.Antwort_Id = aufgabe.Antwort.Antwort_Id;
-            aufgabeInfo_model.Antwort_Name = aufgabe.Antwort.Antwort_Name;
-
-            aufgabeInfo_model.Frage = aufgabe.Frage;
-
-            aufgabeInfo_model.Info = aufgabe.Zusatzinfo.InfoContentM;
-            aufgabeInfo_model.Zusatzinfo = aufgabe.Zusatzinfo;
-
-
-            //Antwort
-            string aufgabe_typ = aufgabe.Antwort.Typ.Typ;
-            int antwortInhalt_id = aufgabe.Antwort.Inhalt_Id;
-
-            switch (aufgabe_typ)
-            {
-                case "A_T":
-                    aufgabeInfo_model.Antworttyp = "Text";
-                    aufgabeInfo_model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_S":
-                    aufgabeInfo_model.Antworttyp = "Slider";
-                    aufgabeInfo_model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_DP":
-                    aufgabeInfo_model.Antworttyp = "DatePicker";
-                    aufgabeInfo_model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_CB:T":
-                    aufgabeInfo_model.Antworttyp = "CheckBox";
-                    aufgabeInfo_model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
-                    break;
-                case "A_RB:T":
-                    aufgabeInfo_model.Antworttyp = "RadioButton";
-                    aufgabeInfo_model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
-                    break;
-            }
-
-            return aufgabeInfo_model;
-        }
-
         public string SaveAdminChanges(int admin_id, string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc)
         {
-            //Datenbankänderungen u Überprüfungen
             var edit_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
             edit_admin.Username = username;
             edit_admin.Password = password;
@@ -392,9 +129,15 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public IActionResult GetAdminDelete(string admin_id)
+        {
+            int adminId_int = Convert.ToInt32(admin_id);
+            var adminInfo_model = FillAdminModel(adminId_int);
+            return PartialView("Modal_PartialViews/AdminModals/AdminDelete_Modal", adminInfo_model);
+        }
+
         public string DeleteAdmin(int admin_id)
         {
-            //Datensatz löschen
             var delete_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
             test_db.Admins.Remove(delete_admin);
             test_db.SaveChanges();
@@ -414,26 +157,9 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public IActionResult SetStandorteBezirkComboBox(string bezirk)
-        {
 
-            List<Ort> standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).ToList();
 
-            List<SelectListItem> standorteList = new List<SelectListItem>();
-            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
-
-            foreach (Ort o in standorte_ff)
-            {
-                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
-                standorteList.Add(standortItem);
-            }
-
-            var newComboBoxValues_Model = new NewComboBoxValues_Model();
-            newComboBoxValues_Model.New_values = standorteList;
-
-            return PartialView("NewComboBoxValues", newComboBoxValues_Model);
-        }
-
+        //FrageInteractions
         public IActionResult GetFrageInfo(int frage_id)
         {
             var frageInfo_Model = FillFrageInfoModel(frage_id);
@@ -446,54 +172,12 @@ namespace WissenstestOnline.Controllers
             return PartialView("Modal_PartialViews/FrageModals/FrageEdit_Modal", frageEdit_Model);
         }
 
-        public FrageInfo_Model FillFrageInfoModel(int frage_id)
-        {
-            Frage frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
-            var frageInfo_Model = new FrageInfo_Model();
-            frageInfo_Model.FrageId = frage.Frage_Id;
-            frageInfo_Model.FrageText = frage.Fragetext;
-            return frageInfo_Model;
-        }
-
         public string SaveFrageChanges(int frage_id, string fragetext)
         {
-
             Frage edit_frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
             edit_frage.Fragetext = fragetext;
             edit_frage.Typ = edit_frage.Typ;
 
-            try
-            {
-                test_db.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
-
-
-            return "ok";
-        }
-
-        public string CreateFrage(string fragetext)
-        {
-
-            Frage new_frage = new Frage();
-            new_frage.Fragetext = fragetext;
-            new_frage.Aufgaben = new List<Aufgabe>();
-            new_frage.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals("F_T"));
-
-            test_db.Fragen.Add(new_frage);
             test_db.SaveChanges();
 
             return "ok";
@@ -521,10 +205,25 @@ namespace WissenstestOnline.Controllers
 
         }
 
+        public string CreateFrage(string fragetext)
+        {
+            Frage new_frage = new Frage();
+            new_frage.Fragetext = fragetext;
+            new_frage.Aufgaben = new List<Aufgabe>();
+            new_frage.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals("F_T"));
+
+            test_db.Fragen.Add(new_frage);
+            test_db.SaveChanges();
+
+            return "ok";
+        }
+
+
+        //AntwortInteractions
         public IActionResult GetAntwortInfo(int antwort_id)
         {
             var antwortInfo_Model = FillAntwortModel(antwort_id);
-            return PartialView("Modal_PartialViews/AntwortInfo_Modal", antwortInfo_Model);
+            return PartialView("Modal_PartialViews/AntwortModals/AntwortInfo_Modal", antwortInfo_Model);
         }
 
         public IActionResult GetAntwortEdit(int antwort_id)
@@ -574,42 +273,7 @@ namespace WissenstestOnline.Controllers
             antwortEditMain_Model.AntwortInfo_Model = antwortEdit_Model;
             antwortEditMain_Model.AntwortEditView_Model = antwortEditView_Model;
 
-            return PartialView("Modal_PartialViews/AntwortEdit_Modal", antwortEditMain_Model);
-        }
-
-        public AntwortInfo_Model FillAntwortModel(int antwort_id)
-        {
-            Antwort antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
-            var antwortInfo_Model = new AntwortInfo_Model();
-            antwortInfo_Model.Antwort_Id = antwort.Antwort_Id;
-            antwortInfo_Model.Antwortname = antwort.Antwort_Name;
-            int antwortInhalt_id = antwort.Inhalt_Id;
-
-            switch (antwort.Typ.Typ)
-            {
-                case "A_T":
-                    antwortInfo_Model.Antworttyp = "Text";
-                    antwortInfo_Model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_S":
-                    antwortInfo_Model.Antworttyp = "Slider";
-                    antwortInfo_Model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_DP":
-                    antwortInfo_Model.Antworttyp = "DatePicker";
-                    antwortInfo_Model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
-                    break;
-                case "A_CB:T":
-                    antwortInfo_Model.Antworttyp = "CheckBox";
-                    antwortInfo_Model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
-                    break;
-                case "A_RB:T":
-                    antwortInfo_Model.Antworttyp = "RadioButton";
-                    antwortInfo_Model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
-                    break;
-            }
-
-            return antwortInfo_Model;
+            return PartialView("Modal_PartialViews/AntwortModals/AntwortEdit_Modal", antwortEditMain_Model);
         }
 
         public IActionResult LoadAntwortEditAntwort(int antwort_id)
@@ -695,103 +359,7 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-        public IActionResult GetAufgabeDelete(int aufgabe_id)
-        {
-            var aufgabeDelete_Model = FillAufgabeModel(aufgabe_id);
-            return PartialView("Modal_PartialViews/AufgabeModals/AufgabeDelete_Modal", aufgabeDelete_Model);
-        }
-
-        public string DeleteAufgabe(int aufgabe_id)
-        {
-            Aufgabe aufgabe_delete = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
-            test_db.Aufgaben.Remove(aufgabe_delete);
-            test_db.SaveChanges();
-            return "ok";
-        }
-
-        public IActionResult SetNewAntwortType(string typ_id)
-        {
-            Console.WriteLine("Selected AntwortType: " + typ_id);
-
-            //string typ_string = test_db.Typendefinitionen.Single(x => x.Typ_Id.ToString().Equals(typ_id)).Typ;
-
-            switch (typ_id)
-            {
-                case "A_T":
-                    return PartialView("AntwortNew_PartialViews/AntwortNewTextPV");
-                case "A_S":
-                    return PartialView("AntwortNew_PartialViews/AntwortNewSliderPV");
-                case "A_DP":
-                    return PartialView("AntwortNew_PartialViews/AntwortNewDatePickerPV");
-                case "A_CB:T":
-                    return PartialView("AntwortNew_PartialViews/AntwortNewCheckBoxPV");
-                case "A_RB:T":
-                    return PartialView("AntwortNew_PartialViews/AntwortNewRadioButtonsPV");
-                default:
-                    return PartialView("AntwortNew_PartialViews/AntwortNewDefaultPV");
-            }
-
-        }
-
-        public IActionResult GetZusatzInfo_Info(int info_id)
-        {
-            var infoZusatzInfo_Model = FillInfoModel(info_id);
-            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfo_InfoModal", infoZusatzInfo_Model);
-        }
-
-        public IActionResult GetZusatzInfoDelete(int info_id)
-        {
-            var infoDelete_Model = FillInfoModel(info_id);
-            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoDelete_Modal", infoDelete_Model);
-        }
-
-        public ZusatzInfo_InfoModel FillInfoModel(int info_id)
-        {
-
-            Zusatzinfo zusatzInfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
-            InfoContent[] infoContents = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == info_id).ToArray();
-            List<ZusatzInfoTextblock> infoTextblocks = new List<ZusatzInfoTextblock>();
-
-            ZusatzInfoTextOnly_Model zusatzInfo_Model = new ZusatzInfoTextOnly_Model();
-            foreach (InfoContent infoCon in infoContents)
-            {
-                ZusatzInfoTextblock textBlock = new ZusatzInfoTextblock();
-                textBlock.Heading = infoCon.Heading;
-                textBlock.Text = infoCon.Info_Content;
-                infoTextblocks.Add(textBlock);
-            }
-
-            var zusatzInfo_InfoModel = new ZusatzInfo_InfoModel();
-            zusatzInfo_InfoModel.Texte = infoTextblocks;
-            zusatzInfo_InfoModel.ZusatzInfo_Id = zusatzInfo.Zusatzinfo_Id;
-            zusatzInfo_InfoModel.ZusatzInfo_Typ = zusatzInfo.Typ.Typ;
-            zusatzInfo_InfoModel.ZusatzInfo_Name = zusatzInfo.Zusatzinfo_Name;
-
-            return zusatzInfo_InfoModel;
-
-        }
-
-        public string DeleteZusatzInfo(int info_id)
-        {
-            Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
-            if (info_delete.Aufgaben.Count == 0)
-            {
-                InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
-                foreach (InfoContent infC in infoContentDel)
-                {
-                    test_db.InfoContentM.Remove(infC);
-                }
-                test_db.Zusatzinfos.Remove(info_delete);
-                test_db.SaveChanges();
-                return "ok";
-            }
-            else
-            {
-                return "not deletable";
-            }
-        }
-
-        //neue Antworten erstellen
+        //neue Antwort erstellen
         public string CreateAntwort_Text(string antwortName, string antwortTyp, string antwortText)
         {
             //Console.WriteLine("AntwortTyp: " + antwortTyp);
@@ -959,20 +527,7 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        public string GetTypIdFromTyp(string typ)
-        {
-            if (typ.Equals("noItemSelected"))
-            {
-                return "noItemSelected";
-            }
-            else
-            {
-                return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
-            }
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        //bestehende Antwort bearbeiten
+        //Antwort bearbeiten
         //Textfeld + Text auf bestehende Antwort einstellen
         public string EditNewAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText)
         {
@@ -1291,51 +846,59 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
-        //Alte Antwortdefinition löschen
-        public void DeleteOldAntwortDefinition(string a_typ, int inhalt_Id)
+        //weitere Antwortmethoden
+        public IActionResult SetNewAntwortType(string typ_id)
         {
-            switch (a_typ)
+            switch (typ_id)
             {
                 case "A_T":
-                    Antwort_Text a_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_Texte.Remove(a_text);
-                    test_db.SaveChanges();
-                    break;
+                    return PartialView("AntwortNew_PartialViews/AntwortNewTextPV");
                 case "A_S":
-                    Antwort_Slider a_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_Sliders.Remove(a_slider);
-                    test_db.SaveChanges();
-                    break;
+                    return PartialView("AntwortNew_PartialViews/AntwortNewSliderPV");
                 case "A_DP":
-                    Antwort_DatePicker a_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_DatePickerM.Remove(a_DP);
-                    test_db.SaveChanges();
-                    break;
-                case "A_RB:T":
-                    Antwort_RadioButton a_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_Id);
-                    List<RadioButton> radioButtons = a_RB.RadioButtons;
-                    foreach (RadioButton rb in radioButtons)
-                    {
-                        test_db.RadioButtons.Remove(rb);
-                        test_db.SaveChanges();
-                    }
-                    test_db.Antwort_RadioButtons.Remove(a_RB);
-                    test_db.SaveChanges();
-                    break;
+                    return PartialView("AntwortNew_PartialViews/AntwortNewDatePickerPV");
                 case "A_CB:T":
-                    Antwort_CheckBox a_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_Id);
-                    List<CheckBox> checkboxes = a_CB.CheckBoxes;
-                    foreach (CheckBox cb in checkboxes)
-                    {
-                        test_db.CheckBoxes.Remove(cb);
-                        test_db.SaveChanges();
-                    }
-                    test_db.Antwort_CheckBoxes.Remove(a_CB);
-                    test_db.SaveChanges();
-                    break;
+                    return PartialView("AntwortNew_PartialViews/AntwortNewCheckBoxPV");
+                case "A_RB:T":
+                    return PartialView("AntwortNew_PartialViews/AntwortNewRadioButtonsPV");
                 default:
-                    //nothing
-                    break;
+                    return PartialView("AntwortNew_PartialViews/AntwortNewDefaultPV");
+            }
+
+        }
+
+
+
+        //ZusatzInfoInteractions
+        public IActionResult GetZusatzInfo_Info(int info_id)
+        {
+            var infoZusatzInfo_Model = FillInfoModel(info_id);
+            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfo_InfoModal", infoZusatzInfo_Model);
+        }
+
+        public IActionResult GetZusatzInfoDelete(int info_id)
+        {
+            var infoDelete_Model = FillInfoModel(info_id);
+            return PartialView("Modal_PartialViews/ZusatzInfoModals/ZusatzInfoDelete_Modal", infoDelete_Model);
+        }
+
+        public string DeleteZusatzInfo(int info_id)
+        {
+            Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
+            if (info_delete.Aufgaben.Count == 0)
+            {
+                InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
+                foreach (InfoContent infC in infoContentDel)
+                {
+                    test_db.InfoContentM.Remove(infC);
+                }
+                test_db.Zusatzinfos.Remove(info_delete);
+                test_db.SaveChanges();
+                return "ok";
+            }
+            else
+            {
+                return "not deletable";
             }
         }
 
@@ -1463,6 +1026,16 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+
+
+        //AufgabeInteractions
+        public IActionResult GetAufgabeInfo(string aufgabe_id)
+        {
+            int aufgabeId_int = Convert.ToInt32(aufgabe_id);
+            var aufgabeInfo_model = FillAufgabeModel(aufgabeId_int);
+            return PartialView("Modal_PartialViews/AufgabeModals/AufgabeInfo_Modal", aufgabeInfo_model);
+        }
+
         public string EditAufgabe(int aufgabe_id,
         int aufgabe_station,
         string aufgabe_stufe,
@@ -1541,6 +1114,322 @@ namespace WissenstestOnline.Controllers
             return "ok";
         }
 
+        public IActionResult GetAufgabeDelete(int aufgabe_id)
+        {
+            var aufgabeDelete_Model = FillAufgabeModel(aufgabe_id);
+            return PartialView("Modal_PartialViews/AufgabeModals/AufgabeDelete_Modal", aufgabeDelete_Model);
+        }
+
+        public string DeleteAufgabe(int aufgabe_id)
+        {
+            Aufgabe aufgabe_delete = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
+            test_db.Aufgaben.Remove(aufgabe_delete);
+            test_db.SaveChanges();
+            return "ok";
+        }
+
+
+
+        //Anderes
+        public IActionResult SetStandorteBezirkComboBox(string bezirk)
+        {
+            List<Ort> standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).ToList();
+
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
+
+            foreach (Ort o in standorte_ff)
+            {
+                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                standorteList.Add(standortItem);
+            }
+
+            var newComboBoxValues_Model = new NewComboBoxValues_Model();
+            newComboBoxValues_Model.New_values = standorteList;
+
+            return PartialView("NewComboBoxValues", newComboBoxValues_Model);
+        }
+
+        public string GetTypIdFromTyp(string typ)
+        {
+            if (typ.Equals("noItemSelected"))
+            {
+                return "noItemSelected";
+            }
+            else
+            {
+                return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
+            }
+        }
+
+             
+
+        //Fill-Methods
+        public AntwortInfo_Model FillAntwortModel(int antwort_id)
+        {
+            Antwort antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
+            var antwortInfo_Model = new AntwortInfo_Model();
+            antwortInfo_Model.Antwort_Id = antwort.Antwort_Id;
+            antwortInfo_Model.Antwortname = antwort.Antwort_Name;
+            int antwortInhalt_id = antwort.Inhalt_Id;
+
+            switch (antwort.Typ.Typ)
+            {
+                case "A_T":
+                    antwortInfo_Model.Antworttyp = "Text";
+                    antwortInfo_Model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_S":
+                    antwortInfo_Model.Antworttyp = "Slider";
+                    antwortInfo_Model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_DP":
+                    antwortInfo_Model.Antworttyp = "DatePicker";
+                    antwortInfo_Model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_CB:T":
+                    antwortInfo_Model.Antworttyp = "CheckBox";
+                    antwortInfo_Model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
+                    break;
+                case "A_RB:T":
+                    antwortInfo_Model.Antworttyp = "RadioButton";
+                    antwortInfo_Model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
+                    break;
+            }
+
+            return antwortInfo_Model;
+        }
+
+        public AdminInfo_Model FillAdminModel(int adminId_int)
+        {
+
+            Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
+            var adminInfo_model = new AdminInfo_Model();
+            adminInfo_model.Id = admin.Admin_Id;
+            adminInfo_model.Username = admin.Username;
+            adminInfo_model.Password = admin.Password;
+            adminInfo_model.Can_create_acc = admin.Can_create_acc;
+            adminInfo_model.Can_edit_acc = admin.Can_edit_acc;
+            adminInfo_model.Can_delete_acc = admin.Can_delete_acc;
+            return adminInfo_model;
+        }
+
+        public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int)
+        {
+            Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
+            var aufgabeInfo_model = new AufgabeInfo_Model();
+            aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
+            aufgabeInfo_model.Station = aufgabe.Station.Stationsname;
+            aufgabeInfo_model.Stufe = aufgabe.Stufe.Stufenname;
+            aufgabeInfo_model.IsPflichtaufgabe = aufgabe.Pflichtaufgabe;
+            aufgabeInfo_model.Bezirk = aufgabe.AufgabeBezirk == null ? "-" : aufgabe.AufgabeBezirk;
+            aufgabeInfo_model.Ort = aufgabe.AufgabeOrt == null ? "-" : aufgabe.AufgabeOrt;
+            aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilaufgabeVon == null ? "-" : aufgabe.TeilaufgabeVon.Aufgabe_Id.ToString();
+            aufgabeInfo_model.Antwort_Id = aufgabe.Antwort.Antwort_Id;
+            aufgabeInfo_model.Antwort_Name = aufgabe.Antwort.Antwort_Name;
+
+            aufgabeInfo_model.Frage = aufgabe.Frage;
+
+            aufgabeInfo_model.Info = aufgabe.Zusatzinfo.InfoContentM;
+            aufgabeInfo_model.Zusatzinfo = aufgabe.Zusatzinfo;
+
+
+            //Antwort
+            string aufgabe_typ = aufgabe.Antwort.Typ.Typ;
+            int antwortInhalt_id = aufgabe.Antwort.Inhalt_Id;
+
+            switch (aufgabe_typ)
+            {
+                case "A_T":
+                    aufgabeInfo_model.Antworttyp = "Text";
+                    aufgabeInfo_model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_S":
+                    aufgabeInfo_model.Antworttyp = "Slider";
+                    aufgabeInfo_model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_DP":
+                    aufgabeInfo_model.Antworttyp = "DatePicker";
+                    aufgabeInfo_model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    break;
+                case "A_CB:T":
+                    aufgabeInfo_model.Antworttyp = "CheckBox";
+                    aufgabeInfo_model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
+                    break;
+                case "A_RB:T":
+                    aufgabeInfo_model.Antworttyp = "RadioButton";
+                    aufgabeInfo_model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
+                    break;
+            }
+
+            return aufgabeInfo_model;
+        }
+
+        public AufgabeEditView_Model FillSiteModel()
+        {
+
+            //Stationen
+            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<SelectListItem> stationsList = new List<SelectListItem>();
+            foreach (Station s in stations)
+            {
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                stationsList.Add(stationItem);
+            }
+
+            //FFs_1
+            List<Ort> standorte_ff = new List<Ort>();
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
+
+            //Bezirke
+            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
+            foreach (Bezirk b in bezirke)
+            {
+                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                bezirkeList.Add(bezirkItem);
+            }
+
+            //FFs_2
+            foreach (Ort o in standorte_ff)
+            {
+                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                standorteList.Add(standortItem);
+            }
+
+            //Fragen
+            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
+
+            //Antworten
+            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
+
+            //Zusatzinfo
+            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
+
+            //AntwortTypen
+            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
+
+            List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
+            antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in antwort_typen)
+            {
+                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
+                antwort_typen_list.Add(antwortTypItem);
+            }
+
+            //ZusatzinfoTypen
+            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
+
+            List<SelectListItem> info_typen_list = new List<SelectListItem>();
+            info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
+            foreach (Typendefinition t in info_typen)
+            {
+                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                info_typen_list.Add(infoTypItem);
+            }
+
+            var aufgabe_view_Model = new AufgabeEditView_Model();
+
+            aufgabe_view_Model.Stationen = stationsList;
+            aufgabe_view_Model.Bezirke = bezirkeList;
+            aufgabe_view_Model.Standorte = standorteList;
+            aufgabe_view_Model.Fragen = fragen;
+            aufgabe_view_Model.Antworten = antworten;
+            aufgabe_view_Model.Infos = infos;
+            aufgabe_view_Model.Antwort_Typen = antwort_typen_list;
+            aufgabe_view_Model.Info_Typen = info_typen_list;
+
+            return aufgabe_view_Model;
+        }
+
+        public FrageInfo_Model FillFrageInfoModel(int frage_id)
+        {
+            Frage frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
+            var frageInfo_Model = new FrageInfo_Model();
+            frageInfo_Model.FrageId = frage.Frage_Id;
+            frageInfo_Model.FrageText = frage.Fragetext;
+            return frageInfo_Model;
+        }
+
+        public ZusatzInfo_InfoModel FillInfoModel(int info_id)
+        {
+            Zusatzinfo zusatzInfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
+            InfoContent[] infoContents = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == info_id).ToArray();
+            List<ZusatzInfoTextblock> infoTextblocks = new List<ZusatzInfoTextblock>();
+
+            ZusatzInfoTextOnly_Model zusatzInfo_Model = new ZusatzInfoTextOnly_Model();
+            foreach (InfoContent infoCon in infoContents)
+            {
+                ZusatzInfoTextblock textBlock = new ZusatzInfoTextblock();
+                textBlock.Heading = infoCon.Heading;
+                textBlock.Text = infoCon.Info_Content;
+                infoTextblocks.Add(textBlock);
+            }
+
+            var zusatzInfo_InfoModel = new ZusatzInfo_InfoModel();
+            zusatzInfo_InfoModel.Texte = infoTextblocks;
+            zusatzInfo_InfoModel.ZusatzInfo_Id = zusatzInfo.Zusatzinfo_Id;
+            zusatzInfo_InfoModel.ZusatzInfo_Typ = zusatzInfo.Typ.Typ;
+            zusatzInfo_InfoModel.ZusatzInfo_Name = zusatzInfo.Zusatzinfo_Name;
+
+            return zusatzInfo_InfoModel;
+        }
+
+
+
+        //Other Methods
+        //Alte Antwortdefinition löschen
+        public void DeleteOldAntwortDefinition(string a_typ, int inhalt_Id)
+        {
+            switch (a_typ)
+            {
+                case "A_T":
+                    Antwort_Text a_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_Texte.Remove(a_text);
+                    test_db.SaveChanges();
+                    break;
+                case "A_S":
+                    Antwort_Slider a_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_Sliders.Remove(a_slider);
+                    test_db.SaveChanges();
+                    break;
+                case "A_DP":
+                    Antwort_DatePicker a_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_Id);
+                    test_db.Antwort_DatePickerM.Remove(a_DP);
+                    test_db.SaveChanges();
+                    break;
+                case "A_RB:T":
+                    Antwort_RadioButton a_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_Id);
+                    List<RadioButton> radioButtons = a_RB.RadioButtons;
+                    foreach (RadioButton rb in radioButtons)
+                    {
+                        test_db.RadioButtons.Remove(rb);
+                        test_db.SaveChanges();
+                    }
+                    test_db.Antwort_RadioButtons.Remove(a_RB);
+                    test_db.SaveChanges();
+                    break;
+                case "A_CB:T":
+                    Antwort_CheckBox a_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_Id);
+                    List<CheckBox> checkboxes = a_CB.CheckBoxes;
+                    foreach (CheckBox cb in checkboxes)
+                    {
+                        test_db.CheckBoxes.Remove(cb);
+                        test_db.SaveChanges();
+                    }
+                    test_db.Antwort_CheckBoxes.Remove(a_CB);
+                    test_db.SaveChanges();
+                    break;
+                default:
+                    //nothing
+                    break;
+            }
+        }
+
+
 
     }
+
 }

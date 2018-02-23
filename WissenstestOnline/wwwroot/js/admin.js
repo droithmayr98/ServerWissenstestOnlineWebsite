@@ -11,7 +11,6 @@
     //Suchtrigger Aufgaben
     $('#stations_admin').on('change', StationSelected);
     $('#searchFrageText').on('click', SearchAufgabeText);
-
     $('#searchFrageField').bind('enterKey', SearchAufgabeText);
     $('#searchFrageField').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -22,7 +21,6 @@
 
     //Suchtrigger Fragen
     $('#searchFrageText_AufgabeEditView').on('click', SearchFrageText_AufgabeEditView_Frage);
-
     $('#searchFrageField_AufgabeEditView').bind('enterKey2', SearchFrageText_AufgabeEditView_Frage);
     $('#searchFrageField_AufgabeEditView').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -32,8 +30,8 @@
     });
 
     //Suchtrigger Antworten
+    $('#aufgabeEdit_antworttyp_select').on('change', SelectAntworttyp);
     $('#searchAntwortText_AufgabeEditView').on('click', SearchAntwortText_AufgabeEditView_Antwort);
-
     $('#searchAntwortField_AufgabeEditView').bind('enterKey3', SearchAntwortText_AufgabeEditView_Antwort);
     $('#searchAntwortField_AufgabeEditView').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -43,9 +41,9 @@
     });
 
     //Suchtrigger ZusatzInfo
-    $('#searchInfoText_AufgabeEditView').on('click', SearchZusatzInfoText_AufgabeEditView_Antwort);
-
-    $('#searchInfoField_AufgabeEditView').bind('enterKey4', SearchZusatzInfoText_AufgabeEditView_Antwort);
+    $('#aufgabeEdit_infotyp_select').on('change', SelectZusatzInfo_Typ);
+    $('#searchInfoText_AufgabeEditView').on('click', SearchZusatzInfoText_AufgabeEditView);
+    $('#searchInfoField_AufgabeEditView').bind('enterKey4', SearchZusatzInfoText_AufgabeEditView);
     $('#searchInfoField_AufgabeEditView').keydown(function (e) {
         if (e.keyCode == 13) {
             $(this).trigger('enterKey4');
@@ -65,7 +63,7 @@
     //save AufgabeEdit
     $('#aufgabeEdit_save').on('click', SaveAufgabeEdit);
 
-    //close AufgabeEdit
+    //close AufgabeEdit/New
     $('#aufgabeEdit_close').on('click', CloseAufgabeEdit);
 
     //AdminItemButtons
@@ -105,25 +103,20 @@
     $('.antwortobject').on('click', SelectAntwort);
     $('.infoobject').on('click', SelectZusatzInfo);
 
-    //Antworttyp Select
-    $('#aufgabeEdit_antworttyp_select').on('change', SelectAntworttyp);
-
-    //ZusatzInfoTyp Select
-    $('#aufgabeEdit_infotyp_select').on('change', SelectZusatzInfo_Typ);
-
-    //AntwortDialog Neu Select Typ
+    
+    //AntwortDialog Neuer Typ ausgewählt
     $('#antwortTypSelectNew').on('change', AntwortNewDialogTypeChanged);
 
     //new Admin
     $('#create_new_admin').on('click', CreateAdminClicked);
     $('#create_admin_button').on('click', CreateAdmin);
 
-    //editAufgabe
-    $('#adminEdit_bezirk_select').on('change', SetStandorteBezirk);
-
     //ZusatzInfoNew Dialog Buttons
     $('#newZusatzInfo_addInfoContentNew').on('click', AddNewInfoContent_ZusatzInfoNew);
     $('#newZusatzInfo_infoContents').on('click', DeleteItemOption_X);
+
+    //Standorte von Bezirk
+    $('#adminEdit_bezirk_select').on('change', SetStandorteBezirk);
 
     //zusätzliches
     $('#refreshButton').on('click', ReloadSite);
@@ -155,14 +148,12 @@ var editAntwortTypeChanged = false;
 
 //LoginInformationen prüfen
 function CheckAdminInfo() {
-    //Eingabewerte holten + Testausgabe
     var input_username = $('#adminUsername').val();
     var input_password = $('#adminPasswort').val();
 
     console.log('Username: ' + input_username);
     console.log('Password: ' + input_password);
 
-    //C# Überprüfung, ob gültiger User
     const url = '/Admin/CheckAdminInfo';
     $.post(url, {
         username: input_username,
@@ -181,6 +172,8 @@ function CheckAdminInfo() {
 
 }
 
+
+//Filterfunktionen
 //Suchfunktion Aufgabe
 function StationSelected() {
     console.log('enter StationSelected');
@@ -470,7 +463,134 @@ function SearchAntwortText_AufgabeEditView_Antwort() {
     });
 }
 
-//AufgabeButtonFunctions
+//Suchfunktion ZusatzInfo
+function SelectZusatzInfo_Typ() {
+    console.log("enter SelectZusatzInfo_Typ");
+
+    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
+    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
+
+    var eingabe = $('#searchInfoField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    if (selectedZusatzInfo_Typ != "noItemSelected") {
+
+        if (eingabe != "") {
+
+            var infoLI_list_filtered = [];
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var id_split = info_li.id.split("-");
+                if (id_split[1] == selectedZusatzInfo_Typ) {
+                    infoLI_list_filtered.push(info_li);
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+            for (var i = 0; i < infoLI_list_filtered.length; i++) {
+                var info_li = infoLI_list_filtered[i];
+                var span_info = $(`#${info_li.id}`).children().first();
+                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${info_li.id}`).show();
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+        } else {
+
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var id_split = info_li.id.split("-");
+                if (id_split[1] != selectedZusatzInfo_Typ) {
+                    $(`#${info_li.id}`).hide();
+                } else {
+                    $(`#${info_li.id}`).show();
+                }
+            }
+
+        }
+
+    } else {
+        if (eingabe != "") {
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                var span_info = $(`#${info_li.id}`).children().first();
+                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                    $(`#${info_li.id}`).show();
+                } else {
+                    $(`#${info_li.id}`).hide();
+                }
+            }
+
+        } else {
+            var infoLI_list = $('#infoliste_aufgabeEditView').children();
+            for (var i = 0; i < infoLI_list.length; i++) {
+                var info_li = infoLI_list[i];
+                $(`#${info_li.id}`).show();
+            }
+        }
+
+    }
+
+}
+
+function SearchZusatzInfoText_AufgabeEditView() {
+    console.log("SearchZusatzInfoText_AufgabeEditView_Antwort");
+
+    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
+    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
+
+    var eingabe = $('#searchInfoField_AufgabeEditView').val();
+    console.log(`Eingegebener Text: ${eingabe}`);
+
+    if (selectedZusatzInfo_Typ == "noItemSelected") {
+        var infoLI_list = $('#infoliste_aufgabeEditView').children();
+        for (var i = 0; i < infoLI_list.length; i++) {
+            var info_li = infoLI_list[i];
+            var span_info = $(`#${info_li.id}`).children().first();
+            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${info_li.id}`).show();
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+    } else {
+        var infoLI_list_filtered = [];
+        var infoLI_list = $('#infoliste_aufgabeEditView').children();
+        for (var i = 0; i < infoLI_list.length; i++) {
+            var info_li = infoLI_list[i];
+            var id_split = info_li.id.split("-");
+            if (id_split[1] == selectedZusatzInfo_Typ) {
+                infoLI_list_filtered.push(info_li);
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+
+        for (var i = 0; i < infoLI_list_filtered.length; i++) {
+            var info_li = infoLI_list_filtered[i];
+            var span_info = $(`#${info_li.id}`).children().first();
+            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
+                $(`#${info_li.id}`).show();
+            } else {
+                $(`#${info_li.id}`).hide();
+            }
+        }
+
+    }
+
+
+}
+
+
+
+//AufgabeInteractions
 function AufgabeInfoClicked(event) {
     console.log('Aufgabe Info Clicked');
     var id = event.target.id;
@@ -505,7 +625,163 @@ function AufgabeDeleteClicked(event) {
 
 }
 
-//AdminButtonFunctions
+function DeleteAufgabe() {
+    console.log('enter DeleteAufgabe');
+    var aufgabe_id_selected = $('#aufgabe_id_delete').text();
+
+    const url = `/Admin/DeleteAufgabe`;
+    $.post(url, {
+        aufgabe_id: aufgabe_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteAufgabe: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        }
+
+    });
+
+}
+
+function SaveAufgabeEdit() {
+    console.log('enter SaveAufgabeEdit');
+
+    var aufgabe_id = $('#aufgabeEdit_aufgabeID').html();
+    var aufgabe_station = $('#adminEdit_station_select').val();
+    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
+    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
+    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
+    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
+    var aufgabe_ort = $('#adminEdit_ort_select').val();
+    var aufgabe_frage = frage_selected;
+    var aufgabe_antwort = antwort_selected;
+    var aufgabe_zusatzinfo = zusatzInfo_selected;
+
+    if (teilaufgabeVon == "-") {
+        teilaufgabeVon = null;
+    }
+
+    if (aufgabe_bezirk == "noBezirkSelected") {
+        aufgabe_bezirk = null;
+    }
+
+    if (aufgabe_ort == "noStandortSelected") {
+        aufgabe_ort = null;
+    }
+
+    console.log("AufgabeEdit_Save Testwerte:");
+    console.log("AufgabeID: " + aufgabe_id);
+    console.log("AufgabeStation: " + aufgabe_station);
+    console.log("AufgabeStufe: " + aufgabe_stufe);
+    console.log("Pflichtaufgabe: " + pflichtaufgabe);
+    console.log("TeilaufgabeVon: " + teilaufgabeVon);
+    console.log("AufgabeBezirk: " + aufgabe_bezirk);
+    console.log("AufgabeOrt: " + aufgabe_ort);
+    console.log("AufgabeFrage: " + aufgabe_frage);
+    console.log("AufgabeAntwort: " + aufgabe_antwort);
+    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
+
+    //BIG Ajax
+    const url_editAufgabe = `/Admin/EditAufgabe`;
+    $.post(url_editAufgabe, {
+        aufgabe_id: aufgabe_id,
+        aufgabe_station: aufgabe_station,
+        aufgabe_stufe: aufgabe_stufe,
+        pflichtaufgabe: pflichtaufgabe,
+        teilaufgabeVon: teilaufgabeVon,
+        aufgabe_bezirk: aufgabe_bezirk,
+        aufgabe_ort: aufgabe_ort,
+        aufgabe_frage: aufgabe_frage,
+        aufgabe_antwort: aufgabe_antwort,
+        aufgabe_zusatzinfo: aufgabe_zusatzinfo
+    }).then(result => {
+        console.log(`ServerReply EditAufgabe: ${result}`);
+        if (result === "ok") {
+            window.close();
+        }
+    });
+
+
+}
+
+function CloseAufgabeEdit() {
+    console.log('enter CloseAufgabeEdit');
+    window.close();
+}
+
+function CreateAufgabeClicked() {
+    console.log("enter CreateAufgabeClicked");
+    window.open('AufgabeNew');
+}
+
+function CreateAufgabe() {
+    console.log('enter CreateAufgabe');
+
+    var aufgabe_station = $('#adminEdit_station_select').val();
+    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
+    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
+    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
+    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
+    var aufgabe_ort = $('#adminEdit_ort_select').val();
+    var aufgabe_frage = frage_selected;
+    var aufgabe_antwort = antwort_selected;
+    var aufgabe_zusatzinfo = zusatzInfo_selected;
+
+    if (teilaufgabeVon == "-") {
+        teilaufgabeVon = null;
+    }
+
+    if (aufgabe_bezirk == "noBezirkSelected") {
+        aufgabe_bezirk = null;
+    }
+
+    if (aufgabe_ort == "noStandortSelected") {
+        aufgabe_ort = null;
+    }
+
+    console.log("AufgabeNew_Create Testwerte:");
+    console.log("AufgabeStation: " + aufgabe_station);
+    console.log("AufgabeStufe: " + aufgabe_stufe);
+    console.log("Pflichtaufgabe: " + pflichtaufgabe);
+    console.log("TeilaufgabeVon: " + teilaufgabeVon);
+    console.log("AufgabeBezirk: " + aufgabe_bezirk);
+    console.log("AufgabeOrt: " + aufgabe_ort);
+    console.log("AufgabeFrage: " + aufgabe_frage);
+    console.log("AufgabeAntwort: " + aufgabe_antwort);
+    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
+
+    if (aufgabe_frage == -1) {
+        $('#noFrageSelectedError_Modal').modal('show');
+    } else if (aufgabe_antwort == -1) {
+        $('#noAntwortSelectedError_Modal').modal('show');
+    } else if (aufgabe_zusatzinfo == -1) {
+        $('#noZusatzInfoSelectedError_Modal').modal('show');
+    } else {
+        //BIG Ajax
+        const url_newAufgabe = `/Admin/CreateAufgabe`;
+        $.post(url_newAufgabe, {
+            aufgabe_station: aufgabe_station,
+            aufgabe_stufe: aufgabe_stufe,
+            pflichtaufgabe: pflichtaufgabe,
+            teilaufgabeVon: teilaufgabeVon,
+            aufgabe_bezirk: aufgabe_bezirk,
+            aufgabe_ort: aufgabe_ort,
+            aufgabe_frage: aufgabe_frage,
+            aufgabe_antwort: aufgabe_antwort,
+            aufgabe_zusatzinfo: aufgabe_zusatzinfo
+        }).then(result => {
+            console.log(`ServerReply CreateAufgabe: ${result}`);
+            if (result === "ok") {
+                window.close();
+            }
+        });
+
+    }
+
+
+}
+
+
+//AdminInteractions
 function AdminInfoClicked(event) {
     console.log('Admin Info Clicked');
     var id = event.target.id;
@@ -630,17 +906,9 @@ function CreateAdmin() {
 
 }
 
-function SetStandorteBezirk() {
-    console.log('enter SetStandorteBezirk');
-    var bezirk_selected = $('#adminEdit_bezirk_select').val();
-    console.log(`Selected Bezirk: ${bezirk_selected}`);
 
-    const url = `/Admin/SetStandorteBezirkComboBox?bezirk=${bezirk_selected}`;
-    $('#adminEdit_ort_select').load(url);
 
-}
-
-//FrageButtonFunctions
+//FrageInteractions
 function FrageInfoClicked(event) {
     console.log('Frage InfoClicked');
     var id = event.target.id;
@@ -694,8 +962,6 @@ function SaveFrageEdit() {
         location.reload();
     });
 
-
-
 }
 
 function CreateFrageClicked() {
@@ -720,8 +986,6 @@ function CreateFrage() {
 
 function DeleteFrage() {
     console.log('enter DeleteFrage');
-    //Nur Frage löschen --> wenn Frage in keiner aufgabe vorkommt
-    //Was passiert mit aufgaben, die die Frage beinhalten???
     var frage_id_selected = $('#frage_id_delete').text();
 
     const url = `/Admin/DeleteFrage`;
@@ -732,7 +996,6 @@ function DeleteFrage() {
         if (result === "ok") {
             location.reload();
         } else {
-            //Frage darf nicht gelöscht werden --> Frage ist noch in einer Aufgabe vorhanden
             $('#frageDeleteError_Modal').modal('show');
 
         }
@@ -741,7 +1004,9 @@ function DeleteFrage() {
 
 }
 
-//AntwortButtonFunctions
+
+
+//AntwortInteractions
 function AntwortInfoClicked(event) {
     console.log('AntwortInfoClicked');
     var id_string = event.target.id;
@@ -817,34 +1082,6 @@ function AntwortDeleteClicked(event) {
 
 }
 
-function AntwortEditDialogTypeChanged() {
-    var selected_Typ = $('#antwortEditTypSelect').val();
-    console.log(`Changed Typ: ${selected_Typ}`);
-
-    const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
-    $('#partialViewAntworten').load(url, () => {
-
-        //Bei Auswahl des Typs ID Counter zurücksetzen
-        id_cbNew_AntwortRichtig = 1;
-        id_cbNew_AntwortFalsch = 1;
-        id_rbNew_AntwortFalsch = 1;
-
-        editAntwortTypeChanged = true;
-
-        //CB events newAntwortDialog
-        $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
-        $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
-        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_X);
-        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_X);
-
-        //RB events newAntwortDialog
-        $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
-        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_X);
-
-    });
-
-}
-
 function DeleteAntwort() {
     console.log('enter DeleteAntwort');
     //Nur Antwort löschen --> wenn Antwort in keiner aufgabe vorkommt
@@ -868,20 +1105,132 @@ function DeleteAntwort() {
 
 }
 
-function DeleteAufgabe() {
-    console.log('enter DeleteAufgabe');
-    var aufgabe_id_selected = $('#aufgabe_id_delete').text();
+function CreateAntwort() {
+    console.log('enter CreateAntwort');
 
-    const url = `/Admin/DeleteAufgabe`;
-    $.post(url, {
-        aufgabe_id: aufgabe_id_selected
-    }).then(result => {
-        console.log(`ServerReply DeleteAufgabe: ${result}`);
-        if (result === "ok") {
-            location.reload();
-        }
+    var antwort_name = $('#antwortNew_AntwortnameNew').val();
+    var selected_Typ_string = $('#antwortTypSelectNew').val();
 
-    });
+    console.log(`Selected Typ: ${selected_Typ_string}`);
+    console.log(`Antwortname: ${antwort_name}`);
+
+    switch (selected_Typ_string) {
+        case "A_T":
+            var antwort_text = $('#textfieldNewAntwortText').val();
+            console.log(`Antwort Text: ${antwort_text}`);
+
+            const url_text = `/Admin/CreateAntwort_Text`;
+            $.post(url_text, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                antwortText: antwort_text
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_Text: ${result}`);
+                location.reload();
+            });
+            break;
+        case "A_S":
+            var slider_min = $('#new_slider_min').val();
+            var slider_max = $('#new_slider_max').val();
+            var slider_sprungweite = $('#new_slider_sprungweite').val();
+            var slider_rightVal = $('#new_slider_rightVal').val();
+            var slider_titel = $('#new_slider_text').val();
+
+            if (slider_titel == null) {
+                slider_titel = "";
+            }
+
+            console.log(`Werte: ${slider_min} + ${slider_max} + ${slider_sprungweite} + ${slider_rightVal} + ${slider_titel}`);
+
+            const url_slider = `/Admin/CreateAntwort_Slider`;
+            $.post(url_slider, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                sliderMin: slider_min,
+                sliderMax: slider_max,
+                sliderSprungweite: slider_sprungweite,
+                sliderRightVal: slider_rightVal,
+                sliderTitel: slider_titel
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_Slider: ${result}`);
+                location.reload();
+            });
+            break;
+        case "A_DP":
+            var date = $('#newAntwortDatepicker').val();
+
+            console.log(`New Date: ${date}`);
+
+            const url_DP = `/Admin/CreateAntwort_DP`;
+            $.post(url_DP, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                date: date
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_DP: ${result}`);
+                location.reload();
+            });
+            break;
+        case "A_RB:T":
+            var right_option = $('#new_radiobuttons_rightVal').val();
+
+            var wrong_options = new Array();
+            var divs_falscheAntworten = $('#newAntwort_rbText_falsch').children();
+            for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                var div = divs_falscheAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                wrong_options.push(input.value);
+            }
+
+            const url_RB = `/Admin/CreateAntwort_RB`;
+            $.post(url_RB, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                rightOption: right_option,
+                wrongOptions: wrong_options
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_RB: ${result}`);
+                location.reload();
+            });
+            break;
+        case "A_CB:T":
+            var right_options = new Array();
+            var divs_richtigeAntworten = $('#newAntwort_cbText_richtig').children();
+            for (var i = 0; i < divs_richtigeAntworten.length; i++) {
+                var div = divs_richtigeAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                right_options.push(input.value);
+            }
+
+            var wrong_options = new Array();
+            var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
+            for (var i = 0; i < divs_falscheAntworten.length; i++) {
+                var div = divs_falscheAntworten[i].children;
+                var div_children = div[0].children;
+                var input = div_children[0];
+                console.log("Input: " + input.value);
+                wrong_options.push(input.value);
+            }
+
+            const url_CB = `/Admin/CreateAntwort_CB`;
+            $.post(url_CB, {
+                antwortName: antwort_name,
+                antwortTyp: selected_Typ_string,
+                rightOptions: right_options,
+                wrongOptions: wrong_options
+            }).then(result => {
+                console.log(`ServerReply CreateAntwort_CB: ${result}`);
+                location.reload();
+            });
+            break;
+        default:
+            console.log('Keine Antwort zum Speichern');
+            break;
+    }
 
 }
 
@@ -1023,7 +1372,6 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#newAntwort_rbText_falsch').children();
-                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;
@@ -1048,7 +1396,6 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#editAntwort_rbText_falsch').children();
-                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;
@@ -1074,7 +1421,6 @@ function SaveAntwortChanges() {
             if (editAntwortTypeChanged) {
                 var right_options = new Array();
                 var divs_richtigeAntworten = $('#newAntwort_cbText_richtig').children();
-                //console.log("Right Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_richtigeAntworten.length; i++) {
                     var div = divs_richtigeAntworten[i].children;
                     var div_children = div[0].children;
@@ -1085,7 +1431,6 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
-                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;
@@ -1108,7 +1453,6 @@ function SaveAntwortChanges() {
             } else {
                 var right_options = new Array();
                 var divs_richtigeAntworten = $('#editAntwort_cbText_richtig').children();
-                //console.log("Right Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_richtigeAntworten.length; i++) {
                     var div = divs_richtigeAntworten[i].children;
                     var div_children = div[0].children;
@@ -1119,7 +1463,6 @@ function SaveAntwortChanges() {
 
                 var wrong_options = new Array();
                 var divs_falscheAntworten = $('#editAntwort_cbText_falsch').children();
-                //console.log("Wrong Options: " + divs_richtigeAntworten.length);
                 for (var i = 0; i < divs_falscheAntworten.length; i++) {
                     var div = divs_falscheAntworten[i].children;
                     var div_children = div[0].children;
@@ -1153,6 +1496,34 @@ function CreateAntwortClicked() {
     $('#antwortCreate_Modal').modal('show');
 }
 
+function AntwortEditDialogTypeChanged() {
+    var selected_Typ = $('#antwortEditTypSelect').val();
+    console.log(`Changed Typ: ${selected_Typ}`);
+
+    const url = `/Admin/SetNewAntwortType?typ_id=${selected_Typ}`;
+    $('#partialViewAntworten').load(url, () => {
+
+        //Bei Auswahl des Typs ID Counter zurücksetzen
+        id_cbNew_AntwortRichtig = 1;
+        id_cbNew_AntwortFalsch = 1;
+        id_rbNew_AntwortFalsch = 1;
+
+        editAntwortTypeChanged = true;
+
+        //CB events newAntwortDialog
+        $('#newAntwort_cbText_richtig_addCB').on('click', AddNewCBOption_RichtigeAntwortNew);
+        $('#newAntwort_cbText_falsch_addCB').on('click', AddNewCBOption_FalscheAntwortNew);
+        $('#newAntwort_cbText_richtig').on('click', DeleteItemOption_X);
+        $('#newAntwort_cbText_falsch').on('click', DeleteItemOption_X);
+
+        //RB events newAntwortDialog
+        $('#newAntwort_rbText_falsch_addRB').on('click', AddNewRBOption_FalscheAntwortNew);
+        $('#newAntwort_rbText_falsch').on('click', DeleteItemOption_X);
+
+    });
+
+}
+
 function AntwortNewDialogTypeChanged() {
     var selected_Typ = $('#antwortTypSelectNew').val();
     console.log(`Changed Typ: ${selected_Typ}`);
@@ -1178,191 +1549,8 @@ function AntwortNewDialogTypeChanged() {
     });
 }
 
-function CreateAntwort() {
-    console.log('enter CreateAntwort');
 
-    var antwort_name = $('#antwortNew_AntwortnameNew').val();
-    var selected_Typ_string = $('#antwortTypSelectNew').val();
-
-    console.log(`Selected Typ: ${selected_Typ_string}`);
-    console.log(`Antwortname: ${antwort_name}`);
-
-    switch (selected_Typ_string) {
-        case "A_T":
-            var antwort_text = $('#textfieldNewAntwortText').val();
-            console.log(`Antwort Text: ${antwort_text}`);
-
-            const url_text = `/Admin/CreateAntwort_Text`;
-            $.post(url_text, {
-                antwortName: antwort_name,
-                antwortTyp: selected_Typ_string,
-                antwortText: antwort_text
-            }).then(result => {
-                console.log(`ServerReply CreateAntwort_Text: ${result}`);
-                location.reload();
-            });
-            break;
-        case "A_S":
-            var slider_min = $('#new_slider_min').val();
-            var slider_max = $('#new_slider_max').val();
-            var slider_sprungweite = $('#new_slider_sprungweite').val();
-            var slider_rightVal = $('#new_slider_rightVal').val();
-            var slider_titel = $('#new_slider_text').val();
-
-            if (slider_titel == null) {
-                slider_titel = "";
-            }
-
-            console.log(`Werte: ${slider_min} + ${slider_max} + ${slider_sprungweite} + ${slider_rightVal} + ${slider_titel}`);
-
-            const url_slider = `/Admin/CreateAntwort_Slider`;
-            $.post(url_slider, {
-                antwortName: antwort_name,
-                antwortTyp: selected_Typ_string,
-                sliderMin: slider_min,
-                sliderMax: slider_max,
-                sliderSprungweite: slider_sprungweite,
-                sliderRightVal: slider_rightVal,
-                sliderTitel: slider_titel
-            }).then(result => {
-                console.log(`ServerReply CreateAntwort_Slider: ${result}`);
-                location.reload();
-            });
-            break;
-        case "A_DP":
-            var date = $('#newAntwortDatepicker').val();
-
-            console.log(`New Date: ${date}`);
-
-            const url_DP = `/Admin/CreateAntwort_DP`;
-            $.post(url_DP, {
-                antwortName: antwort_name,
-                antwortTyp: selected_Typ_string,
-                date: date
-            }).then(result => {
-                console.log(`ServerReply CreateAntwort_DP: ${result}`);
-                location.reload();
-            });
-            break;
-        case "A_RB:T":
-            var right_option = $('#new_radiobuttons_rightVal').val();
-
-            var wrong_options = new Array();
-            var divs_falscheAntworten = $('#newAntwort_rbText_falsch').children();
-            //console.log("Right Options: " + divs_richtigeAntworten.length);
-            for (var i = 0; i < divs_falscheAntworten.length; i++) {
-                var div = divs_falscheAntworten[i].children;
-                var div_children = div[0].children;
-                var input = div_children[0];
-                console.log("Input: " + input.value);
-                wrong_options.push(input.value);
-            }
-
-            const url_RB = `/Admin/CreateAntwort_RB`;
-            $.post(url_RB, {
-                antwortName: antwort_name,
-                antwortTyp: selected_Typ_string,
-                rightOption: right_option,
-                wrongOptions: wrong_options
-            }).then(result => {
-                console.log(`ServerReply CreateAntwort_RB: ${result}`);
-                location.reload();
-            });
-            break;
-        case "A_CB:T":
-            var right_options = new Array();
-            var divs_richtigeAntworten = $('#newAntwort_cbText_richtig').children();
-            //console.log("Right Options: " + divs_richtigeAntworten.length);
-            for (var i = 0; i < divs_richtigeAntworten.length; i++) {
-                var div = divs_richtigeAntworten[i].children;
-                var div_children = div[0].children;
-                var input = div_children[0];
-                console.log("Input: " + input.value);
-                right_options.push(input.value);
-            }
-
-            var wrong_options = new Array();
-            var divs_falscheAntworten = $('#newAntwort_cbText_falsch').children();
-            //console.log("Right Options: " + divs_richtigeAntworten.length);
-            for (var i = 0; i < divs_falscheAntworten.length; i++) {
-                var div = divs_falscheAntworten[i].children;
-                var div_children = div[0].children;
-                var input = div_children[0];
-                console.log("Input: " + input.value);
-                wrong_options.push(input.value);
-            }
-
-            const url_CB = `/Admin/CreateAntwort_CB`;
-            $.post(url_CB, {
-                antwortName: antwort_name,
-                antwortTyp: selected_Typ_string,
-                rightOptions: right_options,
-                wrongOptions: wrong_options
-            }).then(result => {
-                console.log(`ServerReply CreateAntwort_CB: ${result}`);
-                location.reload();
-            });
-            break;
-        default:
-            console.log('Keine Antwort zum Speichern');
-            break;
-    }
-
-}
-
-function ZusatzInfo_InfoClicked(event) {
-    console.log('ZusatzInfo_InfoClicked');
-    var id_string = event.target.id;
-    console.log(`Target_ID: ${id_string}`);
-    var id = id_string.split("_");
-    console.log(`Parameter ID: ${id[1]}`);
-
-    const url = `/Admin/GetZusatzInfo_Info?info_id=${id[1]}`;
-    $('#loadZusatzInfoModal').load(url, () => {
-        $('#zusatzInfoInfo_Modal').modal('show');
-    });
-}
-
-function ZusatzInfo_DeleteClicked(event) {
-
-    console.log('ZusatzInfo_DeleteClicked');
-    var id_string = event.target.id;
-    console.log(`Target_ID: ${id_string}`);
-    var id = id_string.split("_");
-    console.log(`Parameter ID: ${id[1]}`);
-
-    const url = `/Admin/GetZusatzInfoDelete?info_id=${id[1]}`;
-    $('#loadZusatzInfoModal').load(url, () => {
-        $('#zusatzInfoDelete_Modal').modal('show');
-        $('#deleteZusatzInfo').on('click', DeleteZusatzInfo);
-    });
-
-
-}
-
-function DeleteZusatzInfo() {
-    console.log('enter DeleteZusatzInfos');
-    //Nur Zusatzinfo löschen --> wenn ZusatzInfo in keiner aufgabe vorkommt
-    //Was passiert mit aufgaben, die die ZusatzInfo beinhalten???
-    var info_id_selected = $('#zusatzInfo_id_delete').text();
-
-    const url = `/Admin/DeleteZusatzInfo`;
-    $.post(url, {
-        info_id: info_id_selected
-    }).then(result => {
-        console.log(`ServerReply DeleteZusatzInfo: ${result}`);
-        if (result === "ok") {
-            location.reload();
-        } else {
-            //ZusatzInfo darf nicht gelöscht werden --> ZusatzInfo ist noch in einer Aufgabe vorhanden
-            $('#zusatzInfoDeleteError_Modal').modal('show');
-
-        }
-
-    });
-
-}
-
+//AntwortDialog Interactions
 function AddNewCBOption_RichtigeAntwortNew() {
     console.log('enter AddNewCBOption_RichtigeAntwortNew');
     id_cbNew_AntwortRichtig++;
@@ -1458,15 +1646,59 @@ function AddNewRBOption_FalscheAntwortEdit() {
     );
 }
 
-function DeleteItemOption_X(event) {
-    console.log('enter DeleteNewCBOption_RichtigeAntwortNew');
-    console.log(`Target ID BTN delete: ${event.target.id}`);
-    var button_id = event.target.id;
-    if (button_id.startsWith('btn_')) {
-        var div_id = button_id.replace('btn_', '');
-        console.log(`Edited String: ${div_id}`);
-        $(`#${div_id}`).remove();
-    }
+
+//ZusatzInfoInteractions
+function ZusatzInfo_InfoClicked(event) {
+    console.log('ZusatzInfo_InfoClicked');
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetZusatzInfo_Info?info_id=${id[1]}`;
+    $('#loadZusatzInfoModal').load(url, () => {
+        $('#zusatzInfoInfo_Modal').modal('show');
+    });
+}
+
+function ZusatzInfo_DeleteClicked(event) {
+
+    console.log('ZusatzInfo_DeleteClicked');
+    var id_string = event.target.id;
+    console.log(`Target_ID: ${id_string}`);
+    var id = id_string.split("_");
+    console.log(`Parameter ID: ${id[1]}`);
+
+    const url = `/Admin/GetZusatzInfoDelete?info_id=${id[1]}`;
+    $('#loadZusatzInfoModal').load(url, () => {
+        $('#zusatzInfoDelete_Modal').modal('show');
+        $('#deleteZusatzInfo').on('click', DeleteZusatzInfo);
+    });
+
+
+}
+
+function DeleteZusatzInfo() {
+    console.log('enter DeleteZusatzInfos');
+    //Nur Zusatzinfo löschen --> wenn ZusatzInfo in keiner aufgabe vorkommt
+    //Was passiert mit aufgaben, die die ZusatzInfo beinhalten???
+    var info_id_selected = $('#zusatzInfo_id_delete').text();
+
+    const url = `/Admin/DeleteZusatzInfo`;
+    $.post(url, {
+        info_id: info_id_selected
+    }).then(result => {
+        console.log(`ServerReply DeleteZusatzInfo: ${result}`);
+        if (result === "ok") {
+            location.reload();
+        } else {
+            //ZusatzInfo darf nicht gelöscht werden --> ZusatzInfo ist noch in einer Aufgabe vorhanden
+            $('#zusatzInfoDeleteError_Modal').modal('show');
+
+        }
+
+    });
+
 }
 
 function ZusatzInfo_EditClicked(event) {
@@ -1495,38 +1727,6 @@ function CreateZusatzInfoClicked() {
     $('#zusatzInfoCreate_Modal').modal('show');
 }
 
-function AddNewInfoContent_ZusatzInfoNew() {
-    console.log('enter AddNewInfoContent_ZusatzInfoNew');
-    id_infoContentNew++;
-    $('#newZusatzInfo_infoContents').append(
-        `
-        <div id="newZusatzInfo_infoContent_${id_infoContentNew}">
-                                <div>
-                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="newZusatzInfo_infoContent_heading_${id_infoContentNew}"/>
-                                    <button class="btn btn-danger" id="btn_newZusatzInfo_infoContent_${id_infoContentNew}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
-                                    <textarea class="form-control" id="newZusatzInfo_infoContent_content${id_infoContentNew}" style="width:500px; height:150px;"></textarea>
-                                </div><br />
-                            </div>
-        `
-    );
-}
-
-function AddNewInfoContent_ZusatzInfoEdit() {
-    console.log('enter AddNewInfoContent_ZusatzInfoEdit');
-    id_infoContentEdit++;
-    $('#editZusatzInfo_infoContents').append(
-        `
-        <div id="editZusatzInfo_infoContent_${id_infoContentEdit}">
-                                <div>
-                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="editZusatzInfo_infoContent_heading_${id_infoContentEdit}"/>
-                                    <button class="btn btn-danger" id="btn_editZusatzInfo_infoContent_${id_infoContentEdit}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
-                                    <textarea class="form-control" id="editZusatzInfo_infoContent_content${id_infoContentEdit}" style="width:500px; height:150px;"></textarea>
-                                </div><br />
-                            </div>
-        `
-    );
-}
-
 function CreateZusatzInfo() {
     console.log('enter CreateZusatzInfo');
 
@@ -1536,7 +1736,6 @@ function CreateZusatzInfo() {
     var contents = [];
 
     var divs_infoContents = $('#newZusatzInfo_infoContents').children();
-    //console.log("Children: " + divs_infoContents.length);
     for (var i = 0; i < divs_infoContents.length; i++) {
         var div = divs_infoContents[i].children;
         var div_children = div[0].children;
@@ -1569,7 +1768,6 @@ function SaveZusatzInfoChanges() {
     var contents = [];
 
     var divs_infoContents = $('#editZusatzInfo_infoContents').children();
-    //console.log("Children: " + divs_infoContents.length);
     for (var i = 0; i < divs_infoContents.length; i++) {
         var div = divs_infoContents[i].children;
         var div_children = div[0].children;
@@ -1593,6 +1791,44 @@ function SaveZusatzInfoChanges() {
     });
 }
 
+
+
+//ZusatzInfo Dialog Interactions
+function AddNewInfoContent_ZusatzInfoNew() {
+    console.log('enter AddNewInfoContent_ZusatzInfoNew');
+    id_infoContentNew++;
+    $('#newZusatzInfo_infoContents').append(
+        `
+        <div id="newZusatzInfo_infoContent_${id_infoContentNew}">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="newZusatzInfo_infoContent_heading_${id_infoContentNew}"/>
+                                    <button class="btn btn-danger" id="btn_newZusatzInfo_infoContent_${id_infoContentNew}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="newZusatzInfo_infoContent_content${id_infoContentNew}" style="width:500px; height:150px;"></textarea>
+                                </div><br />
+                            </div>
+        `
+    );
+}
+
+function AddNewInfoContent_ZusatzInfoEdit() {
+    console.log('enter AddNewInfoContent_ZusatzInfoEdit');
+    id_infoContentEdit++;
+    $('#editZusatzInfo_infoContents').append(
+        `
+        <div id="editZusatzInfo_infoContent_${id_infoContentEdit}">
+                                <div>
+                                    <input style="margin-bottom: 5px; float:left;" placeholder="Optionaler Titel eingeben" class="form-control input-field" type="text" id="editZusatzInfo_infoContent_heading_${id_infoContentEdit}"/>
+                                    <button class="btn btn-danger" id="btn_editZusatzInfo_infoContent_${id_infoContentEdit}"><span class="glyphicon glyphicon-remove"></span></button><p></p>
+                                    <textarea class="form-control" id="editZusatzInfo_infoContent_content${id_infoContentEdit}" style="width:500px; height:150px;"></textarea>
+                                </div><br />
+                            </div>
+        `
+    );
+}
+
+
+
+//Select Functions
 function SelectFrage(event) {
     console.log('enter SelectFrage');
     var id = event.target.id;
@@ -1609,7 +1845,6 @@ function SelectFrage(event) {
     }
 
     var childrenLI = $(`#li_${id}`).children();
-    //console.log(childrenLI[0].innerText);
     $('#selected_frage').text(childrenLI[0].innerText);
 
     frage_selected = id;
@@ -1621,7 +1856,6 @@ function SelectAntwort(event) {
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
     var li_ID = $(event.target).parent().attr('id');
-    //console.log(li_ID);
 
     if (antwort_oldLI == -1) {
         $(`.li_antwort`).css("background-color", "white");
@@ -1634,7 +1868,6 @@ function SelectAntwort(event) {
     }
 
     var childrenLI = $(`#${li_ID}`).children();
-    //console.log(childrenLI[0].innerText);
     $('#selected_antwort').text(childrenLI[0].innerText);
 
     antwort_selected = id;
@@ -1645,7 +1878,6 @@ function SelectZusatzInfo(event) {
     var id = event.target.id;
     console.log(`Target_ID: ${id}`);
     var li_ID = $(event.target).parent().attr('id');
-    //console.log(li_ID);
 
     if (zusatzInfo_oldLI == -1) {
         $(`.li_zusatzInfo`).css("background-color", "white");
@@ -1658,274 +1890,36 @@ function SelectZusatzInfo(event) {
     }
 
     var childrenLI = $(`#${li_ID}`).children();
-    //console.log(childrenLI[0].innerText);
     $('#selected_zusatzInfo').text(childrenLI[0].innerText);
 
     zusatzInfo_selected = id;
 }
 
-function SelectZusatzInfo_Typ() {
-    console.log("enter SelectZusatzInfo_Typ");
 
-    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
-    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
 
-    var eingabe = $('#searchInfoField_AufgabeEditView').val();
-    console.log(`Eingegebener Text: ${eingabe}`);
-
-    if (selectedZusatzInfo_Typ != "noItemSelected") {
-
-        if (eingabe != "") {
-
-            var infoLI_list_filtered = [];
-            var infoLI_list = $('#infoliste_aufgabeEditView').children();
-            for (var i = 0; i < infoLI_list.length; i++) {
-                var info_li = infoLI_list[i];
-                var id_split = info_li.id.split("-");
-                if (id_split[1] == selectedZusatzInfo_Typ) {
-                    infoLI_list_filtered.push(info_li);
-                } else {
-                    $(`#${info_li.id}`).hide();
-                }
-            }
-
-            for (var i = 0; i < infoLI_list_filtered.length; i++) {
-                var info_li = infoLI_list_filtered[i];
-                var span_info = $(`#${info_li.id}`).children().first();
-                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-                    $(`#${info_li.id}`).show();
-                } else {
-                    $(`#${info_li.id}`).hide();
-                }
-            }
-
-        } else {
-
-            var infoLI_list = $('#infoliste_aufgabeEditView').children();
-            for (var i = 0; i < infoLI_list.length; i++) {
-                var info_li = infoLI_list[i];
-                var id_split = info_li.id.split("-");
-                if (id_split[1] != selectedZusatzInfo_Typ) {
-                    $(`#${info_li.id}`).hide();
-                } else {
-                    $(`#${info_li.id}`).show();
-                }
-            }
-
-        }
-
-    } else {
-        if (eingabe != "") {
-            var infoLI_list = $('#infoliste_aufgabeEditView').children();
-
-            for (var i = 0; i < infoLI_list.length; i++) {
-                var info_li = infoLI_list[i];
-                var span_info = $(`#${info_li.id}`).children().first();
-                if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-                    $(`#${info_li.id}`).show();
-                } else {
-                    $(`#${info_li.id}`).hide();
-                }
-            }
-
-        } else {
-            var infoLI_list = $('#infoliste_aufgabeEditView').children();
-            for (var i = 0; i < infoLI_list.length; i++) {
-                var info_li = infoLI_list[i];
-                $(`#${info_li.id}`).show();
-            }
-        }
-
+//anderes
+function DeleteItemOption_X(event) {
+    console.log('enter DeleteNewCBOption_RichtigeAntwortNew');
+    console.log(`Target ID BTN delete: ${event.target.id}`);
+    var button_id = event.target.id;
+    if (button_id.startsWith('btn_')) {
+        var div_id = button_id.replace('btn_', '');
+        console.log(`Edited String: ${div_id}`);
+        $(`#${div_id}`).remove();
     }
-
 }
 
-function SearchZusatzInfoText_AufgabeEditView_Antwort() {
-    console.log("SearchZusatzInfoText_AufgabeEditView_Antwort");
+function SetStandorteBezirk() {
+    console.log('enter SetStandorteBezirk');
+    var bezirk_selected = $('#adminEdit_bezirk_select').val();
+    console.log(`Selected Bezirk: ${bezirk_selected}`);
 
-    var selectedZusatzInfo_Typ = $('#aufgabeEdit_infotyp_select').val();
-    console.log(`Selected ZusatzInfo_Typ: ${selectedZusatzInfo_Typ}`);
+    const url = `/Admin/SetStandorteBezirkComboBox?bezirk=${bezirk_selected}`;
+    $('#adminEdit_ort_select').load(url);
 
-    var eingabe = $('#searchInfoField_AufgabeEditView').val();
-    console.log(`Eingegebener Text: ${eingabe}`);
-
-    if (selectedZusatzInfo_Typ == "noItemSelected") {
-        var infoLI_list = $('#infoliste_aufgabeEditView').children();
-        for (var i = 0; i < infoLI_list.length; i++) {
-            var info_li = infoLI_list[i];
-            var span_info = $(`#${info_li.id}`).children().first();
-            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-                $(`#${info_li.id}`).show();
-            } else {
-                $(`#${info_li.id}`).hide();
-            }
-        }
-    } else {
-        var infoLI_list_filtered = [];
-        var infoLI_list = $('#infoliste_aufgabeEditView').children();
-        for (var i = 0; i < infoLI_list.length; i++) {
-            var info_li = infoLI_list[i];
-            var id_split = info_li.id.split("-");
-            if (id_split[1] == selectedZusatzInfo_Typ) {
-                infoLI_list_filtered.push(info_li);
-            } else {
-                $(`#${info_li.id}`).hide();
-            }
-        }
-
-        for (var i = 0; i < infoLI_list_filtered.length; i++) {
-            var info_li = infoLI_list_filtered[i];
-            var span_info = $(`#${info_li.id}`).children().first();
-            if (span_info.text().toUpperCase().search(eingabe.toUpperCase()) != -1) {
-                $(`#${info_li.id}`).show();
-            } else {
-                $(`#${info_li.id}`).hide();
-            }
-        }
-
-    }
-
-
-}
-
-function SaveAufgabeEdit() {
-    console.log('enter SaveAufgabeEdit');
-
-    var aufgabe_id = $('#aufgabeEdit_aufgabeID').html();
-    var aufgabe_station = $('#adminEdit_station_select').val();
-    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
-    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
-    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
-    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
-    var aufgabe_ort = $('#adminEdit_ort_select').val();
-    var aufgabe_frage = frage_selected;
-    var aufgabe_antwort = antwort_selected;
-    var aufgabe_zusatzinfo = zusatzInfo_selected;
-
-    if (teilaufgabeVon == "-") {
-        teilaufgabeVon = null;
-    }
-
-    if (aufgabe_bezirk == "noBezirkSelected"){
-        aufgabe_bezirk = null;
-    }
-
-    if (aufgabe_ort == "noStandortSelected"){
-        aufgabe_ort = null;
-    }
-
-    console.log("AufgabeEdit_Save Testwerte:");
-    console.log("AufgabeID: " + aufgabe_id);
-    console.log("AufgabeStation: " + aufgabe_station);
-    console.log("AufgabeStufe: " + aufgabe_stufe);
-    console.log("Pflichtaufgabe: " + pflichtaufgabe);
-    console.log("TeilaufgabeVon: " + teilaufgabeVon);
-    console.log("AufgabeBezirk: " + aufgabe_bezirk);
-    console.log("AufgabeOrt: " + aufgabe_ort);
-    console.log("AufgabeFrage: " + aufgabe_frage);
-    console.log("AufgabeAntwort: " + aufgabe_antwort);
-    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
-
-    //BIG Ajax
-    const url_editAufgabe = `/Admin/EditAufgabe`;
-    $.post(url_editAufgabe, {
-        aufgabe_id: aufgabe_id,
-        aufgabe_station: aufgabe_station,
-        aufgabe_stufe: aufgabe_stufe,
-        pflichtaufgabe: pflichtaufgabe,
-        teilaufgabeVon: teilaufgabeVon,
-        aufgabe_bezirk: aufgabe_bezirk,
-        aufgabe_ort: aufgabe_ort,
-        aufgabe_frage: aufgabe_frage,
-        aufgabe_antwort: aufgabe_antwort,
-        aufgabe_zusatzinfo: aufgabe_zusatzinfo
-    }).then(result => {
-        console.log(`ServerReply EditAufgabe: ${result}`);
-        if (result === "ok") {
-            window.close();
-        }
-    });
-
-
-}
-
-function CloseAufgabeEdit() {
-    console.log('enter CloseAufgabeEdit');
-    window.close();
 }
 
 function ReloadSite() {
     location.reload();
 }
 
-function CreateAufgabeClicked() {
-    console.log("enter CreateAufgabeClicked");
-    window.open('AufgabeNew');
-}
-
-function CreateAufgabe() {
-    console.log('enter CreateAufgabe');
-
-    var aufgabe_station = $('#adminEdit_station_select').val();
-    var aufgabe_stufe = $('input[name=stufe_aufgabeEdit]:checked').val();
-    var pflichtaufgabe = $('input[name=isPflichtaufgabe]:checked').val();
-    var teilaufgabeVon = $('#aufgabeEdit_teilaufgabe').val();
-    var aufgabe_bezirk = $('#adminEdit_bezirk_select').val();
-    var aufgabe_ort = $('#adminEdit_ort_select').val();
-    var aufgabe_frage = frage_selected;
-    var aufgabe_antwort = antwort_selected;
-    var aufgabe_zusatzinfo = zusatzInfo_selected;
-
-    if (teilaufgabeVon == "-") {
-        teilaufgabeVon = null;
-    }
-
-    if (aufgabe_bezirk == "noBezirkSelected") {
-        aufgabe_bezirk = null;
-    }
-
-    if (aufgabe_ort == "noStandortSelected") {
-        aufgabe_ort = null;
-    }
-
-    console.log("AufgabeNew_Create Testwerte:");
-    console.log("AufgabeStation: " + aufgabe_station);
-    console.log("AufgabeStufe: " + aufgabe_stufe);
-    console.log("Pflichtaufgabe: " + pflichtaufgabe);
-    console.log("TeilaufgabeVon: " + teilaufgabeVon);
-    console.log("AufgabeBezirk: " + aufgabe_bezirk);
-    console.log("AufgabeOrt: " + aufgabe_ort);
-    console.log("AufgabeFrage: " + aufgabe_frage);
-    console.log("AufgabeAntwort: " + aufgabe_antwort);
-    console.log("AufgabeZusatzInfo: " + aufgabe_zusatzinfo);
-
-    if (aufgabe_frage == -1) {
-        $('#noFrageSelectedError_Modal').modal('show');
-    } else if (aufgabe_antwort == -1) {
-        $('#noAntwortSelectedError_Modal').modal('show');
-    } else if (aufgabe_zusatzinfo == -1) {
-        $('#noZusatzInfoSelectedError_Modal').modal('show');
-    } else {
-        //BIG Ajax
-        const url_newAufgabe = `/Admin/CreateAufgabe`;
-        $.post(url_newAufgabe, {
-            aufgabe_station: aufgabe_station,
-            aufgabe_stufe: aufgabe_stufe,
-            pflichtaufgabe: pflichtaufgabe,
-            teilaufgabeVon: teilaufgabeVon,
-            aufgabe_bezirk: aufgabe_bezirk,
-            aufgabe_ort: aufgabe_ort,
-            aufgabe_frage: aufgabe_frage,
-            aufgabe_antwort: aufgabe_antwort,
-            aufgabe_zusatzinfo: aufgabe_zusatzinfo
-        }).then(result => {
-            console.log(`ServerReply CreateAufgabe: ${result}`);
-            if (result === "ok") {
-                window.close();
-            }
-        });
-
-    }
-
-
-}

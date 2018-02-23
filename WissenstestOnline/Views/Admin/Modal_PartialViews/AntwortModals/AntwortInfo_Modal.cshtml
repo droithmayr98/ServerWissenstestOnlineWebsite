@@ -16,7 +16,9 @@
                 <span style="font-weight: bold;">Antwortansicht:</span>
                 @if (Model.Antwort_Text != null)
                 {
-                    <p><span style="font-weight: bold">Eingabe:</span> @Model.Antwort_Text.Text</p>
+                    <div class="has-success">
+                        <input type="text" value="@Model.Antwort_Text.Text" class="form-control" disabled="disabled" />
+                    </div>
                 }
                 else if (Model.Antwort_Slider != null)
                 {
