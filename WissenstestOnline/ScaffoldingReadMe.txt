@@ -1,4 +1,4 @@
-﻿
+﻿//Test
 ASP.NET MVC core dependencies have been added to the project.
 However you may still need to do make changes to your project.
 
