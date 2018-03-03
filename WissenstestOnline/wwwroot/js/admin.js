@@ -8,6 +8,9 @@
     //Anmeldevorgang
     $('#adminLoginButton').on('click', CheckAdminInfo);
 
+    //Logout
+    $('#logout_btn').on('click', Logout_Admin);
+
     //Suchtrigger Aufgaben
     $('#stations_admin').on('change', StationSelected);
     $('#searchFrageText').on('click', SearchAufgabeText);
@@ -170,6 +173,12 @@ function CheckAdminInfo() {
         }
     });
 
+}
+
+//Logout Admin
+function Logout_Admin() {
+    console.log('enter Logout_Admin');
+    window.location.href = 'Login';
 }
 
 

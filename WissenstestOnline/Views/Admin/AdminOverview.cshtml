@@ -8,17 +8,18 @@
 
 <div class="container">
 
-    <h1>Willkommen</h1>
+    <h1>Willkommen <span style="color: red;">@Model.Username</span><button style="float: right;" id="logout_btn" class="btn btn-lg btn-primary" float: right;">LOGOUT <span class="glyphicon glyphicon-log-out"></span></button></h1>
+    
 
     <!--Aufgabenliste-->
-    <div class="container well">
-            <h3>Aufgabenübersicht <button id="refreshButton" type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span></button></h3>
-        
+    <div class="container well" style="margin-top:20px;">
+        <h3>Aufgabenübersicht <button id="refreshButton" type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span></button></h3>
+
         <form asp-controller="Admin" asp-action="AdminOverview" method="post" style="margin-bottom:10px" id="formSearchAufgabe">
             <select class="form-control" id="stations_admin" asp-items="@Model.Stationen" style="float:left;"></select>
         </form>
         <div>
-            
+
             <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField">
             <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText">
                 <span class="glyphicon glyphicon-search"></span>
@@ -36,6 +37,7 @@
                             <button class="btn btn-info aufgabe_Info" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
                             <button class="btn btn-warning aufgabe_warning" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-pencil"></span></button>
                             <button class="btn btn-danger aufgabe_danger" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-remove"></span></button>
+
                         </div>
                     </li>
                 }
@@ -49,7 +51,9 @@
     <!--Adminliste-->
     <div class="container well">
         <h3 style="float: left;">Adminübersicht</h3>
+        @if (Model.Can_create_admin) {
         <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;" id="create_new_admin">+ neuen Admin erstellen</button>
+        }
         <!--Suchoptionen-->
         <nav id="adminListAdmins">
             <ul class="list-group">
@@ -59,9 +63,14 @@
                         <span>@admin.Username</span>
                         <div class="btn-group" style="float:right">
                             <button class="btn btn-info admin_Info" id="@admin.Admin_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                            <!--if abfrage ob angemeldeter admin berechtigt-->
-                            <button class="btn btn-warning admin_warning" id="@admin.Admin_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                            <button class="btn btn-danger admin_danger" id="@admin.Admin_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            @if (Model.Can_edit_admin)
+                            {
+                                <button class="btn btn-warning admin_warning" id="@admin.Admin_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                            }
+                            @if (Model.Can_delete_admin)
+                            {
+                                <button class="btn btn-danger admin_danger" id="@admin.Admin_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            }
 
                         </div>
                     </li>

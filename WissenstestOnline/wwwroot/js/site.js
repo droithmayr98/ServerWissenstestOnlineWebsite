@@ -137,6 +137,8 @@ function UserCheck() {
                     //Öffnen der SelectStation Seite
                     $('#UserLoginError').html('');
                     window.open('Main/SelectStation');
+                    //window.location.replace('Main/SelectStation');
+                    //document.location.href = 'Main/SelectStation';
                 } else {
                     //Fehlermeldung
                     $('#UserLoginError').html('Bitte überprüfen Sie ihre Eingabedaten!');
@@ -174,10 +176,14 @@ function StationInput() {
     else if (selectedMode === "learn") {
         $('#StationSelectError').html('');
         window.open('AufgabeUmgebungLearn');
+        //window.location.replace('AufgabeUmgebungLearn');
+        //document.location.href = 'AufgabeUmgebungLearn';
+        //$(location).attr('href', 'AufgabeUmgebungLearn');
 
     } else {
         $('#StationSelectError').html('');
         window.open('AufgabeUmgebungPractise');
+        //window.location.replace('AufgabeUmgebungPractise');
     }
 
 

@@ -55,6 +55,11 @@ namespace WissenstestOnline.Controllers
             List<Admintable> alle_admins = test_db.Admins.Select(x => x).OrderBy(x => x.Username).ToList();
             adminOverwiew_model.Admins = alle_admins;
 
+            adminOverwiew_model.Can_create_admin = AdminData.Can_create_admin;
+            adminOverwiew_model.Can_edit_admin = AdminData.Can_edit_admin;
+            adminOverwiew_model.Can_delete_admin = AdminData.Can_delete_admin;
+            adminOverwiew_model.Username = AdminData.Username;
+
             return View(adminOverwiew_model);
 
         }
@@ -97,6 +102,10 @@ namespace WissenstestOnline.Controllers
             }
             else
             {
+                AdminData.Username = username;
+                AdminData.Can_create_admin = admin.Can_create_acc;
+                AdminData.Can_edit_admin = admin.Can_edit_acc;
+                AdminData.Can_delete_admin = admin.Can_delete_acc;
                 return "ok";
             }
         }
