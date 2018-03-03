@@ -9,7 +9,6 @@ var global_aufgabenCount = "";
 var global_aktuelleStation = "";
 var global_antwortTypPractice = "";
 
-//jquery - Aufruf bei Seitenstart wo Skript angegeben ist
 $(document).ready(() => {
     console.log('jQuery Testausgabe --> site.js');
 
@@ -70,17 +69,7 @@ $(document).ready(() => {
             $('#aktuelleFrageCounterLearn').html(`${global_aufgabenNr}/${global_aufgabenCount}`);
             $('#aktuelleStationLearn').html(global_aktuelleStation);
 
-            //Problem: Beides kann nicht hintereinander aufgerufen werden
-            //soll mit include funktionieren
-            //INCLUDE selektiert nicht die FroreignKeys der FroreignKeys
-
-            /*const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
-            $('#FrageLearn').load(url_frage);
-
-            const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
-            $('#AntwortLearn').load(url_antwort);*/
-
-            //Frage zuerst laden, danach Antwort --> aktuelle Lösung
+            //Frage zuerst laden, danach Antwort
             const url_frage = `/Main/LoadFrage?aufgabenNr=${global_aufgabenNr}`;
             $('#FrageLearn').load(url_frage, () => {
                 const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
@@ -235,11 +224,9 @@ function WeiterAufgabeLearn() {
     });
 }
 
-//überdenken
 function WeiterAufgabePractise() {
     console.log('enter WeiterAufgabePractise');
 
-    //Weiter oder Check??
     var buttonAction = $('#checkAufgabePractise').val();
 
     //UserData wird erhöht, wenn "Weiter" gedrückt wird

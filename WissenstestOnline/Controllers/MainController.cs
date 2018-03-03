@@ -18,9 +18,6 @@ namespace WissenstestOnline.Controllers
         private readonly TestDB_Context test_db;
         private ILogger<MainController> logger;
 
-        //Constructor, wenn UserData über Singleton in der Startup übergeben wird
-        //public MainController(TestDB_Context db, ILogger<MainController> logger, UserData myClass)
-
         public MainController(TestDB_Context db, ILogger<MainController> logger)
         {
             //Testdatenbankinitialisierung --> wenn Datenbank im Hauptordner nicht vorhanden
@@ -37,7 +34,7 @@ namespace WissenstestOnline.Controllers
         public IActionResult Start()
         {
             //Datenbankobjekte brauchen Zeit zum initialisieren
-            System.Threading.Thread.Sleep(3000);
+            //System.Threading.Thread.Sleep(3000);
 
             //DB-ConnectionTest + TestLog
             var test_bezirke_count = test_db.Bezirke.Count();
@@ -155,14 +152,16 @@ namespace WissenstestOnline.Controllers
             UserData.Mode = mode;
             UserData.Stations = stationsString;
 
-            //Aufgaben selektieren grob --> gehört noch genauer (Ort, Stufe, andere Faktoren...)
             for (int i = 0; i < stations.Count; i++)
             {
                 int selected_stationId = Convert.ToInt32(stations[i]);
+                //Aufgaben selektieren grob
                 List<Aufgabe> stationsteil = test_db.Aufgaben
-                    //Include selektiert nur Wert des Foreign Keys, nicht jedoch das Oject!!!
-                    //.Include(x => x.Frage).Include(x => x.Antwort).Include(x => x.Zusatzinfo).Include(x => x.Station).Include(x => x.Stufe).Include(x => x.Hintergrundbild)
                     .Where(x => x.Station.Station_Id == selected_stationId)
+                    .ToList();
+                //Aufgaben selektieren genau --> verschiedenen Faktoren beachten
+                List<Aufgabe> stationsteil_genau = test_db.Aufgaben
+                    .Where(x => x.Station.Station_Id == selected_stationId && x.Stufe.Stufenname == UserData.Stufe)
                     .ToList();
                 //Stationsaufgaben an Gesamtliste ranhängen
                 UserData.Aufgaben.AddRange(stationsteil);
@@ -229,14 +228,13 @@ namespace WissenstestOnline.Controllers
                 return PartialView("PartialViews/LoadFrageText", frageText_model);
             }
             else if (fragetyp.Equals("F_T+B")){
-                //gehört noch gemacht
+                //gehört noch gemacht - Bilder
             }
             else if (fragetyp.Equals("F_T+V")){
-                //gehört noch gemacht
+                //gehört noch gemacht - Videos
             }
 
             //darf nicht passieren
-            //gehört noch gemacht
             return null;
         }
 
@@ -265,7 +263,6 @@ namespace WissenstestOnline.Controllers
                 {
                     UserData.AufgabeNr = UserData.AufgabeNr - 1;
                 }
-                //User steht Am Anfang oder Ende --> Alert zur Bekanntmachung
                 return "ok";
             }
             else
@@ -332,7 +329,7 @@ namespace WissenstestOnline.Controllers
             //Je nach Typ, wird eine spezielle Partialview aufgerufen und die benötigten Daten geholt
             if (splitInfo_[1].Contains('+'))
             {
-                //gehört noch gemacht
+                //gehört noch gemacht - für Bilder und Videos
             }
             else
             {

@@ -7,163 +7,223 @@
 <div class="container">
     <h1>Aufgabenerstellungsmodus</h1>
 
-    <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
+    <div class="panel-group" id="accordion">
 
-        <h4>Station:</h4>
-        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Frage</a>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <h4><span style="font-weight: bold">Ausgewählte Frage:</span> <span id="selected_frage">-</span></h4>
 
-        <h4>Stufe:</h4>
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary active buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
-            </label>
-        </div>
+                    <div class="well">
 
-        <h4>Pflichtaufgabe:</h4>
-        <div class="btn-group" data-toggle="buttons" id="stufen">
-            <label class="btn btn-secondary buttons_stufen active">
-                <input type="radio" name="isPflichtaufgabe" id="aufgabeNew_isPflichtaufgabe_true" value="true" checked>Ja
-            </label>
-            <label class="btn btn-secondary buttons_stufen">
-                <input type="radio" name="isPflichtaufgabe" id="aufgabeNew_isPflichtaufgabe_false" value="false">Nein
-            </label>
-        </div>
-
-        <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="-" id="aufgabeEdit_teilaufgabe" />
-
-        <h4>Bezirk:</h4>
-        <select id="adminEdit_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
-
-        <h4>Ort:</h4>
-        <select id="adminEdit_ort_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Standorte"></select>
-
-    </form>
-
-    <hr />
-    <h3>Frage:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Frage:</span> <span id="selected_frage">-</span></h4>
-
-    <div class="well">
-
-        <div>
-            <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField_AufgabeEditView">
-            <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText_AufgabeEditView">
-                <span class="glyphicon glyphicon-search"></span>
-            </button>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newFrage_AufgabeEditView">+ neue Frage erstellen</button>
-        </div>
-
-        <nav id="aufgabeEditFragen">
-            <ul class="list-group" id="frageliste_aufgabeEditView">
-
-                @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
-                {
-                    <li class="list-group-item li_frage" id="li_@frage.Frage_Id">
-                        <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
-                        <div class="btn-group" style="float:right">
-                            <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                            <button class="btn btn-warning frage_warning" id="@frage.Frage_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                            <button class="btn btn-danger frage_danger" id="@frage.Frage_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div>
+                            <input type="text" class="form-control input" placeholder="Frage eingeben..." style="float:left;" id="searchFrageField_AufgabeEditView">
+                            <button class="btn btn-info" type="button" style="float:left;" id="searchFrageText_AufgabeEditView">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newFrage_AufgabeEditView">+ neue Frage erstellen</button>
                         </div>
-                    </li>
-                }
 
-            </ul>
-        </nav>
+                        <nav id="aufgabeEditFragen">
+                            <ul class="list-group" id="frageliste_aufgabeEditView">
 
-    </div>
+                                @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
+                                {
+                                    <li class="list-group-item li_frage" id="li_@frage.Frage_Id">
+                                        <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
+                                        <div class="btn-group" style="float:right">
+                                            <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning frage_warning" id="@frage.Frage_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger frage_danger" id="@frage.Frage_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                        </div>
+                                    </li>
+                                }
 
-    <hr />
+                            </ul>
+                        </nav>
 
-
-    <h3>Antwort:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Antwort:</span> <span id="selected_antwort">-</span></h4>
-
-    <div class="well">
-
-        <div>
-            <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
-                <select id="aufgabeEdit_antworttyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
-
-                <input type="text" class="form-control input" placeholder="Antwort eingeben..." style="float:left;" id="searchAntwortField_AufgabeEditView">
-                <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeEditView">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </form>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
-
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Achtung!</strong>
+                        Wird eine Frage erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <nav id="aufgabeEditAntworten">
-            <ul class="list-group" id="antwortliste_aufgabeEditView">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Antwort</a>
+                </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <h4><span style="font-weight: bold">Ausgewählte Antwort:</span> <span id="selected_antwort">-</span></h4>
 
-                @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
-                {
+                    <div class="well">
 
-                    <li class="list-group-item li_antwort" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
-                        <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
-                        <div class="btn-group" style="float:right">
-                            <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                            <button class="btn btn-warning antwort_warning" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                            <button class="btn btn-danger antwort_danger" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div>
+                            <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
+                                <select id="aufgabeEdit_antworttyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Antwort_Typen"></select>
+
+                                <input type="text" class="form-control input" placeholder="Antwort eingeben..." style="float:left;" id="searchAntwortField_AufgabeEditView">
+                                <button class="btn btn-info" type="button" style="float:left;" id="searchAntwortText_AufgabeEditView">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </form>
+                            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newAntwort_AufgabeEditView">+ neue Antwort erstellen</button>
+
                         </div>
-                    </li>
-                }
 
-            </ul>
-        </nav>
+                        <nav id="aufgabeEditAntworten">
+                            <ul class="list-group" id="antwortliste_aufgabeEditView">
+
+                                @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
+                                {
+
+                                    <li class="list-group-item li_antwort" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
+                                        <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
+                                        <div class="btn-group" style="float:right">
+                                            <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning antwort_warning" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger antwort_danger" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                        </div>
+                                    </li>
+                                }
+
+                            </ul>
+                        </nav>
 
 
-    </div>
-
-
-    <hr />
-
-    <h3>ZusatzInfo:</h3>
-    <h4><span style="font-weight: bold">Ausgewählte Zusatzinfo:</span> <span id="selected_zusatzInfo">-</span></h4>
-
-    <div class="well">
-
-        <div>
-            <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
-                <select id="aufgabeEdit_infotyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Info_Typen"></select>
-
-                <input type="text" class="form-control input" placeholder="Zusatzinfo eingeben..." style="float:left;" id="searchInfoField_AufgabeEditView">
-                <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeEditView">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </form>
-            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
-
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Achtung!</strong>
+                        Wird eine Antwort erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <nav id="aufgabeEditInfo">
-            <ul class="list-group" id="infoliste_aufgabeEditView">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">ZusatzInfo</a>
+                </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <h4><span style="font-weight: bold">Ausgewählte Zusatzinfo:</span> <span id="selected_zusatzInfo">-</span></h4>
 
-                @foreach (var info in Model.AufgabeEditView_Model.Infos)
-                {
+                    <div class="well">
 
-                    <li class="list-group-item li_zusatzInfo" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
-                        <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
-                        <div class="btn-group" style="float:right">
-                            <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                            <button class="btn btn-warning info_warning" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                            <button class="btn btn-danger info_danger" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div>
+                            <form asp-controller="Admin" asp-action="AufgabeEditView" method="post">
+                                <select id="aufgabeEdit_infotyp_select" class="form-control" style="float:left;" asp-items="@Model.AufgabeEditView_Model.Info_Typen"></select>
+
+                                <input type="text" class="form-control input" placeholder="Zusatzinfo eingeben..." style="float:left;" id="searchInfoField_AufgabeEditView">
+                                <button class="btn btn-info" type="button" style="float:left;" id="searchInfoText_AufgabeEditView">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </form>
+                            <button class="btn btn-success" style="margin-left: 8px; margin-right: 20px; margin-bottom:10px; float: right;" id="newInfo_AufgabeEditView">+ neue Zusatzinfo erstellen</button>
+
                         </div>
-                    </li>
 
-                }
+                        <nav id="aufgabeEditInfo">
+                            <ul class="list-group" id="infoliste_aufgabeEditView">
 
-            </ul>
-        </nav>
+                                @foreach (var info in Model.AufgabeEditView_Model.Infos)
+                                {
 
-    </div>
+                                    <li class="list-group-item li_zusatzInfo" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
+                                        <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
+                                        <div class="btn-group" style="float:right">
+                                            <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning info_warning" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger info_danger" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                        </div>
+                                    </li>
+
+                                }
+
+                            </ul>
+                        </nav>
+
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Achtung!</strong>
+                        Wird eine ZusatzInfo erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Allgemeine Daten</a>
+                </h4>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <form asp-controller="Admin" asp-action="AufgabeNew" method="post">
+
+                        <h4>Station:</h4>
+                        <select id="adminEdit_station_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Stationen"></select>
+
+                        <h4>Stufe:</h4>
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary active buttons_stufen">
+                                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
+                            </label>
+                            <label class="btn btn-secondary buttons_stufen">
+                                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
+                            </label>
+                            <label class="btn btn-secondary buttons_stufen">
+                                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
+                            </label>
+                        </div>
+
+                        <h4>Pflichtaufgabe:</h4>
+                        <div class="btn-group" data-toggle="buttons" id="stufen">
+                            <label class="btn btn-secondary buttons_stufen active">
+                                <input type="radio" name="isPflichtaufgabe" id="aufgabeNew_isPflichtaufgabe_true" value="true" checked>Ja
+                            </label>
+                            <label class="btn btn-secondary buttons_stufen">
+                                <input type="radio" name="isPflichtaufgabe" id="aufgabeNew_isPflichtaufgabe_false" value="false">Nein
+                            </label>
+                        </div>
+
+                        <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="-" id="aufgabeEdit_teilaufgabe" />
+
+                        <h4>Bezirk:</h4>
+                        <select id="adminEdit_bezirk_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Bezirke"></select>
+
+                        <h4>Ort:</h4>
+                        <select id="adminEdit_ort_select" class="form-control" asp-items="@Model.AufgabeEditView_Model.Standorte"></select>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+
+    
+    
+   
+
+
+    
 
     <button class="btn btn-lg btn-success" id="aufgabeNew_create">ERSTELLEN</button>
     <button class="btn btn-lg btn-danger" id="aufgabeEdit_close">CLOSE</button>
