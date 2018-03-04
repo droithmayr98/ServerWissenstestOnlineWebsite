@@ -5,7 +5,7 @@
     @foreach (var checkBox in @Model.CheckBoxen)
     {
         <div class="checkbox">
-            <label id="cb_@checkBox.CheckBox_Id"><input type="checkbox" id="@checkBox.CheckBox_Id" class="checkboxInput" />@checkBox.Content</label>
+            <label id="cb_@checkBox.CheckboxID"><input type="checkbox" id="@checkBox.CheckboxID" class="checkboxInput" />@checkBox.Inhalt</label>
         </div>
     }
 
@@ -14,7 +14,7 @@
         <ul>
             @foreach (var checkBox_rightVal in Model.CheckBoxen_RightVal)
             {
-                <li>@checkBox_rightVal.Content</li>
+                <li>@checkBox_rightVal.Inhalt</li>
             }
         </ul>
     </div>

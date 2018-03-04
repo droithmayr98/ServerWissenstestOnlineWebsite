@@ -30,6 +30,7 @@ namespace DB_lib.Migrations
             //    );
             //
 
+            /*
             #region----------------------------------------------------------------------Bezirke erzeugen
             Bezirk Braunau = new Bezirk{ Bezirksname = "Braunau" };
             Bezirk Eferding = new Bezirk { Bezirksname = "Eferding" };
@@ -514,6 +515,7 @@ namespace DB_lib.Migrations
 
 
             context.SaveChanges();
+            */
 
 
 

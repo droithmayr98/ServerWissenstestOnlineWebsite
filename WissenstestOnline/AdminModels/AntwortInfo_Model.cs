@@ -11,10 +11,10 @@ namespace WissenstestOnlineWebseite.AdminModels
         public int Antwort_Id { get; set; }
         public string Antwortname { get; set; }
         public string Antworttyp { get; set; }
-        public Antwort_Text Antwort_Text { get; set; }
-        public Antwort_DatePicker Antwort_DatePicker { get; set; }
-        public Antwort_Slider Antwort_Slider { get; set; }
-        public List<CheckBox> Antwort_CheckBoxes { get; set; }
-        public List<RadioButton> Antwort_RadioButtons { get; set; }
+        public DB_lib.Antwort_text Antwort_Text { get; set; }
+        public DB_lib.Antwort_datepicker Antwort_DatePicker { get; set; }
+        public DB_lib.Antwort_slider Antwort_Slider { get; set; }
+        public List<DB_lib.Checkbox> Antwort_CheckBoxes { get; set; }
+        public List<DB_lib.Radiobutton> Antwort_RadioButtons { get; set; }
     }
 }

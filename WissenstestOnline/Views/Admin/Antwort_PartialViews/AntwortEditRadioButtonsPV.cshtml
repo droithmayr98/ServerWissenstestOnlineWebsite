@@ -6,7 +6,7 @@
         <h5 style="font-weight: bold">Richtige Antwort:</h5>
         @foreach (var radioButton in Model.Antwort_RadioButtons)
         {
-            if (radioButton.IsTrue)
+            if (radioButton.ErwartungsWert)
             {
                 <input placeholder="Richtige Antwort eingeben" class="form-control input-field" type="text" value="@radioButton.Content" id="edit_radiobuttons_rightVal" />
             }
@@ -20,7 +20,7 @@
             @{int i = 0;}
             @foreach (var radioButton in Model.Antwort_RadioButtons)
             {
-                if (!radioButton.IsTrue)
+                if (!radioButton.ErwartungsWert)
                 {
                     i++;
                     <div id="editAntwort_rbText_falsch_@i">

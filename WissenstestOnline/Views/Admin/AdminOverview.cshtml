@@ -31,12 +31,12 @@
             <ul class="list-group" id="admin_aufgabenliste">
                 @foreach (var aufgabe in Model.Aufgaben)
                 {
-                    <li class="list-group-item" id="@aufgabe.Aufgabe_Id-@aufgabe.Station.Station_Id">
-                        <span>@aufgabe.Aufgabe_Id: @aufgabe.Frage.Fragetext</span>
+                    <li class="list-group-item" id="@aufgabe.AufgabeID-@aufgabe.Station.StationID">
+                        <span>@aufgabe.AufgabeID: @aufgabe.Frage.FrageText</span>
                         <div class="btn-group" style="float:right">
-                            <button class="btn btn-info aufgabe_Info" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                            <button class="btn btn-warning aufgabe_warning" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                            <button class="btn btn-danger aufgabe_danger" id="@aufgabe.Aufgabe_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                            <button class="btn btn-info aufgabe_Info" id="@aufgabe.AufgabeID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                            <button class="btn btn-warning aufgabe_warning" id="@aufgabe.AufgabeID"><span class="glyphicon glyphicon-pencil"></span></button>
+                            <button class="btn btn-danger aufgabe_danger" id="@aufgabe.AufgabeID"><span class="glyphicon glyphicon-remove"></span></button>
 
                         </div>
                     </li>
@@ -60,16 +60,16 @@
                 @foreach (var admin in Model.Admins)
                 {
                     <li class="list-group-item">
-                        <span>@admin.Username</span>
+                        <span>@admin.Benutzer</span>
                         <div class="btn-group" style="float:right">
-                            <button class="btn btn-info admin_Info" id="@admin.Admin_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
+                            <button class="btn btn-info admin_Info" id="@admin.AdminID"><span class="glyphicon glyphicon-info-sign"></span></button>
                             @if (Model.Can_edit_admin)
                             {
-                                <button class="btn btn-warning admin_warning" id="@admin.Admin_Id"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-warning admin_warning" id="@admin.AdminID"><span class="glyphicon glyphicon-pencil"></span></button>
                             }
                             @if (Model.Can_delete_admin)
                             {
-                                <button class="btn btn-danger admin_danger" id="@admin.Admin_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                <button class="btn btn-danger admin_danger" id="@admin.AdminID"><span class="glyphicon glyphicon-remove"></span></button>
                             }
 
                         </div>

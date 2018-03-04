@@ -34,12 +34,12 @@
 
                                 @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
                                 {
-                                    <li class="list-group-item li_frage" id="li_@frage.Frage_Id">
-                                        <span class="frageobject" id="@frage.Frage_Id">@frage.Fragetext</span>
+                                    <li class="list-group-item li_frage" id="li_@frage.FrageID">
+                                        <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
                                         <div class="btn-group" style="float:right">
-                                            <button class="btn btn-info frage_Info" id="@frage.Frage_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                            <button class="btn btn-warning frage_warning" id="@frage.Frage_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                                            <button class="btn btn-danger frage_danger" id="@frage.Frage_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                            <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
                                         </div>
                                     </li>
                                 }
@@ -88,12 +88,12 @@
                                 @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
                                 {
 
-                                    <li class="list-group-item li_antwort" id="@antwort.Antwort_Id-@antwort.Typ.Typ_Id">
-                                        <span class="antwortobject" id="antwort_@antwort.Antwort_Id">@antwort.Antwort_Name</span>
+                                    <li class="list-group-item li_antwort" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
+                                        <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
                                         <div class="btn-group" style="float:right">
-                                            <button class="btn btn-info antwort_Info" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                            <button class="btn btn-warning antwort_warning" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                                            <button class="btn btn-danger antwort_danger" id="antwort_@antwort.Antwort_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                            <button class="btn btn-info antwort_Info" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning antwort_warning" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger antwort_danger" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-remove"></span></button>
                                         </div>
                                     </li>
                                 }
@@ -143,12 +143,12 @@
                                 @foreach (var info in Model.AufgabeEditView_Model.Infos)
                                 {
 
-                                    <li class="list-group-item li_zusatzInfo" id="@info.Zusatzinfo_Id-@info.Typ.Typ_Id">
-                                        <span class="infoobject" id="info_@info.Zusatzinfo_Id">@info.Zusatzinfo_Name</span>
+                                    <li class="list-group-item li_zusatzInfo" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
+                                        <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
                                         <div class="btn-group" style="float:right">
-                                            <button class="btn btn-info info_Info" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                            <button class="btn btn-warning info_warning" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-pencil"></span></button>
-                                            <button class="btn btn-danger info_danger" id="info_@info.Zusatzinfo_Id"><span class="glyphicon glyphicon-remove"></span></button>
+                                            <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                            <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
                                         </div>
                                     </li>
 

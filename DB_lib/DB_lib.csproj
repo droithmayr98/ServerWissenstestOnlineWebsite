@@ -40,6 +40,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,16 +50,79 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admintabelle.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_checkbox.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_datepicker.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_radiobutton.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_slider.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_text.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Antwort_verbinden.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Aufgabe.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bezirk.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bild.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Checkbox.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Frage.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Hintergrund.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Infocontent.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs" />
     <Compile Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.Designer.cs">
       <DependentUpon>201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Paar.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Radiobutton.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Standort.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Station.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Stufe.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Tables\Admintable.cs" />
     <Compile Include="Tables\Antwort.cs" />
@@ -81,6 +146,27 @@
     <Compile Include="Tables\Zusatzinfo.cs" />
     <Compile Include="Tables\InfoContent.cs" />
     <Compile Include="TestDB_Context.cs" />
+    <Compile Include="Typendefinition.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WissenstestDBModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WissenstestDBModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WissenstestDBModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WissenstestDBModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WissenstestDBModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Zusatzinfo.cs">
+      <DependentUpon>WissenstestDBModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -89,11 +175,33 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <EntityDeploy Include="WissenstestDBModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>WissenstestDBModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="WissenstestDBModel.edmx.diagram">
+      <DependentUpon>WissenstestDBModel.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.resx">
       <DependentUpon>201801051340164_Columns_AntwortName_ZusatzinfoName05_01_2018.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WissenstestDBModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WissenstestDBModel.Context.cs</LastGenOutput>
+      <DependentUpon>WissenstestDBModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="WissenstestDBModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>WissenstestDBModel.edmx</DependentUpon>
+      <LastGenOutput>WissenstestDBModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

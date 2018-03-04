@@ -9,9 +9,9 @@ namespace WissenstestOnlineWebseite.Models
 {
     public class AdminOverview_Model
     {
-        public List<Aufgabe> Aufgaben { get; set; }
+        public List<DB_lib.Aufgabe> Aufgaben { get; set; }
         public List<SelectListItem> Stationen { get; set; }
-        public List<Admintable> Admins { get; set; }
+        public List<DB_lib.Admintabelle> Admins { get; set; }
 
         public bool Can_create_admin { get; set; }
 

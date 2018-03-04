@@ -16,12 +16,14 @@ namespace WissenstestOnline.Controllers
     public class AdminController : Controller
     {
 
-        private TestDB_Context test_db;
+        /*private TestDB_Context main_db;*/
+        private WissenstestDBEntities main_db;
         private ILogger<MainController> logger;
 
-        public AdminController(TestDB_Context db, ILogger<MainController> logger)
+        public AdminController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities main_db)
         {
-            this.test_db = db;
+            /*this.test_db = db;*/
+            this.main_db = main_db;
             this.logger = logger;
         }
 
@@ -36,23 +38,23 @@ namespace WissenstestOnline.Controllers
         public IActionResult AdminOverview()
         {
             //Alle Aufgaben holen und in Model speichern
-            List<Aufgabe> alle_aufgaben = test_db.Aufgaben.Select(x => x).OrderBy(x => x.Station.Station_Id).ToList();
+            List<DB_lib.Aufgabe> alle_aufgaben = main_db.Aufgabe.Select(x => x).OrderBy(x=>x.Station.StationID).ToList();
             var adminOverwiew_model = new AdminOverview_Model();
             adminOverwiew_model.Aufgaben = alle_aufgaben;
 
             //Stationen als SelectListItems umwandeln und in Model speichern
-            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<DB_lib.Station> stations = main_db.Station.OrderBy(x => x.StationID).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
             stationsList.Add(new SelectListItem { Text = "keine ausgewählt", Value = "noItemSelected" });
-            foreach (Station s in stations)
+            foreach (DB_lib.Station s in stations)
             {
-                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.StationID.ToString() };
                 stationsList.Add(stationItem);
             }
             adminOverwiew_model.Stationen = stationsList;
 
             //Admins holen und in Model speichern + Modelübergabe an View
-            List<Admintable> alle_admins = test_db.Admins.Select(x => x).OrderBy(x => x.Username).ToList();
+            List<Admintabelle> alle_admins = main_db.Admintabelle.Select(x => x).OrderBy(x => x.Benutzer).ToList();
             adminOverwiew_model.Admins = alle_admins;
 
             adminOverwiew_model.Can_create_admin = AdminData.Can_create_admin;
@@ -91,21 +93,21 @@ namespace WissenstestOnline.Controllers
         //Ajax calls
         public string CheckAdminInfo(string username, string password)
         {
-            Admintable admin = test_db.Admins.SingleOrDefault(x => x.Username.Equals(username));
+            Admintabelle admin = main_db.Admintabelle.SingleOrDefault(x => x.Benutzer.Equals(username));
             if (admin == null)
             {
                 return "username_fail";
             }
-            else if (!admin.Password.Equals(password))
+            else if (!admin.Passwort.Equals(password))
             {
                 return "password_fail";
             }
             else
             {
                 AdminData.Username = username;
-                AdminData.Can_create_admin = admin.Can_create_acc;
-                AdminData.Can_edit_admin = admin.Can_edit_acc;
-                AdminData.Can_delete_admin = admin.Can_delete_acc;
+                AdminData.Can_create_admin = admin.CanCreateAcc;
+                AdminData.Can_edit_admin = admin.CanEditAcc;
+                AdminData.Can_delete_admin = admin.CanDeleteAcc;
                 return "ok";
             }
         }
@@ -128,13 +130,13 @@ namespace WissenstestOnline.Controllers
 
         public string SaveAdminChanges(int admin_id, string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc)
         {
-            var edit_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
-            edit_admin.Username = username;
-            edit_admin.Password = password;
-            edit_admin.Can_create_acc = can_create_acc;
-            edit_admin.Can_edit_acc = can_edit_acc;
-            edit_admin.Can_delete_acc = can_delete_acc;
-            test_db.SaveChanges();
+            var edit_admin = main_db.Admintabelle.Single(x => x.AdminID == admin_id);
+            edit_admin.Benutzer = username;
+            edit_admin.Passwort = password;
+            edit_admin.CanCreateAcc = can_create_acc;
+            edit_admin.CanEditAcc = can_edit_acc;
+            edit_admin.CanDeleteAcc = can_delete_acc;
+            main_db.SaveChanges();
             return "ok";
         }
 
@@ -147,22 +149,22 @@ namespace WissenstestOnline.Controllers
 
         public string DeleteAdmin(int admin_id)
         {
-            var delete_admin = test_db.Admins.Single(x => x.Admin_Id == admin_id);
-            test_db.Admins.Remove(delete_admin);
-            test_db.SaveChanges();
+            var delete_admin = main_db.Admintabelle.Single(x => x.AdminID == admin_id);
+            main_db.Admintabelle.Remove(delete_admin);
+            main_db.SaveChanges();
             return "ok";
         }
 
         public string CreateAdmin(string username, string password, bool can_create_acc, bool can_edit_acc, bool can_delete_acc)
         {
-            Admintable new_admin = new Admintable();
-            new_admin.Username = username;
-            new_admin.Password = password;
-            new_admin.Can_create_acc = can_create_acc;
-            new_admin.Can_edit_acc = can_edit_acc;
-            new_admin.Can_delete_acc = can_delete_acc;
-            test_db.Admins.Add(new_admin);
-            test_db.SaveChanges();
+            Admintabelle new_admin = new Admintabelle();
+            new_admin.Benutzer = username;
+            new_admin.Passwort = password;
+            new_admin.CanCreateAcc = can_create_acc;
+            new_admin.CanEditAcc = can_edit_acc;
+            new_admin.CanDeleteAcc = can_delete_acc;
+            main_db.Admintabelle.Add(new_admin);
+            main_db.SaveChanges();
             return "ok";
         }
 
@@ -183,11 +185,11 @@ namespace WissenstestOnline.Controllers
 
         public string SaveFrageChanges(int frage_id, string fragetext)
         {
-            Frage edit_frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
-            edit_frage.Fragetext = fragetext;
-            edit_frage.Typ = edit_frage.Typ;
+            DB_lib.Frage edit_frage = main_db.Frage.Single(x => x.FrageID == frage_id);
+            edit_frage.FrageText = fragetext;
+            edit_frage.Typendefinition = edit_frage.Typendefinition;
 
-            test_db.SaveChanges();
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -200,11 +202,11 @@ namespace WissenstestOnline.Controllers
 
         public string DeleteFrage(int frage_id)
         {
-            Frage frage_delete = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
-            if (frage_delete.Aufgaben.Count == 0)
+            DB_lib.Frage frage_delete = main_db.Frage.Single(x => x.FrageID == frage_id);
+            if (frage_delete.Aufgabe.Count == 0)
             {
-                test_db.Fragen.Remove(frage_delete);
-                test_db.SaveChanges();
+                main_db.Frage.Remove(frage_delete);
+                main_db.SaveChanges();
                 return "ok";
             }
             else
@@ -216,13 +218,13 @@ namespace WissenstestOnline.Controllers
 
         public string CreateFrage(string fragetext)
         {
-            Frage new_frage = new Frage();
-            new_frage.Fragetext = fragetext;
-            new_frage.Aufgaben = new List<Aufgabe>();
-            new_frage.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals("F_T"));
+            DB_lib.Frage new_frage = new DB_lib.Frage();
+            new_frage.FrageText = fragetext;
+            new_frage.Aufgabe = new List<DB_lib.Aufgabe>();
+            new_frage.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals("F_T"));
 
-            test_db.Fragen.Add(new_frage);
-            test_db.SaveChanges();
+            main_db.Frage.Add(new_frage);
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -240,12 +242,12 @@ namespace WissenstestOnline.Controllers
             var antwortEditMain_Model = new AntwortEditMain_Model();
             var antwortEdit_Model = FillAntwortModel(antwort_id);
 
-            List<Typendefinition> antwortTypen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A_")).ToList<Typendefinition>();
+            List<DB_lib.Typendefinition> antwortTypen = main_db.Typendefinition.Where(x => x.TypName.StartsWith("A_")).ToList<DB_lib.Typendefinition>();
             List<SelectListItem> antwortTypenList = new List<SelectListItem>();
-            foreach (Typendefinition t in antwortTypen)
+            foreach (DB_lib.Typendefinition t in antwortTypen)
             {
                 string typ_string = "";
-                switch (t.Typ)
+                switch (t.TypName)
                 {
                     case "A_T":
                         typ_string = "Text";
@@ -265,13 +267,13 @@ namespace WissenstestOnline.Controllers
                 }
                 if (antwortEdit_Model.Antworttyp.Equals(typ_string))
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.TypName, Value = t.TypName };
                     antwortTypItem.Selected = true;
                     antwortTypenList.Add(antwortTypItem);
                 }
                 else
                 {
-                    SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
+                    SelectListItem antwortTypItem = new SelectListItem { Text = t.TypName, Value = t.TypName };
                     antwortTypenList.Add(antwortTypItem);
                 }
 
@@ -315,51 +317,51 @@ namespace WissenstestOnline.Controllers
 
         public string DeleteAntwort(int antwort_id)
         {
-            Antwort antwort_delete = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
-            if (antwort_delete.Aufgaben.Count == 0)
+            DB_lib.Antwort antwort_delete = main_db.Antwort.Single(x => x.AntwortID == antwort_id);
+            if (antwort_delete.Aufgabe.Count == 0)
             {
-                string a_typ = antwort_delete.Typ.Typ;
-                int inhalt_id = antwort_delete.Inhalt_Id;
+                string a_typ = antwort_delete.Typendefinition.TypName;
+                int inhalt_id = antwort_delete.AntwortContentID;
                 switch (a_typ)
                 {
                     case "A_T":
-                        Antwort_Text antwort_Text_delete = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
-                        test_db.Antwort_Texte.Remove(antwort_Text_delete);
+                        Antwort_text antwort_Text_delete = main_db.Antwort_text.Single(x => x.AntwortContentID == inhalt_id);
+                        main_db.Antwort_text.Remove(antwort_Text_delete);
                         break;
                     case "A_S":
-                        Antwort_Slider antwort_Slider_delete = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
-                        test_db.Antwort_Sliders.Remove(antwort_Slider_delete);
+                        Antwort_slider antwort_Slider_delete = main_db.Antwort_slider.Single(x => x.AntwortContentID == inhalt_id);
+                        main_db.Antwort_slider.Remove(antwort_Slider_delete);
                         break;
                     case "A_DP":
-                        Antwort_DatePicker antwort_DP_delete = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
-                        test_db.Antwort_DatePickerM.Remove(antwort_DP_delete);
+                        Antwort_datepicker antwort_DP_delete = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == inhalt_id);
+                        main_db.Antwort_datepicker.Remove(antwort_DP_delete);
                         break;
                     case "A_RB:T":
-                        Antwort_RadioButton antwort_RB_delete = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
-                        int rb_inhalt_id = antwort_RB_delete.Inhalt_Id;
-                        RadioButton[] radioButtons_delete = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == rb_inhalt_id).ToArray();
-                        foreach (RadioButton rb_delete in radioButtons_delete)
+                        Antwort_radiobutton antwort_RB_delete = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == inhalt_id);
+                        int rb_inhalt_id = antwort_RB_delete.AntwortContentID;
+                        Radiobutton[] radioButtons_delete = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == rb_inhalt_id).ToArray();
+                        foreach (Radiobutton rb_delete in radioButtons_delete)
                         {
-                            test_db.RadioButtons.Remove(rb_delete);
+                            main_db.Radiobutton.Remove(rb_delete);
                         }
-                        test_db.Antwort_RadioButtons.Remove(antwort_RB_delete);
+                        main_db.Antwort_radiobutton.Remove(antwort_RB_delete);
                         break;
                     case "A_CB:T":
-                        Antwort_CheckBox antwort_CB_delete = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
-                        int cb_inhalt_id = antwort_CB_delete.Inhalt_Id;
-                        CheckBox[] checkBoxes_delete = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == cb_inhalt_id).ToArray();
-                        foreach (CheckBox cb_delete in checkBoxes_delete)
+                        Antwort_checkbox antwort_CB_delete = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == inhalt_id);
+                        int cb_inhalt_id = antwort_CB_delete.AntwortContentID;
+                        Checkbox[] checkBoxes_delete = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == cb_inhalt_id).ToArray();
+                        foreach (Checkbox cb_delete in checkBoxes_delete)
                         {
-                            test_db.CheckBoxes.Remove(cb_delete);
+                            main_db.Checkbox.Remove(cb_delete);
                         }
-                        test_db.Antwort_CheckBoxes.Remove(antwort_CB_delete);
+                        main_db.Antwort_checkbox.Remove(antwort_CB_delete);
                         break;
                     default:
                         //nothing
                         break;
                 }
-                test_db.Antworten.Remove(antwort_delete);
-                test_db.SaveChanges();
+                main_db.Antwort.Remove(antwort_delete);
+                main_db.SaveChanges();
                 return "ok";
             }
             else
@@ -374,19 +376,19 @@ namespace WissenstestOnline.Controllers
             //Console.WriteLine("AntwortTyp: " + antwortTyp);
             //Console.WriteLine("AntwortName: " + antwortName);
 
-            Antwort new_antwort = new Antwort();
-            Antwort_Text new_antwortText = new Antwort_Text();
+            DB_lib.Antwort new_antwort = new DB_lib.Antwort();
+            Antwort_text new_antwortText = new Antwort_text();
 
             new_antwortText.Text = antwortText;
-            test_db.Antwort_Texte.Add(new_antwortText);
-            test_db.SaveChanges();
+            main_db.Antwort_text.Add(new_antwortText);
+            main_db.SaveChanges();
 
-            new_antwort.Antwort_Name = antwortName;
-            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            new_antwort.Inhalt_Id = new_antwortText.Inhalt_Id;
-            new_antwort.Aufgaben = new List<Aufgabe>();
-            test_db.Antworten.Add(new_antwort);
-            test_db.SaveChanges();
+            new_antwort.AntwortName = antwortName;
+            new_antwort.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            new_antwort.AntwortContentID = new_antwortText.AntwortContentID;
+            new_antwort.Aufgabe = new List<DB_lib.Aufgabe>();
+            main_db.Antwort.Add(new_antwort);
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -400,31 +402,31 @@ namespace WissenstestOnline.Controllers
                 int sliderRightVal,
                 string sliderTitel)
         {
-            Antwort new_antwort = new Antwort();
-            Antwort_Slider new_antwortSlider = new Antwort_Slider();
+            DB_lib.Antwort new_antwort = new DB_lib.Antwort();
+            Antwort_slider new_antwortSlider = new Antwort_slider();
 
-            new_antwortSlider.Min_val = sliderMin;
-            new_antwortSlider.Max_val = sliderMax;
+            new_antwortSlider.MinVal = sliderMin;
+            new_antwortSlider.MaxVal = sliderMax;
             new_antwortSlider.Sprungweite = sliderSprungweite;
-            new_antwortSlider.RightVal = sliderRightVal;
+            new_antwortSlider.ErwartungsWert = sliderRightVal;
             if (sliderTitel == "")
             {
-                new_antwortSlider.Slider_text = null;
+                new_antwortSlider.SliderText = null;
             }
             else
             {
-                new_antwortSlider.Slider_text = sliderTitel;
+                new_antwortSlider.SliderText = sliderTitel;
             }
 
-            test_db.Antwort_Sliders.Add(new_antwortSlider);
-            test_db.SaveChanges();
+            main_db.Antwort_slider.Add(new_antwortSlider);
+            main_db.SaveChanges();
 
-            new_antwort.Antwort_Name = antwortName;
-            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            new_antwort.Inhalt_Id = new_antwortSlider.Inhalt_Id;
-            new_antwort.Aufgaben = new List<Aufgabe>();
-            test_db.Antworten.Add(new_antwort);
-            test_db.SaveChanges();
+            new_antwort.AntwortName = antwortName;
+            new_antwort.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            new_antwort.AntwortContentID = new_antwortSlider.AntwortContentID;
+            new_antwort.Aufgabe = new List<DB_lib.Aufgabe>();
+            main_db.Antwort.Add(new_antwort);
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -432,44 +434,44 @@ namespace WissenstestOnline.Controllers
         public string CreateAntwort_DP(string antwortName, string antwortTyp, string date)
         {
 
-            Antwort new_antwort = new Antwort();
-            Antwort_DatePicker new_antwortDP = new Antwort_DatePicker();
+            DB_lib.Antwort new_antwort = new DB_lib.Antwort();
+            Antwort_datepicker new_antwortDP = new Antwort_datepicker();
 
             DateTime date_formated = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             new_antwortDP.Date = date_formated;
-            test_db.Antwort_DatePickerM.Add(new_antwortDP);
-            test_db.SaveChanges();
+            main_db.Antwort_datepicker.Add(new_antwortDP);
+            main_db.SaveChanges();
 
-            new_antwort.Antwort_Name = antwortName;
-            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            new_antwort.Inhalt_Id = new_antwortDP.Inhalt_Id;
-            new_antwort.Aufgaben = new List<Aufgabe>();
-            test_db.Antworten.Add(new_antwort);
-            test_db.SaveChanges();
+            new_antwort.AntwortName = antwortName;
+            new_antwort.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            new_antwort.AntwortContentID = new_antwortDP.AntwortContentID;
+            new_antwort.Aufgabe = new List<DB_lib.Aufgabe>();
+            main_db.Antwort.Add(new_antwort);
+            main_db.SaveChanges();
 
             return "ok";
         }
 
         public string CreateAntwort_CB(string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
         {
-            Antwort new_antwort = new Antwort();
-            Antwort_CheckBox new_antwortCB = new Antwort_CheckBox();
+            DB_lib.Antwort new_antwort = new DB_lib.Antwort();
+            Antwort_checkbox new_antwortCB = new Antwort_checkbox();
 
             new_antwortCB.Anzahl = rightOptions.Length + wrongOptions.Length;
-            new_antwortCB.CheckBoxes = new List<CheckBox>();
-            test_db.Antwort_CheckBoxes.Add(new_antwortCB);
-            test_db.SaveChanges();
+            new_antwortCB.Checkbox = new List<Checkbox>();
+            main_db.Antwort_checkbox.Add(new_antwortCB);
+            main_db.SaveChanges();
 
             foreach (string right_option in rightOptions)
             {
                 if (right_option != "")
                 {
-                    CheckBox cb_right = new CheckBox();
-                    cb_right.Content = right_option;
+                    Checkbox cb_right = new Checkbox();
+                    cb_right.Inhalt = right_option;
                     cb_right.CheckBoxVal = true;
-                    cb_right.Antwort_CheckBox = new_antwortCB;
-                    test_db.CheckBoxes.Add(cb_right);
-                    test_db.SaveChanges();
+                    cb_right.Antwort_checkbox = new_antwortCB;
+                    main_db.Checkbox.Add(cb_right);
+                    main_db.SaveChanges();
                 }
             }
 
@@ -477,61 +479,61 @@ namespace WissenstestOnline.Controllers
             {
                 if (wrong_option != "")
                 {
-                    CheckBox cb_wrong = new CheckBox();
-                    cb_wrong.Content = wrong_option;
+                    Checkbox cb_wrong = new Checkbox();
+                    cb_wrong.Inhalt = wrong_option;
                     cb_wrong.CheckBoxVal = false;
-                    cb_wrong.Antwort_CheckBox = new_antwortCB;
-                    test_db.CheckBoxes.Add(cb_wrong);
-                    test_db.SaveChanges();
+                    cb_wrong.Antwort_checkbox = new_antwortCB;
+                    main_db.Checkbox.Add(cb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            new_antwort.Antwort_Name = antwortName;
-            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            new_antwort.Inhalt_Id = new_antwortCB.Inhalt_Id;
-            new_antwort.Aufgaben = new List<Aufgabe>();
-            test_db.Antworten.Add(new_antwort);
-            test_db.SaveChanges();
+            new_antwort.AntwortName = antwortName;
+            new_antwort.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            new_antwort.AntwortContentID = new_antwortCB.AntwortContentID;
+            new_antwort.Aufgabe = new List<DB_lib.Aufgabe>();
+            main_db.Antwort.Add(new_antwort);
+            main_db.SaveChanges();
 
             return "ok";
         }
 
         public string CreateAntwort_RB(string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
         {
-            Antwort new_antwort = new Antwort();
-            Antwort_RadioButton new_antwortRB = new Antwort_RadioButton();
+            DB_lib.Antwort new_antwort = new DB_lib.Antwort();
+            Antwort_radiobutton new_antwortRB = new Antwort_radiobutton();
 
             new_antwortRB.Anzahl = 1 + wrongOptions.Length;
-            new_antwortRB.RadioButtons = new List<RadioButton>();
-            test_db.Antwort_RadioButtons.Add(new_antwortRB);
-            test_db.SaveChanges();
+            new_antwortRB.Radiobutton = new List<Radiobutton>();
+            main_db.Antwort_radiobutton.Add(new_antwortRB);
+            main_db.SaveChanges();
 
             foreach (string wrong_option in wrongOptions)
             {
                 if (wrong_option != "")
                 {
-                    RadioButton rb_wrong = new RadioButton();
+                    Radiobutton rb_wrong = new Radiobutton();
                     rb_wrong.Content = wrong_option;
-                    rb_wrong.IsTrue = false;
-                    rb_wrong.Antwort_RadioButton = new_antwortRB;
-                    test_db.RadioButtons.Add(rb_wrong);
-                    test_db.SaveChanges();
+                    rb_wrong.ErwartungsWert = false;
+                    rb_wrong.Antwort_radiobutton = new_antwortRB;
+                    main_db.Radiobutton.Add(rb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            RadioButton rb_right = new RadioButton();
+            Radiobutton rb_right = new Radiobutton();
             rb_right.Content = rightOption;
-            rb_right.IsTrue = true;
-            rb_right.Antwort_RadioButton = new_antwortRB;
-            test_db.RadioButtons.Add(rb_right);
-            test_db.SaveChanges();
+            rb_right.ErwartungsWert = true;
+            rb_right.Antwort_radiobutton = new_antwortRB;
+            main_db.Radiobutton.Add(rb_right);
+            main_db.SaveChanges();
 
-            new_antwort.Antwort_Name = antwortName;
-            new_antwort.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            new_antwort.Inhalt_Id = new_antwortRB.Inhalt_Id;
-            new_antwort.Aufgaben = new List<Aufgabe>();
-            test_db.Antworten.Add(new_antwort);
-            test_db.SaveChanges();
+            new_antwort.AntwortName = antwortName;
+            new_antwort.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            new_antwort.AntwortContentID = new_antwortRB.AntwortContentID;
+            new_antwort.Aufgabe = new List<DB_lib.Aufgabe>();
+            main_db.Antwort.Add(new_antwort);
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -540,20 +542,20 @@ namespace WissenstestOnline.Controllers
         //Textfeld + Text auf bestehende Antwort einstellen
         public string EditNewAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText)
         {
-            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            string a_typ = antwort_editNew.Typ.Typ;
+            DB_lib.Antwort antwort_editNew = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            string a_typ = antwort_editNew.Typendefinition.TypName;
 
-            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.AntwortContentID);
 
-            Antwort_Text new_antwortText = new Antwort_Text();
+            Antwort_text new_antwortText = new Antwort_text();
             new_antwortText.Text = antwortText;
-            test_db.Antwort_Texte.Add(new_antwortText);
-            test_db.SaveChanges();
+            main_db.Antwort_text.Add(new_antwortText);
+            main_db.SaveChanges();
 
-            antwort_editNew.Antwort_Name = antwortName;
-            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            antwort_editNew.Inhalt_Id = new_antwortText.Inhalt_Id;
-            test_db.SaveChanges();
+            antwort_editNew.AntwortName = antwortName;
+            antwort_editNew.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            antwort_editNew.AntwortContentID = new_antwortText.AntwortContentID;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -561,11 +563,11 @@ namespace WissenstestOnline.Controllers
         //Text des Textfeldes auf bestehende Antwort ändern
         public string EditAntwort_Text(int antwortId, string antwortName, string antwortTyp, string antwortText)
         {
-            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            Antwort_Text antwort_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            DB_lib.Antwort antwort_edit = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            Antwort_text antwort_text = main_db.Antwort_text.Single(x => x.AntwortContentID == antwort_edit.AntwortContentID);
             antwort_text.Text = antwortText;
-            antwort_edit.Antwort_Name = antwortName;
-            test_db.SaveChanges();
+            antwort_edit.AntwortName = antwortName;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -578,31 +580,31 @@ namespace WissenstestOnline.Controllers
                 string sliderTitel)
         {
 
-            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            string a_typ = antwort_editNew.Typ.Typ;
+            DB_lib.Antwort antwort_editNew = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            string a_typ = antwort_editNew.Typendefinition.TypName;
 
-            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.AntwortContentID);
 
-            Antwort_Slider new_antwortSlider = new Antwort_Slider();
-            new_antwortSlider.Min_val = sliderMin;
-            new_antwortSlider.Max_val = sliderMax;
+            Antwort_slider new_antwortSlider = new Antwort_slider();
+            new_antwortSlider.MinVal = sliderMin;
+            new_antwortSlider.MaxVal = sliderMax;
             new_antwortSlider.Sprungweite = sliderSprungweite;
-            new_antwortSlider.RightVal = sliderRightVal;
+            new_antwortSlider.ErwartungsWert = sliderRightVal;
             if (sliderTitel == "")
             {
-                new_antwortSlider.Slider_text = null;
+                new_antwortSlider.SliderText = null;
             }
             else
             {
-                new_antwortSlider.Slider_text = sliderTitel;
+                new_antwortSlider.SliderText = sliderTitel;
             }
-            test_db.Antwort_Sliders.Add(new_antwortSlider);
-            test_db.SaveChanges();
+            main_db.Antwort_slider.Add(new_antwortSlider);
+            main_db.SaveChanges();
 
-            antwort_editNew.Antwort_Name = antwortName;
-            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            antwort_editNew.Inhalt_Id = new_antwortSlider.Inhalt_Id;
-            test_db.SaveChanges();
+            antwort_editNew.AntwortName = antwortName;
+            antwort_editNew.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            antwort_editNew.AntwortContentID = new_antwortSlider.AntwortContentID;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -615,22 +617,22 @@ namespace WissenstestOnline.Controllers
                 string sliderTitel)
         {
 
-            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            Antwort_Slider antwort_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
-            antwort_slider.Min_val = sliderMin;
-            antwort_slider.Max_val = sliderMax;
+            DB_lib.Antwort antwort_edit = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            Antwort_slider antwort_slider = main_db.Antwort_slider.Single(x => x.AntwortContentID == antwort_edit.AntwortContentID);
+            antwort_slider.MinVal = sliderMin;
+            antwort_slider.MaxVal = sliderMax;
             antwort_slider.Sprungweite = sliderSprungweite;
-            antwort_slider.RightVal = sliderRightVal;
+            antwort_slider.ErwartungsWert = sliderRightVal;
             if (sliderTitel == "")
             {
-                antwort_slider.Slider_text = null;
+                antwort_slider.SliderText = null;
             }
             else
             {
-                antwort_slider.Slider_text = sliderTitel;
+                antwort_slider.SliderText = sliderTitel;
             }
-            antwort_edit.Antwort_Name = antwortName;
-            test_db.SaveChanges();
+            antwort_edit.AntwortName = antwortName;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -638,20 +640,20 @@ namespace WissenstestOnline.Controllers
         //DP auf bestehende Antwort einstellen
         public string EditNewAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date)
         {
-            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            string a_typ = antwort_editNew.Typ.Typ;
+            DB_lib.Antwort antwort_editNew = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            string a_typ = antwort_editNew.Typendefinition.TypName;
 
-            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.AntwortContentID);
 
-            Antwort_DatePicker new_antwortDP = new Antwort_DatePicker();
+            Antwort_datepicker new_antwortDP = new Antwort_datepicker();
             new_antwortDP.Date = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            test_db.Antwort_DatePickerM.Add(new_antwortDP);
-            test_db.SaveChanges();
+            main_db.Antwort_datepicker.Add(new_antwortDP);
+            main_db.SaveChanges();
 
-            antwort_editNew.Antwort_Name = antwortName;
-            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            antwort_editNew.Inhalt_Id = new_antwortDP.Inhalt_Id;
-            test_db.SaveChanges();
+            antwort_editNew.AntwortName = antwortName;
+            antwort_editNew.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            antwort_editNew.AntwortContentID = new_antwortDP.AntwortContentID;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -659,11 +661,11 @@ namespace WissenstestOnline.Controllers
         //DP-Datum auf bestehende Antwort ändern
         public string EditAntwort_DP(int antwortId, string antwortName, string antwortTyp, string date)
         {
-            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            Antwort_DatePicker antwort_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            DB_lib.Antwort antwort_edit = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            Antwort_datepicker antwort_DP = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == antwort_edit.AntwortContentID);
             antwort_DP.Date = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            antwort_edit.Antwort_Name = antwortName;
-            test_db.SaveChanges();
+            antwort_edit.AntwortName = antwortName;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -672,27 +674,27 @@ namespace WissenstestOnline.Controllers
         public string EditNewAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
         {
 
-            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            string a_typ = antwort_editNew.Typ.Typ;
+            DB_lib.Antwort antwort_editNew = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            string a_typ = antwort_editNew.Typendefinition.TypName;
 
-            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.AntwortContentID);
 
-            Antwort_CheckBox new_antwortCB = new Antwort_CheckBox();
+            Antwort_checkbox new_antwortCB = new Antwort_checkbox();
             new_antwortCB.Anzahl = rightOptions.Length + wrongOptions.Length;
-            new_antwortCB.CheckBoxes = new List<CheckBox>();
-            test_db.Antwort_CheckBoxes.Add(new_antwortCB);
-            test_db.SaveChanges();
+            new_antwortCB.Checkbox = new List<Checkbox>();
+            main_db.Antwort_checkbox.Add(new_antwortCB);
+            main_db.SaveChanges();
 
             foreach (string right_option in rightOptions)
             {
                 if (right_option != "")
                 {
-                    CheckBox cb_right = new CheckBox();
-                    cb_right.Content = right_option;
+                    Checkbox cb_right = new Checkbox();
+                    cb_right.Inhalt = right_option;
                     cb_right.CheckBoxVal = true;
-                    cb_right.Antwort_CheckBox = new_antwortCB;
-                    test_db.CheckBoxes.Add(cb_right);
-                    test_db.SaveChanges();
+                    cb_right.Antwort_checkbox = new_antwortCB;
+                    main_db.Checkbox.Add(cb_right);
+                    main_db.SaveChanges();
                 }
             }
 
@@ -700,19 +702,19 @@ namespace WissenstestOnline.Controllers
             {
                 if (wrong_option != "")
                 {
-                    CheckBox cb_wrong = new CheckBox();
-                    cb_wrong.Content = wrong_option;
+                    Checkbox cb_wrong = new Checkbox();
+                    cb_wrong.Inhalt = wrong_option;
                     cb_wrong.CheckBoxVal = false;
-                    cb_wrong.Antwort_CheckBox = new_antwortCB;
-                    test_db.CheckBoxes.Add(cb_wrong);
-                    test_db.SaveChanges();
+                    cb_wrong.Antwort_checkbox = new_antwortCB;
+                    main_db.Checkbox.Add(cb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            antwort_editNew.Antwort_Name = antwortName;
-            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            antwort_editNew.Inhalt_Id = new_antwortCB.Inhalt_Id;
-            test_db.SaveChanges();
+            antwort_editNew.AntwortName = antwortName;
+            antwort_editNew.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            antwort_editNew.AntwortContentID = new_antwortCB.AntwortContentID;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -720,29 +722,29 @@ namespace WissenstestOnline.Controllers
         //CBs auf bestehende Antwort ändern
         public string EditAntwort_CB(int antwortId, string antwortName, string antwortTyp, string[] rightOptions, string[] wrongOptions)
         {
-            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            Antwort_CheckBox antwort_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            DB_lib.Antwort antwort_edit = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            Antwort_checkbox antwort_CB = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == antwort_edit.AntwortContentID);
             antwort_CB.Anzahl = rightOptions.Length + wrongOptions.Length;
 
-            List<CheckBox> checkBoxesOld = antwort_CB.CheckBoxes;
+            List<Checkbox> checkBoxesOld = antwort_CB.Checkbox.ToList();
             for (int i = checkBoxesOld.Count - 1; i >= 0; i--)
             {
-                test_db.CheckBoxes.Remove(checkBoxesOld[i]);
+                main_db.Checkbox.Remove(checkBoxesOld[i]);
             }
-            test_db.SaveChanges();
+            main_db.SaveChanges();
 
-            antwort_CB.CheckBoxes = new List<CheckBox>();
+            antwort_CB.Checkbox = new List<Checkbox>();
 
             foreach (string right_option in rightOptions)
             {
                 if (right_option != "")
                 {
-                    CheckBox cb_right = new CheckBox();
-                    cb_right.Content = right_option;
+                    Checkbox cb_right = new Checkbox();
+                    cb_right.Inhalt = right_option;
                     cb_right.CheckBoxVal = true;
-                    cb_right.Antwort_CheckBox = antwort_CB;
-                    test_db.CheckBoxes.Add(cb_right);
-                    test_db.SaveChanges();
+                    cb_right.Antwort_checkbox = antwort_CB;
+                    main_db.Checkbox.Add(cb_right);
+                    main_db.SaveChanges();
                 }
             }
 
@@ -750,17 +752,17 @@ namespace WissenstestOnline.Controllers
             {
                 if (wrong_option != "")
                 {
-                    CheckBox cb_wrong = new CheckBox();
-                    cb_wrong.Content = wrong_option;
+                    Checkbox cb_wrong = new Checkbox();
+                    cb_wrong.Inhalt = wrong_option;
                     cb_wrong.CheckBoxVal = false;
-                    cb_wrong.Antwort_CheckBox = antwort_CB;
-                    test_db.CheckBoxes.Add(cb_wrong);
-                    test_db.SaveChanges();
+                    cb_wrong.Antwort_checkbox = antwort_CB;
+                    main_db.Checkbox.Add(cb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            antwort_edit.Antwort_Name = antwortName;
-            test_db.SaveChanges();
+            antwort_edit.AntwortName = antwortName;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -768,25 +770,25 @@ namespace WissenstestOnline.Controllers
         //RB-Antwortart auf bestehende Antwort einstellen
         public string EditNewAntwort_RB(int antwortId, string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
         {
-            Antwort antwort_editNew = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            string a_typ = antwort_editNew.Typ.Typ;
+            DB_lib.Antwort antwort_editNew = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            string a_typ = antwort_editNew.Typendefinition.TypName;
 
-            DeleteOldAntwortDefinition(a_typ, antwort_editNew.Inhalt_Id);
+            DeleteOldAntwortDefinition(a_typ, antwort_editNew.AntwortContentID);
 
-            Antwort_RadioButton new_antwortRB = new Antwort_RadioButton();
+            Antwort_radiobutton new_antwortRB = new Antwort_radiobutton();
             new_antwortRB.Anzahl = 1 + wrongOptions.Length;
-            new_antwortRB.RadioButtons = new List<RadioButton>();
-            test_db.Antwort_RadioButtons.Add(new_antwortRB);
-            test_db.SaveChanges();
+            new_antwortRB.Radiobutton = new List<Radiobutton>();
+            main_db.Antwort_radiobutton.Add(new_antwortRB);
+            main_db.SaveChanges();
 
             if (rightOption != "")
             {
-                RadioButton rb_right = new RadioButton();
+                Radiobutton rb_right = new Radiobutton();
                 rb_right.Content = rightOption;
-                rb_right.IsTrue = true;
-                rb_right.Antwort_RadioButton = new_antwortRB;
-                test_db.RadioButtons.Add(rb_right);
-                test_db.SaveChanges();
+                rb_right.ErwartungsWert = true;
+                rb_right.Antwort_radiobutton = new_antwortRB;
+                main_db.Radiobutton.Add(rb_right);
+                main_db.SaveChanges();
             }
 
 
@@ -794,19 +796,19 @@ namespace WissenstestOnline.Controllers
             {
                 if (wrong_option != "")
                 {
-                    RadioButton rb_wrong = new RadioButton();
+                    Radiobutton rb_wrong = new Radiobutton();
                     rb_wrong.Content = wrong_option;
-                    rb_wrong.IsTrue = false;
-                    rb_wrong.Antwort_RadioButton = new_antwortRB;
-                    test_db.RadioButtons.Add(rb_wrong);
-                    test_db.SaveChanges();
+                    rb_wrong.ErwartungsWert = false;
+                    rb_wrong.Antwort_radiobutton = new_antwortRB;
+                    main_db.Radiobutton.Add(rb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            antwort_editNew.Antwort_Name = antwortName;
-            antwort_editNew.Typ = test_db.Typendefinitionen.Single(x => x.Typ.Equals(antwortTyp));
-            antwort_editNew.Inhalt_Id = new_antwortRB.Inhalt_Id;
-            test_db.SaveChanges();
+            antwort_editNew.AntwortName = antwortName;
+            antwort_editNew.Typendefinition = main_db.Typendefinition.Single(x => x.TypName.Equals(antwortTyp));
+            antwort_editNew.AntwortContentID = new_antwortRB.AntwortContentID;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -814,43 +816,43 @@ namespace WissenstestOnline.Controllers
         //RBs auf bestehende Antwort ändern
         public string EditAntwort_RB(int antwortId, string antwortName, string antwortTyp, string rightOption, string[] wrongOptions)
         {
-            Antwort antwort_edit = test_db.Antworten.Single(x => x.Antwort_Id == antwortId);
-            Antwort_RadioButton antwort_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwort_edit.Inhalt_Id);
+            DB_lib.Antwort antwort_edit = main_db.Antwort.Single(x => x.AntwortID == antwortId);
+            Antwort_radiobutton antwort_RB = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == antwort_edit.AntwortContentID);
             antwort_RB.Anzahl = 1 + wrongOptions.Length;
 
-            List<RadioButton> radioButtonsOld = antwort_RB.RadioButtons;
+            List<Radiobutton> radioButtonsOld = antwort_RB.Radiobutton.ToList();
             for (int i = radioButtonsOld.Count - 1; i >= 0; i--)
             {
-                test_db.RadioButtons.Remove(radioButtonsOld[i]);
+                main_db.Radiobutton.Remove(radioButtonsOld[i]);
             }
-            test_db.SaveChanges();
+            main_db.SaveChanges();
 
-            antwort_RB.RadioButtons = new List<RadioButton>();
+            antwort_RB.Radiobutton = new List<Radiobutton>();
 
             if (rightOption != "")
             {
-                RadioButton rb_right = new RadioButton();
+                Radiobutton rb_right = new Radiobutton();
                 rb_right.Content = rightOption;
-                rb_right.IsTrue = true;
-                rb_right.Antwort_RadioButton = antwort_RB;
-                test_db.RadioButtons.Add(rb_right);
-                test_db.SaveChanges();
+                rb_right.ErwartungsWert = true;
+                rb_right.Antwort_radiobutton = antwort_RB;
+                main_db.Radiobutton.Add(rb_right);
+                main_db.SaveChanges();
             }
             foreach (string wrong_option in wrongOptions)
             {
                 if (wrong_option != "")
                 {
-                    RadioButton rb_wrong = new RadioButton();
+                    Radiobutton rb_wrong = new Radiobutton();
                     rb_wrong.Content = wrong_option;
-                    rb_wrong.IsTrue = false;
-                    rb_wrong.Antwort_RadioButton = antwort_RB;
-                    test_db.RadioButtons.Add(rb_wrong);
-                    test_db.SaveChanges();
+                    rb_wrong.ErwartungsWert = false;
+                    rb_wrong.Antwort_radiobutton = antwort_RB;
+                    main_db.Radiobutton.Add(rb_wrong);
+                    main_db.SaveChanges();
                 }
             }
 
-            antwort_edit.Antwort_Name = antwortName;
-            test_db.SaveChanges();
+            antwort_edit.AntwortName = antwortName;
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -893,16 +895,16 @@ namespace WissenstestOnline.Controllers
 
         public string DeleteZusatzInfo(int info_id)
         {
-            Zusatzinfo info_delete = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
-            if (info_delete.Aufgaben.Count == 0)
+            DB_lib.Zusatzinfo info_delete = main_db.Zusatzinfo.Single(x => x.ZusatzinfoID == info_id);
+            if (info_delete.Aufgabe.Count == 0)
             {
-                InfoContent[] infoContentDel = info_delete.InfoContentM.ToArray();
-                foreach (InfoContent infC in infoContentDel)
+                DB_lib.Infocontent[] infoContentDel = info_delete.Infocontent.ToArray();
+                foreach (DB_lib.Infocontent infC in infoContentDel)
                 {
-                    test_db.InfoContentM.Remove(infC);
+                    main_db.Infocontent.Remove(infC);
                 }
-                test_db.Zusatzinfos.Remove(info_delete);
-                test_db.SaveChanges();
+                main_db.Zusatzinfo.Remove(info_delete);
+                main_db.SaveChanges();
                 return "ok";
             }
             else
@@ -927,45 +929,45 @@ namespace WissenstestOnline.Controllers
                 type_generated = type_generated + "T";
             }
 
-            Typendefinition typ = test_db.Typendefinitionen.SingleOrDefault(x => x.Typ.Equals(type_generated));
+            DB_lib.Typendefinition typ = main_db.Typendefinition.SingleOrDefault(x => x.TypName.Equals(type_generated));
             if (typ == null)
             {
-                typ = new Typendefinition();
-                typ.Typ = type_generated;
-                typ.Zusatzinfos = new List<Zusatzinfo>();
-                typ.Antworten = new List<Antwort>();
-                typ.Fragen = new List<Frage>();
-                test_db.Typendefinitionen.Add(typ);
-                test_db.SaveChanges();
+                typ = new DB_lib.Typendefinition();
+                typ.TypName = type_generated;
+                typ.Zusatzinfo = new List<DB_lib.Zusatzinfo>();
+                typ.Antwort = new List<DB_lib.Antwort>();
+                typ.Frage = new List<DB_lib.Frage>();
+                main_db.Typendefinition.Add(typ);
+                main_db.SaveChanges();
             }
 
-            Zusatzinfo new_zusatzInfo = new Zusatzinfo();
-            new_zusatzInfo.Aufgaben = new List<Aufgabe>();
-            new_zusatzInfo.InfoContentM = new List<InfoContent>();
-            new_zusatzInfo.Zusatzinfo_Name = zusatzInfoName;
-            new_zusatzInfo.Typ = typ;
+            DB_lib.Zusatzinfo new_zusatzInfo = new DB_lib.Zusatzinfo();
+            new_zusatzInfo.Aufgabe = new List<DB_lib.Aufgabe>();
+            new_zusatzInfo.Infocontent = new List<DB_lib.Infocontent>();
+            new_zusatzInfo.InfoName = zusatzInfoName;
+            new_zusatzInfo.Typendefinition = typ;
 
-            test_db.Zusatzinfos.Add(new_zusatzInfo);
-            test_db.SaveChanges();
+            main_db.Zusatzinfo.Add(new_zusatzInfo);
+            main_db.SaveChanges();
 
             for (int i = 0; i < contents.Length; i++)
             {
                 if (headings[i] == null)
                 {
-                    InfoContent ic = new InfoContent();
+                    DB_lib.Infocontent ic = new DB_lib.Infocontent();
                     ic.Zusatzinfo = new_zusatzInfo;
-                    ic.Info_Content = contents[i];
-                    test_db.InfoContentM.Add(ic);
-                    test_db.SaveChanges();
+                    ic.InfoContent1 = contents[i];
+                    main_db.Infocontent.Add(ic);
+                    main_db.SaveChanges();
                 }
                 else
                 {
-                    InfoContent ic = new InfoContent();
+                    Infocontent ic = new Infocontent();
                     ic.Zusatzinfo = new_zusatzInfo;
                     ic.Heading = headings[i];
-                    ic.Info_Content = contents[i];
-                    test_db.InfoContentM.Add(ic);
-                    test_db.SaveChanges();
+                    ic.InfoContent1 = contents[i];
+                    main_db.Infocontent.Add(ic);
+                    main_db.SaveChanges();
                 }
 
             }
@@ -984,50 +986,50 @@ namespace WissenstestOnline.Controllers
                 type_generated = type_generated + "T";
             }
 
-            Typendefinition typ = test_db.Typendefinitionen.SingleOrDefault(x => x.Typ.Equals(type_generated));
+            DB_lib.Typendefinition typ = main_db.Typendefinition.SingleOrDefault(x => x.TypName.Equals(type_generated));
             if (typ == null)
             {
-                typ = new Typendefinition();
-                typ.Typ = type_generated;
-                typ.Zusatzinfos = new List<Zusatzinfo>();
-                typ.Antworten = new List<Antwort>();
-                typ.Fragen = new List<Frage>();
-                test_db.Typendefinitionen.Add(typ);
-                test_db.SaveChanges();
+                typ = new DB_lib.Typendefinition();
+                typ.TypName = type_generated;
+                typ.Zusatzinfo = new List<DB_lib.Zusatzinfo>();
+                typ.Antwort = new List<DB_lib.Antwort>();
+                typ.Frage = new List<DB_lib.Frage>();
+                main_db.Typendefinition.Add(typ);
+                main_db.SaveChanges();
             }
 
-            Zusatzinfo edit_zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzInfoId);
+            DB_lib.Zusatzinfo edit_zusatzinfo = main_db.Zusatzinfo.Single(x => x.ZusatzinfoID == zusatzInfoId);
 
-            List<InfoContent> old_infoC = edit_zusatzinfo.InfoContentM;
+            List<DB_lib.Infocontent> old_infoC = edit_zusatzinfo.Infocontent.ToList();
             for (int i = 0; i < old_infoC.Count; i++)
             {
-                test_db.InfoContentM.Remove(old_infoC[i]);
-                test_db.SaveChanges();
+                main_db.Infocontent.Remove(old_infoC[i]);
+                main_db.SaveChanges();
             }
 
-            edit_zusatzinfo.Zusatzinfo_Name = zusatzInfoName;
-            edit_zusatzinfo.Typ = typ;
+            edit_zusatzinfo.InfoName = zusatzInfoName;
+            edit_zusatzinfo.Typendefinition = typ;
 
-            test_db.SaveChanges();
+            main_db.SaveChanges();
 
             for (int i = 0; i < contents.Length; i++)
             {
                 if (headings[i] == null)
                 {
-                    InfoContent ic = new InfoContent();
+                    DB_lib.Infocontent ic = new DB_lib.Infocontent();
                     ic.Zusatzinfo = edit_zusatzinfo;
-                    ic.Info_Content = contents[i];
-                    test_db.InfoContentM.Add(ic);
-                    test_db.SaveChanges();
+                    ic.InfoContent1 = contents[i];
+                    main_db.Infocontent.Add(ic);
+                    main_db.SaveChanges();
                 }
                 else
                 {
-                    InfoContent ic = new InfoContent();
+                    DB_lib.Infocontent ic = new DB_lib.Infocontent();
                     ic.Zusatzinfo = edit_zusatzinfo;
                     ic.Heading = headings[i];
-                    ic.Info_Content = contents[i];
-                    test_db.InfoContentM.Add(ic);
-                    test_db.SaveChanges();
+                    ic.InfoContent1 = contents[i];
+                    main_db.Infocontent.Add(ic);
+                    main_db.SaveChanges();
                 }
 
             }
@@ -1057,35 +1059,35 @@ namespace WissenstestOnline.Controllers
         string aufgabe_zusatzinfo)
         {
 
-            Aufgabe aufgabe_edit = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
+            DB_lib.Aufgabe aufgabe_edit = main_db.Aufgabe.Single(x => x.AufgabeID == aufgabe_id);
 
-            aufgabe_edit.Station = test_db.Stationen.Single(x => x.Station_Id == aufgabe_station);
-            aufgabe_edit.Stufe = test_db.Stufen.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
+            aufgabe_edit.Station = main_db.Station.Single(x => x.StationID == aufgabe_station);
+            aufgabe_edit.Stufe = main_db.Stufe.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
             aufgabe_edit.Pflichtaufgabe = pflichtaufgabe;
-            aufgabe_edit.TeilaufgabeVon = test_db.Aufgaben.SingleOrDefault(x => x.Aufgabe_Id == teilaufgabeVon);
-            aufgabe_edit.AufgabeBezirk = aufgabe_bezirk;
-            aufgabe_edit.AufgabeOrt = aufgabe_ort;
+            aufgabe_edit.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == teilaufgabeVon).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            aufgabe_edit.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
+            aufgabe_edit.Standort = main_db.Standort.SingleOrDefault(x => x.Ortsname.Equals(aufgabe_ort));
             if (aufgabe_frage != -1)
             {
-                aufgabe_edit.Frage = test_db.Fragen.Single(x => x.Frage_Id == aufgabe_frage);
+                aufgabe_edit.Frage = main_db.Frage.Single(x => x.FrageID == aufgabe_frage);
             }
 
             if (!aufgabe_antwort.Equals("-1"))
             {
                 string[] antwort_split = aufgabe_antwort.Split('_');
                 int antwort = Convert.ToInt32(antwort_split[1]);
-                aufgabe_edit.Antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort);
+                aufgabe_edit.Antwort = main_db.Antwort.Single(x => x.AntwortID == antwort);
             }
 
             if (!aufgabe_zusatzinfo.Equals("-1"))
             {
                 string[] zusatzinfo_split = aufgabe_zusatzinfo.Split('_');
                 int zusatzinfo = Convert.ToInt32(zusatzinfo_split[1]);
-                aufgabe_edit.Zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzinfo);
+                aufgabe_edit.Zusatzinfo = main_db.Zusatzinfo.Single(x => x.ZusatzinfoID == zusatzinfo);
             }
 
 
-            test_db.SaveChanges();
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -1106,19 +1108,19 @@ namespace WissenstestOnline.Controllers
             string[] zusatzinfo_split = aufgabe_zusatzinfo.Split('_');
             int zusatzinfo = Convert.ToInt32(zusatzinfo_split[1]);
 
-            Aufgabe new_aufgabe = new Aufgabe();
-            new_aufgabe.Station = test_db.Stationen.Single(x => x.Station_Id == aufgabe_station);
-            new_aufgabe.Stufe = test_db.Stufen.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
+            DB_lib.Aufgabe new_aufgabe = new DB_lib.Aufgabe();
+            new_aufgabe.Station = main_db.Station.Single(x => x.StationID == aufgabe_station);
+            new_aufgabe.Stufe = main_db.Stufe.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
             new_aufgabe.Pflichtaufgabe = pflichtaufgabe;
-            new_aufgabe.TeilaufgabeVon = test_db.Aufgaben.SingleOrDefault(x => x.Aufgabe_Id == teilaufgabeVon);
-            new_aufgabe.AufgabeBezirk = aufgabe_bezirk;
-            new_aufgabe.AufgabeOrt = aufgabe_ort;
-            new_aufgabe.Frage = test_db.Fragen.Single(x => x.Frage_Id == aufgabe_frage);
-            new_aufgabe.Antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort);
-            new_aufgabe.Zusatzinfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == zusatzinfo);
+            new_aufgabe.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == teilaufgabeVon).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            new_aufgabe.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
+            new_aufgabe.Standort = main_db.Standort.SingleOrDefault(x => x.Ortsname.Equals(aufgabe_ort));
+            new_aufgabe.Frage = main_db.Frage.Single(x => x.FrageID == aufgabe_frage);
+            new_aufgabe.Antwort = main_db.Antwort.Single(x => x.AntwortID == antwort);
+            new_aufgabe.Zusatzinfo = main_db.Zusatzinfo.Single(x => x.ZusatzinfoID == zusatzinfo);
 
-            test_db.Aufgaben.Add(new_aufgabe);
-            test_db.SaveChanges();
+            main_db.Aufgabe.Add(new_aufgabe);
+            main_db.SaveChanges();
 
             return "ok";
         }
@@ -1131,9 +1133,9 @@ namespace WissenstestOnline.Controllers
 
         public string DeleteAufgabe(int aufgabe_id)
         {
-            Aufgabe aufgabe_delete = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabe_id);
-            test_db.Aufgaben.Remove(aufgabe_delete);
-            test_db.SaveChanges();
+            DB_lib.Aufgabe aufgabe_delete = main_db.Aufgabe.Single(x => x.AufgabeID == aufgabe_id);
+            main_db.Aufgabe.Remove(aufgabe_delete);
+            main_db.SaveChanges();
             return "ok";
         }
 
@@ -1142,12 +1144,12 @@ namespace WissenstestOnline.Controllers
         //Anderes
         public IActionResult SetStandorteBezirkComboBox(string bezirk)
         {
-            List<Ort> standorte_ff = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).ToList();
+            List<Standort> standorte_ff = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).ToList();
 
             List<SelectListItem> standorteList = new List<SelectListItem>();
             standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
 
-            foreach (Ort o in standorte_ff)
+            foreach (Standort o in standorte_ff)
             {
                 SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
                 standorteList.Add(standortItem);
@@ -1167,7 +1169,7 @@ namespace WissenstestOnline.Controllers
             }
             else
             {
-                return test_db.Typendefinitionen.Single(x => x.Typ.Equals(typ)).Typ_Id.ToString();
+                return main_db.Typendefinition.Single(x => x.TypName.Equals(typ)).TypendefinitionID.ToString();
             }
         }
 
@@ -1176,33 +1178,33 @@ namespace WissenstestOnline.Controllers
         //Fill-Methods
         public AntwortInfo_Model FillAntwortModel(int antwort_id)
         {
-            Antwort antwort = test_db.Antworten.Single(x => x.Antwort_Id == antwort_id);
+            DB_lib.Antwort antwort = main_db.Antwort.Single(x => x.AntwortID == antwort_id);
             var antwortInfo_Model = new AntwortInfo_Model();
-            antwortInfo_Model.Antwort_Id = antwort.Antwort_Id;
-            antwortInfo_Model.Antwortname = antwort.Antwort_Name;
-            int antwortInhalt_id = antwort.Inhalt_Id;
+            antwortInfo_Model.Antwort_Id = antwort.AntwortID;
+            antwortInfo_Model.Antwortname = antwort.AntwortName;
+            int antwortInhalt_id = antwort.AntwortContentID;
 
-            switch (antwort.Typ.Typ)
+            switch (antwort.Typendefinition.TypName)
             {
                 case "A_T":
                     antwortInfo_Model.Antworttyp = "Text";
-                    antwortInfo_Model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    antwortInfo_Model.Antwort_Text = main_db.Antwort_text.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_S":
                     antwortInfo_Model.Antworttyp = "Slider";
-                    antwortInfo_Model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    antwortInfo_Model.Antwort_Slider = main_db.Antwort_slider.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_DP":
                     antwortInfo_Model.Antworttyp = "DatePicker";
-                    antwortInfo_Model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    antwortInfo_Model.Antwort_DatePicker = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_CB:T":
                     antwortInfo_Model.Antworttyp = "CheckBox";
-                    antwortInfo_Model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
+                    antwortInfo_Model.Antwort_CheckBoxes = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == antwortInhalt_id).Checkbox.ToList();
                     break;
                 case "A_RB:T":
                     antwortInfo_Model.Antworttyp = "RadioButton";
-                    antwortInfo_Model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
+                    antwortInfo_Model.Antwort_RadioButtons = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == antwortInhalt_id).Radiobutton.ToList();
                     break;
             }
 
@@ -1212,62 +1214,62 @@ namespace WissenstestOnline.Controllers
         public AdminInfo_Model FillAdminModel(int adminId_int)
         {
 
-            Admintable admin = test_db.Admins.Single(x => x.Admin_Id == adminId_int);
+            Admintabelle admin = main_db.Admintabelle.Single(x => x.AdminID == adminId_int);
             var adminInfo_model = new AdminInfo_Model();
-            adminInfo_model.Id = admin.Admin_Id;
-            adminInfo_model.Username = admin.Username;
-            adminInfo_model.Password = admin.Password;
-            adminInfo_model.Can_create_acc = admin.Can_create_acc;
-            adminInfo_model.Can_edit_acc = admin.Can_edit_acc;
-            adminInfo_model.Can_delete_acc = admin.Can_delete_acc;
+            adminInfo_model.Id = admin.AdminID;
+            adminInfo_model.Username = admin.Benutzer;
+            adminInfo_model.Password = admin.Passwort;
+            adminInfo_model.Can_create_acc = admin.CanCreateAcc;
+            adminInfo_model.Can_edit_acc = admin.CanEditAcc;
+            adminInfo_model.Can_delete_acc = admin.CanDeleteAcc;
             return adminInfo_model;
         }
 
         public AufgabeInfo_Model FillAufgabeModel(int aufgabeId_int)
         {
-            Aufgabe aufgabe = test_db.Aufgaben.Single(x => x.Aufgabe_Id == aufgabeId_int);
+            DB_lib.Aufgabe aufgabe = main_db.Aufgabe.Single(x => x.AufgabeID == aufgabeId_int);
             var aufgabeInfo_model = new AufgabeInfo_Model();
-            aufgabeInfo_model.Aufgabe_Id = aufgabe.Aufgabe_Id;
+            aufgabeInfo_model.Aufgabe_Id = aufgabe.AufgabeID;
             aufgabeInfo_model.Station = aufgabe.Station.Stationsname;
             aufgabeInfo_model.Stufe = aufgabe.Stufe.Stufenname;
             aufgabeInfo_model.IsPflichtaufgabe = aufgabe.Pflichtaufgabe;
-            aufgabeInfo_model.Bezirk = aufgabe.AufgabeBezirk == null ? "-" : aufgabe.AufgabeBezirk;
-            aufgabeInfo_model.Ort = aufgabe.AufgabeOrt == null ? "-" : aufgabe.AufgabeOrt;
-            aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilaufgabeVon == null ? "-" : aufgabe.TeilaufgabeVon.Aufgabe_Id.ToString();
-            aufgabeInfo_model.Antwort_Id = aufgabe.Antwort.Antwort_Id;
-            aufgabeInfo_model.Antwort_Name = aufgabe.Antwort.Antwort_Name;
+            aufgabeInfo_model.Bezirk = aufgabe.Bezirk == null ? "-" : aufgabe.Bezirk.BezirkName;
+            aufgabeInfo_model.Ort = aufgabe.Standort == null ? "-" : aufgabe.Standort.Ortsname;
+            aufgabeInfo_model.TeilAufgabeVon = aufgabe.TeilAufgabeVon == null ? "-" : aufgabe.TeilAufgabeVon.ToString();
+            aufgabeInfo_model.Antwort_Id = aufgabe.Antwort.AntwortID;
+            aufgabeInfo_model.Antwort_Name = aufgabe.Antwort.AntwortName;
 
             aufgabeInfo_model.Frage = aufgabe.Frage;
 
-            aufgabeInfo_model.Info = aufgabe.Zusatzinfo.InfoContentM;
+            aufgabeInfo_model.Info = aufgabe.Zusatzinfo.Infocontent.ToList();
             aufgabeInfo_model.Zusatzinfo = aufgabe.Zusatzinfo;
 
 
             //Antwort
-            string aufgabe_typ = aufgabe.Antwort.Typ.Typ;
-            int antwortInhalt_id = aufgabe.Antwort.Inhalt_Id;
+            string aufgabe_typ = aufgabe.Antwort.Typendefinition.TypName;
+            int antwortInhalt_id = aufgabe.Antwort.AntwortContentID;
 
             switch (aufgabe_typ)
             {
                 case "A_T":
                     aufgabeInfo_model.Antworttyp = "Text";
-                    aufgabeInfo_model.Antwort_Text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    aufgabeInfo_model.Antwort_Text = main_db.Antwort_text.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_S":
                     aufgabeInfo_model.Antworttyp = "Slider";
-                    aufgabeInfo_model.Antwort_Slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    aufgabeInfo_model.Antwort_Slider = main_db.Antwort_slider.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_DP":
                     aufgabeInfo_model.Antworttyp = "DatePicker";
-                    aufgabeInfo_model.Antwort_DatePicker = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == antwortInhalt_id);
+                    aufgabeInfo_model.Antwort_DatePicker = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == antwortInhalt_id);
                     break;
                 case "A_CB:T":
                     aufgabeInfo_model.Antworttyp = "CheckBox";
-                    aufgabeInfo_model.Antwort_CheckBoxes = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == antwortInhalt_id).CheckBoxes;
+                    aufgabeInfo_model.Antwort_CheckBoxes = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == antwortInhalt_id).Checkbox.ToList();
                     break;
                 case "A_RB:T":
                     aufgabeInfo_model.Antworttyp = "RadioButton";
-                    aufgabeInfo_model.Antwort_RadioButtons = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == antwortInhalt_id).RadioButtons;
+                    aufgabeInfo_model.Antwort_RadioButtons = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == antwortInhalt_id).Radiobutton.ToList();
                     break;
             }
 
@@ -1278,11 +1280,11 @@ namespace WissenstestOnline.Controllers
         {
 
             //Stationen
-            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<DB_lib.Station> stations = main_db.Station.OrderBy(x => x.StationID).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
-            foreach (Station s in stations)
+            foreach (DB_lib.Station s in stations)
             {
-                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.StationID.ToString() };
                 stationsList.Add(stationItem);
             }
 
@@ -1292,12 +1294,12 @@ namespace WissenstestOnline.Controllers
             standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
 
             //Bezirke
-            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<DB_lib.Bezirk> bezirke = main_db.Bezirk.OrderBy(x => x.BezirkName).ToList();
             List<SelectListItem> bezirkeList = new List<SelectListItem>();
             bezirkeList.Add(new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" });
-            foreach (Bezirk b in bezirke)
+            foreach (DB_lib.Bezirk b in bezirke)
             {
-                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+                SelectListItem bezirkItem = new SelectListItem { Text = b.BezirkName, Value = b.BezirkName };
                 bezirkeList.Add(bezirkItem);
             }
 
@@ -1309,33 +1311,33 @@ namespace WissenstestOnline.Controllers
             }
 
             //Fragen
-            List<Frage> fragen = test_db.Fragen.OrderBy(x => x.Frage_Id).ToList();
+            List<DB_lib.Frage> fragen = main_db.Frage.OrderBy(x => x.FrageID).ToList();
 
             //Antworten
-            List<Antwort> antworten = test_db.Antworten.OrderBy(x => x.Antwort_Id).ToList();
+            List<DB_lib.Antwort> antworten = main_db.Antwort.OrderBy(x => x.AntwortID).ToList();
 
             //Zusatzinfo
-            List<Zusatzinfo> infos = test_db.Zusatzinfos.OrderBy(x => x.Zusatzinfo_Id).ToList();
+            List<DB_lib.Zusatzinfo> infos = main_db.Zusatzinfo.OrderBy(x => x.ZusatzinfoID).ToList();
 
             //AntwortTypen
-            List<Typendefinition> antwort_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("A")).ToList();
+            List<DB_lib.Typendefinition> antwort_typen = main_db.Typendefinition.Where(x => x.TypName.StartsWith("A")).ToList();
 
             List<SelectListItem> antwort_typen_list = new List<SelectListItem>();
             antwort_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in antwort_typen)
+            foreach (DB_lib.Typendefinition t in antwort_typen)
             {
-                SelectListItem antwortTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ };
+                SelectListItem antwortTypItem = new SelectListItem { Text = t.TypName, Value = t.TypName };
                 antwort_typen_list.Add(antwortTypItem);
             }
 
             //ZusatzinfoTypen
-            List<Typendefinition> info_typen = test_db.Typendefinitionen.Where(x => x.Typ.StartsWith("I")).ToList();
+            List<DB_lib.Typendefinition> info_typen = main_db.Typendefinition.Where(x => x.TypName.StartsWith("I")).ToList();
 
             List<SelectListItem> info_typen_list = new List<SelectListItem>();
             info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
-            foreach (Typendefinition t in info_typen)
+            foreach (DB_lib.Typendefinition t in info_typen)
             {
-                SelectListItem infoTypItem = new SelectListItem { Text = t.Typ, Value = t.Typ_Id.ToString() };
+                SelectListItem infoTypItem = new SelectListItem { Text = t.TypName, Value = t.TypName.ToString() };
                 info_typen_list.Add(infoTypItem);
             }
 
@@ -1355,33 +1357,33 @@ namespace WissenstestOnline.Controllers
 
         public FrageInfo_Model FillFrageInfoModel(int frage_id)
         {
-            Frage frage = test_db.Fragen.Single(x => x.Frage_Id == frage_id);
+            DB_lib.Frage frage = main_db.Frage.Single(x => x.FrageID == frage_id);
             var frageInfo_Model = new FrageInfo_Model();
-            frageInfo_Model.FrageId = frage.Frage_Id;
-            frageInfo_Model.FrageText = frage.Fragetext;
+            frageInfo_Model.FrageId = frage.FrageID;
+            frageInfo_Model.FrageText = frage.FrageText;
             return frageInfo_Model;
         }
 
         public ZusatzInfo_InfoModel FillInfoModel(int info_id)
         {
-            Zusatzinfo zusatzInfo = test_db.Zusatzinfos.Single(x => x.Zusatzinfo_Id == info_id);
-            InfoContent[] infoContents = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == info_id).ToArray();
+            DB_lib.Zusatzinfo zusatzInfo = main_db.Zusatzinfo.Single(x => x.ZusatzinfoID == info_id);
+            Infocontent[] infoContents = main_db.Infocontent.Where(x => x.Zusatzinfo.ZusatzinfoID == info_id).ToArray();
             List<ZusatzInfoTextblock> infoTextblocks = new List<ZusatzInfoTextblock>();
 
             ZusatzInfoTextOnly_Model zusatzInfo_Model = new ZusatzInfoTextOnly_Model();
-            foreach (InfoContent infoCon in infoContents)
+            foreach (Infocontent infoCon in infoContents)
             {
                 ZusatzInfoTextblock textBlock = new ZusatzInfoTextblock();
                 textBlock.Heading = infoCon.Heading;
-                textBlock.Text = infoCon.Info_Content;
+                textBlock.Text = infoCon.InfoContent1;
                 infoTextblocks.Add(textBlock);
             }
 
             var zusatzInfo_InfoModel = new ZusatzInfo_InfoModel();
             zusatzInfo_InfoModel.Texte = infoTextblocks;
-            zusatzInfo_InfoModel.ZusatzInfo_Id = zusatzInfo.Zusatzinfo_Id;
-            zusatzInfo_InfoModel.ZusatzInfo_Typ = zusatzInfo.Typ.Typ;
-            zusatzInfo_InfoModel.ZusatzInfo_Name = zusatzInfo.Zusatzinfo_Name;
+            zusatzInfo_InfoModel.ZusatzInfo_Id = zusatzInfo.ZusatzinfoID;
+            zusatzInfo_InfoModel.ZusatzInfo_Typ = zusatzInfo.Typendefinition.TypName;
+            zusatzInfo_InfoModel.ZusatzInfo_Name = zusatzInfo.InfoName;
 
             return zusatzInfo_InfoModel;
         }
@@ -1395,41 +1397,41 @@ namespace WissenstestOnline.Controllers
             switch (a_typ)
             {
                 case "A_T":
-                    Antwort_Text a_text = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_Texte.Remove(a_text);
-                    test_db.SaveChanges();
+                    Antwort_text a_text = main_db.Antwort_text.Single(x => x.AntwortContentID == inhalt_Id);
+                    main_db.Antwort_text.Remove(a_text);
+                    main_db.SaveChanges();
                     break;
                 case "A_S":
-                    Antwort_Slider a_slider = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_Sliders.Remove(a_slider);
-                    test_db.SaveChanges();
+                    Antwort_slider a_slider = main_db.Antwort_slider.Single(x => x.AntwortContentID == inhalt_Id);
+                    main_db.Antwort_slider.Remove(a_slider);
+                    main_db.SaveChanges();
                     break;
                 case "A_DP":
-                    Antwort_DatePicker a_DP = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_Id);
-                    test_db.Antwort_DatePickerM.Remove(a_DP);
-                    test_db.SaveChanges();
+                    Antwort_datepicker a_DP = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == inhalt_Id);
+                    main_db.Antwort_datepicker.Remove(a_DP);
+                    main_db.SaveChanges();
                     break;
                 case "A_RB:T":
-                    Antwort_RadioButton a_RB = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_Id);
-                    List<RadioButton> radioButtons = a_RB.RadioButtons;
-                    foreach (RadioButton rb in radioButtons)
+                    Antwort_radiobutton a_RB = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == inhalt_Id);
+                    List<Radiobutton> radioButtons = a_RB.Radiobutton.ToList();
+                    foreach (Radiobutton rb in radioButtons)
                     {
-                        test_db.RadioButtons.Remove(rb);
-                        test_db.SaveChanges();
+                        main_db.Radiobutton.Remove(rb);
+                        main_db.SaveChanges();
                     }
-                    test_db.Antwort_RadioButtons.Remove(a_RB);
-                    test_db.SaveChanges();
+                    main_db.Antwort_radiobutton.Remove(a_RB);
+                    main_db.SaveChanges();
                     break;
                 case "A_CB:T":
-                    Antwort_CheckBox a_CB = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_Id);
-                    List<CheckBox> checkboxes = a_CB.CheckBoxes;
-                    foreach (CheckBox cb in checkboxes)
+                    Antwort_checkbox a_CB = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == inhalt_Id);
+                    List<Checkbox> checkboxes = a_CB.Checkbox.ToList();
+                    foreach (Checkbox cb in checkboxes)
                     {
-                        test_db.CheckBoxes.Remove(cb);
-                        test_db.SaveChanges();
+                        main_db.Checkbox.Remove(cb);
+                        main_db.SaveChanges();
                     }
-                    test_db.Antwort_CheckBoxes.Remove(a_CB);
-                    test_db.SaveChanges();
+                    main_db.Antwort_checkbox.Remove(a_CB);
+                    main_db.SaveChanges();
                     break;
                 default:
                     //nothing

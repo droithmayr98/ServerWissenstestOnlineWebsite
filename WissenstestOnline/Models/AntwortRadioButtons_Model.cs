@@ -1,4 +1,5 @@
-﻿using DB_lib.Tables;
+﻿using DB_lib;
+using DB_lib.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace WissenstestOnlineWebseite.Models
 {
     public class AntwortRadioButtons_Model
     {
-        public List<RadioButton> RadioButtons { get; set; }
-        public RadioButton RadioButton_rightVal { get; set; }
+        public List<Radiobutton> RadioButtons { get; set; }
+        public Radiobutton RadioButton_rightVal { get; set; }
     }
 }

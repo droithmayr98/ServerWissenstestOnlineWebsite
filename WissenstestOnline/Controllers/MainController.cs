@@ -15,17 +15,19 @@ namespace WissenstestOnline.Controllers
 {
     public class MainController : Controller
     {
-        private readonly TestDB_Context test_db;
+        //private readonly TestDB_Context test_db;
+        private readonly WissenstestDBEntities main_db;
         private ILogger<MainController> logger;
 
-        public MainController(TestDB_Context db, ILogger<MainController> logger)
+        public MainController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities main_db)
         {
             //Testdatenbankinitialisierung --> wenn Datenbank im Hauptordner nicht vorhanden
             // --> auskommentieren und einmal ausführen
             //var migration = new MigrateDatabaseToLatestVersion<TestDB_Context, Configuration>();
             //Database.SetInitializer(migration);
 
-            this.test_db = db;
+            //this.test_db = db;
+            this.main_db = main_db;
             this.logger = logger;
 
         }
@@ -37,14 +39,18 @@ namespace WissenstestOnline.Controllers
             //System.Threading.Thread.Sleep(3000);
 
             //DB-ConnectionTest + TestLog
-            var test_bezirke_count = test_db.Bezirke.Count();
-            logger.LogInformation($"DB Bezirke: {test_bezirke_count}");
+            //var test_bezirke_count = test_db.Bezirk.Count();
+            //logger.LogInformation($"DB Bezirke: {test_bezirke_count}");
+
+            //Main-DB-ConetionTest
+            var main_test_bezirke_count = main_db.Bezirk.Count();
+            logger.LogInformation($"DB Main Bezirke: {main_test_bezirke_count}");
 
             //Bezirksnamen in SelectListItems umwandeln --> Value: Bezirksname  --> eventuell auf BezirksID umändern
-            List<Bezirk> bezirke = test_db.Bezirke.OrderBy(x => x.Bezirksname).ToList();
+            List<DB_lib.Bezirk> bezirke = main_db.Bezirk.OrderBy(x => x.BezirkName).ToList();
             List<SelectListItem> bezirkeList = new List<SelectListItem>();
-            foreach (Bezirk b in bezirke) {
-                SelectListItem bezirkItem = new SelectListItem { Text = b.Bezirksname, Value = b.Bezirksname };
+            foreach (DB_lib.Bezirk b in bezirke) {
+                SelectListItem bezirkItem = new SelectListItem { Text = b.BezirkName, Value = b.BezirkName };
                 bezirkeList.Add(bezirkItem);
             }
 
@@ -58,11 +64,11 @@ namespace WissenstestOnline.Controllers
         public IActionResult SelectStation()
         {
             //Stationennamen in SelectListItems umwandeln --> Value: Station_Id
-            List<Station> stations = test_db.Stationen.OrderBy(x => x.Station_Id).ToList();
+            List<DB_lib.Station> stations = main_db.Station.OrderBy(x => x.StationID).ToList();
             List<SelectListItem> stationsList = new List<SelectListItem>();
-            foreach (Station s in stations)
+            foreach (DB_lib.Station s in stations)
             {
-                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.Station_Id.ToString() };
+                SelectListItem stationItem = new SelectListItem { Text = s.Stationsname, Value = s.StationID.ToString() };
                 stationsList.Add(stationItem);
             }
 
@@ -121,12 +127,12 @@ namespace WissenstestOnline.Controllers
         //StartInfo überprüfen
         public string CheckUserInfo(string bezirk, string ort, string stufe){
             //alle Feuerwehren vom Bezirk holen
-            List<Ort> alle_ff_vom_bezirk = test_db.Orte.Where(x => x.Bezirk.Bezirksname.Equals(bezirk)).Select(x => x).ToList();
+            List<Standort> alle_ff_vom_bezirk = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).Select(x => x).ToList();
             //FF Eingabe überprüfen
             if (Regex.IsMatch(ort, @"^[A-ZÄÖÜ][a-zA-ZÄÖÜäöü\-\. ]+$"))
             {
                 //ist Ort vorhanden?
-                foreach (Ort o in alle_ff_vom_bezirk)
+                foreach (Standort o in alle_ff_vom_bezirk)
                 {
                     //Wenn ja --> Werte werden in UserData gespeichert und Kontrolle wird beendet
                     if (o.Ortsname.Equals(ort))
@@ -156,12 +162,12 @@ namespace WissenstestOnline.Controllers
             {
                 int selected_stationId = Convert.ToInt32(stations[i]);
                 //Aufgaben selektieren grob
-                List<Aufgabe> stationsteil = test_db.Aufgaben
-                    .Where(x => x.Station.Station_Id == selected_stationId)
+                List<DB_lib.Aufgabe> stationsteil = main_db.Aufgabe
+                    .Where(x => x.Station.StationID == selected_stationId)
                     .ToList();
                 //Aufgaben selektieren genau --> verschiedenen Faktoren beachten
-                List<Aufgabe> stationsteil_genau = test_db.Aufgaben
-                    .Where(x => x.Station.Station_Id == selected_stationId && x.Stufe.Stufenname == UserData.Stufe)
+                List<DB_lib.Aufgabe> stationsteil_genau = main_db.Aufgabe
+                    .Where(x => x.Station.StationID == selected_stationId && x.Stufe.Stufenname == UserData.Stufe)
                     .ToList();
                 //Stationsaufgaben an Gesamtliste ranhängen
                 UserData.Aufgaben.AddRange(stationsteil);
@@ -187,9 +193,9 @@ namespace WissenstestOnline.Controllers
 
             if (UserData.AufgabenCount > 0)
             {
-                Aufgabe nexteAufgabe = UserData.Aufgaben[UserData.AufgabeNr];
+                DB_lib.Aufgabe nexteAufgabe = UserData.Aufgaben[UserData.AufgabeNr];
                 UserData.AktuelleStation = nexteAufgabe.Station.Stationsname;
-                aktuellerTyp = UserData.Aufgaben[UserData.AufgabeNr].Antwort.Typ.Typ;
+                aktuellerTyp = UserData.Aufgaben[UserData.AufgabeNr].Antwort.Typendefinition.TypName;
                 UserData.Aufgabe = nexteAufgabe;
             }
 
@@ -216,9 +222,9 @@ namespace WissenstestOnline.Controllers
             aufgabenNr_Int--;
 
             //Holen der benötigten Daten
-            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-            string fragetyp = aufgabe.Frage.Typ.Typ;
-            string fragetext = aufgabe.Frage.Fragetext;
+            DB_lib.Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+            string fragetyp = aufgabe.Frage.Typendefinition.TypName;
+            string fragetext = aufgabe.Frage.FrageText;
 
             //Aufruf der PartialView, je nach Fragetyp
             if (fragetyp.Equals("F_T"))
@@ -278,9 +284,9 @@ namespace WissenstestOnline.Controllers
             aufgabenNr_Int--;
 
             //Holen der benötigten Daten
-            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-            string antwort_typ = aufgabe.Antwort.Typ.Typ;
-            int inhalt_id = aufgabe.Antwort.Inhalt_Id;
+            DB_lib.Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+            string antwort_typ = aufgabe.Antwort.Typendefinition.TypName;
+            int inhalt_id = aufgabe.Antwort.AntwortContentID;
 
             //Aufruf der PartialView, je nach Fragetyp
             //Füllen des dazugehörigen Models
@@ -308,7 +314,7 @@ namespace WissenstestOnline.Controllers
 
         public string CancelAufgabe(){
             //Werte werden auf Ausgangswert im UserData gesetzt
-            UserData.Aufgaben = new List<Aufgabe>();
+            UserData.Aufgaben = new List<DB_lib.Aufgabe>();
             UserData.AufgabeNr = 0;
             UserData.AufgabenCount = 0;
             UserData.lastPracticeAufgabeCorrect = false;
@@ -320,8 +326,8 @@ namespace WissenstestOnline.Controllers
         {
             //Benötigte Informationen holen
             int aufgabenNr_Int = Convert.ToInt32(UserData.AufgabeNr);
-            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-            string info_typ = aufgabe.Zusatzinfo.Typ.Typ;
+            DB_lib.Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+            string info_typ = aufgabe.Zusatzinfo.Typendefinition.TypName;
 
             //Typtrennung für weitere Vorgehensweise
             string[] splitInfo_ = info_typ.Split('_');
@@ -335,12 +341,12 @@ namespace WissenstestOnline.Controllers
             {
                 if (splitInfo_[1].Contains('T'))
                 {
-                    int zusatzinfo_id = aufgabe.Zusatzinfo.Zusatzinfo_Id;
-                    List<InfoContent> infoContent = test_db.InfoContentM.Where(x => x.Zusatzinfo.Zusatzinfo_Id == zusatzinfo_id).Select(x => x).ToList();
+                    int zusatzinfo_id = aufgabe.Zusatzinfo.ZusatzinfoID;
+                    List<Infocontent> infoContent = main_db.Infocontent.Where(x => x.Zusatzinfo.ZusatzinfoID == zusatzinfo_id).Select(x => x).ToList();
                     var zusatzInfoTextOnly_Model = new ZusatzInfoTextOnly_Model();
-                    foreach (InfoContent ic in infoContent)
+                    foreach (Infocontent ic in infoContent)
                     {
-                        var zit = new ZusatzInfoTextblock { Heading = ic.Heading, Text = ic.Info_Content };
+                        var zit = new ZusatzInfoTextblock { Heading = ic.Heading, Text = ic.InfoContent1 };
                         zusatzInfoTextOnly_Model.Texte.Add(zit);
                     }
                     return PartialView("PartialViews/LoadZusatzinfoTextOnly", zusatzInfoTextOnly_Model);
@@ -405,9 +411,9 @@ namespace WissenstestOnline.Controllers
             aufgabenNr_Int--;
 
             //Holen der benötigten Daten
-            Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
-            string antwort_typ = aufgabe.Antwort.Typ.Typ;
-            int inhalt_id = aufgabe.Antwort.Inhalt_Id;
+            DB_lib.Aufgabe aufgabe = UserData.Aufgaben[aufgabenNr_Int];
+            string antwort_typ = aufgabe.Antwort.Typendefinition.TypName;
+            int inhalt_id = aufgabe.Antwort.AntwortContentID;
 
             //Aufruf der PartialView, je nach Fragetyp
             //Füllen des dazugehörigen Models
@@ -440,7 +446,7 @@ namespace WissenstestOnline.Controllers
         //ModelFüllMethoden
         public AntwortText_Model FillTextModel(int inhalt_id)
         {
-            Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == inhalt_id);
+            Antwort_text antwortTextObject = main_db.Antwort_text.Single(x => x.AntwortContentID == inhalt_id);
             string antwortText = antwortTextObject.Text;
             var antwortText_model = new AntwortText_Model();
             antwortText_model.Antwort_text = antwortText;
@@ -449,19 +455,19 @@ namespace WissenstestOnline.Controllers
 
         public AntwortSlider_Model FillSliderModel(int inhalt_id)
         {
-            Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == inhalt_id);
+            Antwort_slider antwortSliderObject = main_db.Antwort_slider.Single(x => x.AntwortContentID == inhalt_id);
             var antwortSlider_Model = new AntwortSlider_Model();
-            antwortSlider_Model.Min = antwortSliderObject.Min_val;
-            antwortSlider_Model.Max = antwortSliderObject.Max_val;
-            antwortSlider_Model.RightVal = antwortSliderObject.RightVal;
+            antwortSlider_Model.Min = antwortSliderObject.MinVal;
+            antwortSlider_Model.Max = antwortSliderObject.MaxVal;
+            antwortSlider_Model.RightVal = antwortSliderObject.ErwartungsWert;
             antwortSlider_Model.Sprungweite = antwortSliderObject.Sprungweite;
-            antwortSlider_Model.Slider_Text = antwortSliderObject.Slider_text;
+            antwortSlider_Model.Slider_Text = antwortSliderObject.SliderText;
             return antwortSlider_Model;
         }
 
         public AntwortDatePicker_Model FillDatePickerModel(int inhalt_id)
         {
-            Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == inhalt_id);
+            Antwort_datepicker antwortDatePickerObject = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == inhalt_id);
             var antwortDatePicker_Model = new AntwortDatePicker_Model();
             antwortDatePicker_Model.Datum = antwortDatePickerObject.Date;
             return antwortDatePicker_Model;
@@ -469,19 +475,19 @@ namespace WissenstestOnline.Controllers
 
         public AntwortCheckBox_Model FillCheckBoxTextModel(int inhalt_id)
         {
-            Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == inhalt_id);
+            Antwort_checkbox antwortCheckBoxObject = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == inhalt_id);
             var antwortCheckBox_Model = new AntwortCheckBox_Model();
-            antwortCheckBox_Model.CheckBoxen = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
-            antwortCheckBox_Model.CheckBoxen_RightVal = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id && x.CheckBoxVal == true).ToList();
+            antwortCheckBox_Model.CheckBoxen = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID).ToList();
+            antwortCheckBox_Model.CheckBoxen_RightVal = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID && x.CheckBoxVal == true).ToList();
             return antwortCheckBox_Model;
         }
 
         public AntwortRadioButtons_Model FillRadioButtonsTextModel(int inhalt_id)
         {
-            Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == inhalt_id);
+            Antwort_radiobutton antwortRadioButtonObject = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == inhalt_id);
             var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
-            antwortRadioButtons_Model.RadioButtons = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).ToList();
-            RadioButton rb_rightVal = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
+            antwortRadioButtons_Model.RadioButtons = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID).ToList();
+            Radiobutton rb_rightVal = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID).Single(x => x.ErwartungsWert);
             antwortRadioButtons_Model.RadioButton_rightVal = rb_rightVal;
             return antwortRadioButtons_Model;
         }
@@ -491,9 +497,9 @@ namespace WissenstestOnline.Controllers
         //Überprüfen der Antwort im Übungsmodus
         public bool CheckAntwortText(string texteingabe)
         {
-            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
+            int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
             
-            Antwort_Text antwortTextObject = test_db.Antwort_Texte.Single(x => x.Inhalt_Id == id_antwort);
+            Antwort_text antwortTextObject = main_db.Antwort_text.Single(x => x.AntwortContentID == id_antwort);
             if (texteingabe == null)
             {
 
@@ -514,9 +520,9 @@ namespace WissenstestOnline.Controllers
 
         public bool CheckAntwortSlider(string slidervalue)
         {
-            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
-            Antwort_Slider antwortSliderObject = test_db.Antwort_Sliders.Single(x => x.Inhalt_Id == id_antwort);
-            if (antwortSliderObject.RightVal.ToString().Equals(slidervalue))
+            int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
+            Antwort_slider antwortSliderObject = main_db.Antwort_slider.Single(x => x.AntwortContentID == id_antwort);
+            if (antwortSliderObject.ErwartungsWert.ToString().Equals(slidervalue))
             {
                 UserData.lastPracticeAufgabeCorrect = true;
                 return true;
@@ -531,9 +537,9 @@ namespace WissenstestOnline.Controllers
 
         public bool CheckAntwortRadioButtons(string rbValue)
         {
-            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
-            Antwort_RadioButton antwortRadioButtonObject = test_db.Antwort_RadioButtons.Single(x => x.Inhalt_Id == id_antwort);
-            RadioButton rb = test_db.RadioButtons.Where(x => x.Antwort_RadioButton.Inhalt_Id == antwortRadioButtonObject.Inhalt_Id).Single(x => x.IsTrue);
+            int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
+            Antwort_radiobutton antwortRadioButtonObject = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == id_antwort);
+            Radiobutton rb = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID).Single(x => x.ErwartungsWert);
             if (rb.Content.Equals(rbValue))
             {
                 UserData.lastPracticeAufgabeCorrect = true;
@@ -550,15 +556,15 @@ namespace WissenstestOnline.Controllers
         {
             bool erg = false;
 
-            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
-            Antwort_CheckBox antwortCheckBoxObject = test_db.Antwort_CheckBoxes.Single(x => x.Inhalt_Id == id_antwort);
-            List<CheckBox> cb_List = test_db.CheckBoxes.Where(x => x.Antwort_CheckBox.Inhalt_Id == antwortCheckBoxObject.Inhalt_Id).ToList();
+            int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
+            Antwort_checkbox antwortCheckBoxObject = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == id_antwort);
+            List<Checkbox> cb_List = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID).ToList();
 
             for (int i = 0; i < cbValue.Length; i++)
             {
                 if (cbValue[i] == null)
                 {
-                    CheckBox cb_NOTchecked = cb_List[i];
+                    Checkbox cb_NOTchecked = cb_List[i];
                     if (!cb_NOTchecked.CheckBoxVal)
                     {
                         erg = true;
@@ -571,7 +577,7 @@ namespace WissenstestOnline.Controllers
                 }
                 else
                 {
-                    CheckBox cb_checked = cb_List[i];
+                    Checkbox cb_checked = cb_List[i];
                     if (cb_checked.CheckBoxVal)
                     {
                         erg = true;
@@ -588,8 +594,8 @@ namespace WissenstestOnline.Controllers
 
         public bool CheckAntwortDate(DateTime date)
         {
-            int id_antwort = UserData.Aufgabe.Antwort.Inhalt_Id;
-            Antwort_DatePicker antwortDatePickerObject = test_db.Antwort_DatePickerM.Single(x => x.Inhalt_Id == id_antwort);
+            int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
+            Antwort_datepicker antwortDatePickerObject = main_db.Antwort_datepicker.Single(x => x.AntwortContentID == id_antwort);
             if (antwortDatePickerObject.Date.Equals(date))
             {
                 UserData.lastPracticeAufgabeCorrect = true;

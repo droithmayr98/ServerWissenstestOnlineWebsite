@@ -1,4 +1,5 @@
-﻿using DB_lib.Tables;
+﻿using DB_lib;
+using DB_lib.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace WissenstestOnlineWebseite.Models
 {
     public class AntwortCheckBox_Model
     {
-        public List<CheckBox> CheckBoxen { get; set; }
-        public List<CheckBox> CheckBoxen_RightVal { get; set; }
+        public List<Checkbox> CheckBoxen { get; set; }
+        public List<Checkbox> CheckBoxen_RightVal { get; set; }
     }
 }

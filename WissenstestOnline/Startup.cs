@@ -33,6 +33,8 @@ namespace WissenstestOnline
 
             //TestDB
             services.AddSingleton<TestDB_Context, TestDB_Context>(serviceProvider => new TestDB_Context());
+            //MainDB
+            services.AddSingleton<WissenstestDBEntities, WissenstestDBEntities>(serviceProvider => new WissenstestDBEntities());
             //Globale Variablen über Singelton und co
 
             services.AddMvc();

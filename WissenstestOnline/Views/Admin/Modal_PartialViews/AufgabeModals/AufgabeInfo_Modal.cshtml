@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header MyInfoHeader">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AufgabeInfo: @Model.Frage.Fragetext</h4>
+                <h4 class="modal-title">AufgabeInfo: @Model.Frage.FrageText</h4>
             </div>
             <div class="modal-body">
                 <p><span style="font-weight: bold">Aufgabe ID:</span> @Model.Aufgabe_Id</p>
@@ -33,7 +33,7 @@
                 <hr />
 
                 <span style="font-weight: bold">Frage:</span>
-                <p>@Model.Frage.Fragetext</p>
+                <p>@Model.Frage.FrageText</p>
 
                 <hr />
 
@@ -49,10 +49,10 @@
 
                     <div class="row  form-group">
                         <div class="col-md-4">
-                            <input type="range" class="form-control" id="sliderBar" min="@Model.Antwort_Slider.Min_val" max="@Model.Antwort_Slider.Max_val" step="@Model.Antwort_Slider.Sprungweite" value="@Model.Antwort_Slider.RightVal" oninput="changeSlider(this.value, @Model.Antwort_Slider.RightVal);">
+                            <input type="range" class="form-control" id="sliderBar" min="@Model.Antwort_Slider.MinVal" max="@Model.Antwort_Slider.MaxVal" step="@Model.Antwort_Slider.Sprungweite" value="@Model.Antwort_Slider.ErwartungsWert" oninput="changeSlider(this.value, @Model.Antwort_Slider.ErwartungsWert);">
                         </div>
                         <div class="col-md-2">
-                            <input style="background-color: green; color: black; font-weight: bold" class="form-control" type="text" id="textfield_slider" value="@Model.Antwort_Slider.RightVal" oninput="changeTextField(this.value, @Model.Antwort_Slider.RightVal)" />
+                            <input style="background-color: green; color: black; font-weight: bold" class="form-control" type="text" id="textfield_slider" value="@Model.Antwort_Slider.ErwartungsWert" oninput="changeTextField(this.value, @Model.Antwort_Slider.ErwartungsWert)" />
                         </div>
                     </div>
 
@@ -91,16 +91,16 @@
 
                     @foreach (var radioButton in @Model.Antwort_RadioButtons)
                     {
-                        if (radioButton.IsTrue)
+                        if (radioButton.ErwartungsWert)
                         {
                             <div class="radio">
-                                <label style="background-color:green"><input type="radio" name="gruppe" id="@radioButton.Radio_Id" checked /> @radioButton.Content</label>
+                                <label style="background-color:green"><input type="radio" name="gruppe" id="@radioButton.RadioButtonsID" checked /> @radioButton.Content</label>
                             </div>
                         }
                         else
                         {
                             <div class="radio">
-                                <label><input type="radio" name="gruppe" id="@radioButton.Radio_Id" /> @radioButton.Content</label>
+                                <label><input type="radio" name="gruppe" id="@radioButton.RadioButtonsID" /> @radioButton.Content</label>
                             </div>
                         }
 
@@ -115,13 +115,13 @@
                         if (checkBox.CheckBoxVal)
                         {
                             <div class="checkbox">
-                                <label style="background-color:green"><input type="checkbox" id="@checkBox.CheckBox_Id" checked />@checkBox.Content</label>
+                                <label style="background-color:green"><input type="checkbox" id="@checkBox.CheckboxID" checked />@checkBox.Inhalt</label>
                             </div>
                         }
                         else
                         {
                             <div class="checkbox">
-                                <label><input type="checkbox" id="@checkBox.CheckBox_Id" />@checkBox.Content</label>
+                                <label><input type="checkbox" id="@checkBox.CheckboxID" />@checkBox.Inhalt</label>
                             </div>
                         }
 
@@ -140,7 +140,7 @@
                 @foreach (var text in @Model.Info)
                 {
                     <h4>@text.Heading</h4>
-                    <p>@text.Info_Content</p>
+                    <p>@text.InfoContent1</p>
 
                 }
 

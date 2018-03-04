@@ -1,0 +1,1286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WissenstestDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admintabelle">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Benutzer" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Passwort" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CanCreateAcc" Type="bit" Nullable="false" />
+          <Property Name="CanDeleteAcc" Type="bit" Nullable="false" />
+          <Property Name="CanEditAcc" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort">
+          <Key>
+            <PropertyRef Name="AntwortID" />
+          </Key>
+          <Property Name="AntwortID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AntwortContentID" Type="int" Nullable="false" />
+          <Property Name="FkTypendefinition" Type="int" Nullable="false" />
+          <Property Name="AntwortName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Antwort_checkbox">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anzahl" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort_datepicker">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort_radiobutton">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anzahl" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort_slider">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MinVal" Type="int" Nullable="false" />
+          <Property Name="MaxVal" Type="int" Nullable="false" />
+          <Property Name="Sprungweite" Type="int" Nullable="false" />
+          <Property Name="ErwartungsWert" Type="int" Nullable="false" />
+          <Property Name="SliderText" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Antwort_text">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort_verbinden">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Anzahl" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Aufgabe' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="Aufgabe">
+          <Key>
+            <PropertyRef Name="AufgabeID" />
+            <PropertyRef Name="Pflichtaufgabe" />
+            <PropertyRef Name="FkAntwort" />
+            <PropertyRef Name="FkFrage" />
+            <PropertyRef Name="FkStation" />
+            <PropertyRef Name="FkStufe" />
+            <PropertyRef Name="FkZusatzinfo" />
+          </Key>
+          <Property Name="AufgabeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pflichtaufgabe" Type="bit" Nullable="false" />
+          <Property Name="FkAntwort" Type="int" Nullable="false" />
+          <Property Name="FkFrage" Type="int" Nullable="false" />
+          <Property Name="FkHintergrundbild" Type="int" />
+          <Property Name="FkStation" Type="int" Nullable="false" />
+          <Property Name="FkStufe" Type="int" Nullable="false" />
+          <Property Name="FkZusatzinfo" Type="int" Nullable="false" />
+          <Property Name="TeilAufgabeVon" Type="int" />
+          <Property Name="FkBezirk" Type="int" />
+          <Property Name="FkStandort" Type="int" />
+        </EntityType>
+        <EntityType Name="Bezirk">
+          <Key>
+            <PropertyRef Name="BezirkID" />
+          </Key>
+          <Property Name="BezirkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BezirkName" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="Bild">
+          <Key>
+            <PropertyRef Name="BildID" />
+          </Key>
+          <Property Name="BildID" Type="int" Nullable="false" />
+          <Property Name="BildPfad" Type="nvarchar" MaxLength="50" />
+          <Property Name="BildData" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Checkbox">
+          <Key>
+            <PropertyRef Name="CheckboxID" />
+          </Key>
+          <Property Name="CheckboxID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Inhalt" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CheckBoxVal" Type="bit" Nullable="false" />
+          <Property Name="FkAntwortCheckbox" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Frage">
+          <Key>
+            <PropertyRef Name="FrageID" />
+          </Key>
+          <Property Name="FrageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FrageText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FrageBild" Type="nvarchar(max)" />
+          <Property Name="FrageVideo" Type="nvarchar(max)" />
+          <Property Name="FkTypendefinition" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Hintergrund">
+          <Key>
+            <PropertyRef Name="HintergrundID" />
+          </Key>
+          <Property Name="HintergrundID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bild" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Infocontent">
+          <Key>
+            <PropertyRef Name="InfoContentID" />
+          </Key>
+          <Property Name="InfoContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InfoContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Heading" Type="nvarchar(max)" />
+          <Property Name="FkZusatzinfo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Paar">
+          <Key>
+            <PropertyRef Name="PaarID" />
+          </Key>
+          <Property Name="PaarID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Teil1" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Teil2" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FkAntwortVerbinden" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Radiobutton">
+          <Key>
+            <PropertyRef Name="RadioButtonsID" />
+          </Key>
+          <Property Name="RadioButtonsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ErwartungsWert" Type="bit" Nullable="false" />
+          <Property Name="FkAntwortRadiobuttons" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Standort">
+          <Key>
+            <PropertyRef Name="StandortID" />
+          </Key>
+          <Property Name="StandortID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ortsname" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FkBezirk" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Name="StationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stationsname" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stufe">
+          <Key>
+            <PropertyRef Name="StufeID" />
+          </Key>
+          <Property Name="StufeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stufenname" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Typendefinition">
+          <Key>
+            <PropertyRef Name="TypendefinitionID" />
+          </Key>
+          <Property Name="TypendefinitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypName" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zusatzinfo">
+          <Key>
+            <PropertyRef Name="ZusatzinfoID" />
+          </Key>
+          <Property Name="ZusatzinfoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FkTypendefinition" Type="int" Nullable="false" />
+          <Property Name="InfoName" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Aufgabe_Bezirk">
+          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bezirk">
+              <PropertyRef Name="BezirkID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkBezirk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Aufgabe_Standort">
+          <End Role="Standort" Type="Self.Standort" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standort">
+              <PropertyRef Name="StandortID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStandort" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Antwort" Type="Self.Antwort" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Antwort">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id">
+          <End Role="Antwort" Type="Self.Antwort" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort">
+              <PropertyRef Name="AntwortID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkAntwort" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id">
+          <End Role="Frage" Type="Self.Frage" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Frage">
+              <PropertyRef Name="FrageID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkFrage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
+          <End Role="Hintergrund" Type="Self.Hintergrund" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hintergrund">
+              <PropertyRef Name="HintergrundID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkHintergrundbild" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id">
+          <End Role="Stufe" Type="Self.Stufe" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stufe">
+              <PropertyRef Name="StufeID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStufe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zusatzinfo">
+              <PropertyRef Name="ZusatzinfoID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkZusatzinfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id">
+          <End Role="Antwort_checkbox" Type="Self.Antwort_checkbox" Multiplicity="1" />
+          <End Role="Checkbox" Type="Self.Checkbox" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_checkbox">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Checkbox">
+              <PropertyRef Name="FkAntwortCheckbox" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Frage" Type="Self.Frage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Frage">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
+          <End Role="Infocontent" Type="Self.Infocontent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zusatzinfo">
+              <PropertyRef Name="ZusatzinfoID" />
+            </Principal>
+            <Dependent Role="Infocontent">
+              <PropertyRef Name="FkZusatzinfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="1" />
+          <End Role="Standort" Type="Self.Standort" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bezirk">
+              <PropertyRef Name="BezirkID" />
+            </Principal>
+            <Dependent Role="Standort">
+              <PropertyRef Name="FkBezirk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id">
+          <End Role="Antwort_verbinden" Type="Self.Antwort_verbinden" Multiplicity="1" />
+          <End Role="Paar" Type="Self.Paar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_verbinden">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Paar">
+              <PropertyRef Name="FkAntwortVerbinden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id">
+          <End Role="Antwort_radiobutton" Type="Self.Antwort_radiobutton" Multiplicity="1" />
+          <End Role="Radiobutton" Type="Self.Radiobutton" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_radiobutton">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Radiobutton">
+              <PropertyRef Name="FkAntwortRadiobuttons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Zusatzinfo">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WissenstestDBModelStoreContainer">
+          <EntitySet Name="Admintabelle" EntityType="Self.Admintabelle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort" EntityType="Self.Antwort" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_checkbox" EntityType="Self.Antwort_checkbox" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_datepicker" EntityType="Self.Antwort_datepicker" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_radiobutton" EntityType="Self.Antwort_radiobutton" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_slider" EntityType="Self.Antwort_slider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_text" EntityType="Self.Antwort_text" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Antwort_verbinden" EntityType="Self.Antwort_verbinden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bezirk" EntityType="Self.Bezirk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Checkbox" EntityType="Self.Checkbox" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Frage" EntityType="Self.Frage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hintergrund" EntityType="Self.Hintergrund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Infocontent" EntityType="Self.Infocontent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Paar" EntityType="Self.Paar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Radiobutton" EntityType="Self.Radiobutton" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Standort" EntityType="Self.Standort" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Station" EntityType="Self.Station" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stufe" EntityType="Self.Stufe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Typendefinition" EntityType="Self.Typendefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zusatzinfo" EntityType="Self.Zusatzinfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Aufgabe].[AufgabeID] AS [AufgabeID], 
+    [Aufgabe].[Pflichtaufgabe] AS [Pflichtaufgabe], 
+    [Aufgabe].[FkAntwort] AS [FkAntwort], 
+    [Aufgabe].[FkFrage] AS [FkFrage], 
+    [Aufgabe].[FkHintergrundbild] AS [FkHintergrundbild], 
+    [Aufgabe].[FkStation] AS [FkStation], 
+    [Aufgabe].[FkStufe] AS [FkStufe], 
+    [Aufgabe].[FkZusatzinfo] AS [FkZusatzinfo], 
+    [Aufgabe].[TeilAufgabeVon] AS [TeilAufgabeVon], 
+    [Aufgabe].[FkBezirk] AS [FkBezirk], 
+    [Aufgabe].[FkStandort] AS [FkStandort]
+    FROM [dbo].[Aufgabe] AS [Aufgabe]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Bild" EntityType="Self.Bild" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Bild].[BildID] AS [BildID], 
+    [Bild].[BildPfad] AS [BildPfad], 
+    [Bild].[BildData] AS [BildData]
+    FROM [dbo].[Bild] AS [Bild]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Aufgabe_Bezirk" Association="Self.FK_Aufgabe_Bezirk">
+            <End Role="Bezirk" EntitySet="Bezirk" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Aufgabe_Standort" Association="Self.FK_Aufgabe_Standort">
+            <End Role="Standort" EntitySet="Standort" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Antwort" EntitySet="Antwort" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" Association="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id">
+            <End Role="Antwort" EntitySet="Antwort" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" Association="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id">
+            <End Role="Frage" EntitySet="Frage" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" Association="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
+            <End Role="Hintergrund" EntitySet="Hintergrund" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" Association="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" Association="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id">
+            <End Role="Stufe" EntitySet="Stufe" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id" Association="Self.FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id">
+            <End Role="Antwort_checkbox" EntitySet="Antwort_checkbox" />
+            <End Role="Checkbox" EntitySet="Checkbox" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Frage" EntitySet="Frage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+            <End Role="Infocontent" EntitySet="Infocontent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" Association="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+            <End Role="Bezirk" EntitySet="Bezirk" />
+            <End Role="Standort" EntitySet="Standort" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id" Association="Self.FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id">
+            <End Role="Antwort_verbinden" EntitySet="Antwort_verbinden" />
+            <End Role="Paar" EntitySet="Paar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id" Association="Self.FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id">
+            <End Role="Antwort_radiobutton" EntitySet="Antwort_radiobutton" />
+            <End Role="Radiobutton" EntitySet="Radiobutton" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WissenstestDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admintabelle">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Benutzer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Passwort" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CanCreateAcc" Type="Boolean" Nullable="false" />
+          <Property Name="CanDeleteAcc" Type="Boolean" Nullable="false" />
+          <Property Name="CanEditAcc" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort">
+          <Key>
+            <PropertyRef Name="AntwortID" />
+          </Key>
+          <Property Name="AntwortID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" />
+          <Property Name="FkTypendefinition" Type="Int32" Nullable="false" />
+          <Property Name="AntwortName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Typendefinition" Relationship="Self.FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Antwort" ToRole="Typendefinition" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" FromRole="Antwort" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="Antwort_checkbox">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anzahl" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Checkbox" Relationship="Self.FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id" FromRole="Antwort_checkbox" ToRole="Checkbox" />
+        </EntityType>
+        <EntityType Name="Antwort_datepicker">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Antwort_radiobutton">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anzahl" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Radiobutton" Relationship="Self.FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id" FromRole="Antwort_radiobutton" ToRole="Radiobutton" />
+        </EntityType>
+        <EntityType Name="Antwort_slider">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MinVal" Type="Int32" Nullable="false" />
+          <Property Name="MaxVal" Type="Int32" Nullable="false" />
+          <Property Name="Sprungweite" Type="Int32" Nullable="false" />
+          <Property Name="ErwartungsWert" Type="Int32" Nullable="false" />
+          <Property Name="SliderText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Antwort_text">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Antwort_verbinden">
+          <Key>
+            <PropertyRef Name="AntwortContentID" />
+          </Key>
+          <Property Name="AntwortContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anzahl" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Paar" Relationship="Self.FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id" FromRole="Antwort_verbinden" ToRole="Paar" />
+        </EntityType>
+        <EntityType Name="Bezirk">
+          <Key>
+            <PropertyRef Name="BezirkID" />
+          </Key>
+          <Property Name="BezirkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BezirkName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_Aufgabe_Bezirk" FromRole="Bezirk" ToRole="Aufgabe" />
+          <NavigationProperty Name="Standort" Relationship="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" FromRole="Bezirk" ToRole="Standort" />
+        </EntityType>
+        <EntityType Name="Checkbox">
+          <Key>
+            <PropertyRef Name="CheckboxID" />
+          </Key>
+          <Property Name="CheckboxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Inhalt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CheckBoxVal" Type="Boolean" Nullable="false" />
+          <Property Name="FkAntwortCheckbox" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Antwort_checkbox" Relationship="Self.FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id" FromRole="Checkbox" ToRole="Antwort_checkbox" />
+        </EntityType>
+        <EntityType Name="Frage">
+          <Key>
+            <PropertyRef Name="FrageID" />
+          </Key>
+          <Property Name="FrageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FrageText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FrageBild" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FrageVideo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FkTypendefinition" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" FromRole="Frage" ToRole="Aufgabe" />
+          <NavigationProperty Name="Typendefinition" Relationship="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Frage" ToRole="Typendefinition" />
+        </EntityType>
+        <EntityType Name="Hintergrund">
+          <Key>
+            <PropertyRef Name="HintergrundID" />
+          </Key>
+          <Property Name="HintergrundID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bild" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" FromRole="Hintergrund" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="Infocontent">
+          <Key>
+            <PropertyRef Name="InfoContentID" />
+          </Key>
+          <Property Name="InfoContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InfoContent1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Heading" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FkZusatzinfo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Zusatzinfo" Relationship="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Infocontent" ToRole="Zusatzinfo" />
+        </EntityType>
+        <EntityType Name="Paar">
+          <Key>
+            <PropertyRef Name="PaarID" />
+          </Key>
+          <Property Name="PaarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Teil1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Teil2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FkAntwortVerbinden" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Antwort_verbinden" Relationship="Self.FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id" FromRole="Paar" ToRole="Antwort_verbinden" />
+        </EntityType>
+        <EntityType Name="Radiobutton">
+          <Key>
+            <PropertyRef Name="RadioButtonsID" />
+          </Key>
+          <Property Name="RadioButtonsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ErwartungsWert" Type="Boolean" Nullable="false" />
+          <Property Name="FkAntwortRadiobuttons" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Antwort_radiobutton" Relationship="Self.FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id" FromRole="Radiobutton" ToRole="Antwort_radiobutton" />
+        </EntityType>
+        <EntityType Name="Standort">
+          <Key>
+            <PropertyRef Name="StandortID" />
+          </Key>
+          <Property Name="StandortID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ortsname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FkBezirk" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bezirk" Relationship="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" FromRole="Standort" ToRole="Bezirk" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_Aufgabe_Standort" FromRole="Standort" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Name="StationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stationsname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" FromRole="Station" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="Stufe">
+          <Key>
+            <PropertyRef Name="StufeID" />
+          </Key>
+          <Property Name="StufeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stufenname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" FromRole="Stufe" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Typendefinition">
+          <Key>
+            <PropertyRef Name="TypendefinitionID" />
+          </Key>
+          <Property Name="TypendefinitionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Antwort" Relationship="Self.FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Typendefinition" ToRole="Antwort" />
+          <NavigationProperty Name="Frage" Relationship="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Typendefinition" ToRole="Frage" />
+          <NavigationProperty Name="Zusatzinfo" Relationship="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Typendefinition" ToRole="Zusatzinfo" />
+        </EntityType>
+        <EntityType Name="Zusatzinfo">
+          <Key>
+            <PropertyRef Name="ZusatzinfoID" />
+          </Key>
+          <Property Name="ZusatzinfoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FkTypendefinition" Type="Int32" Nullable="false" />
+          <Property Name="InfoName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Infocontent" Relationship="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Zusatzinfo" ToRole="Infocontent" />
+          <NavigationProperty Name="Typendefinition" Relationship="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Zusatzinfo" ToRole="Typendefinition" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Zusatzinfo" ToRole="Aufgabe" />
+        </EntityType>
+        <EntityType Name="Aufgabe">
+          <Key>
+            <PropertyRef Name="AufgabeID" />
+            <PropertyRef Name="Pflichtaufgabe" />
+            <PropertyRef Name="FkAntwort" />
+            <PropertyRef Name="FkFrage" />
+            <PropertyRef Name="FkStation" />
+            <PropertyRef Name="FkStufe" />
+            <PropertyRef Name="FkZusatzinfo" />
+          </Key>
+          <Property Name="AufgabeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pflichtaufgabe" Type="Boolean" Nullable="false" />
+          <Property Name="FkAntwort" Type="Int32" Nullable="false" />
+          <Property Name="FkFrage" Type="Int32" Nullable="false" />
+          <Property Name="FkHintergrundbild" Type="Int32" />
+          <Property Name="FkStation" Type="Int32" Nullable="false" />
+          <Property Name="FkStufe" Type="Int32" Nullable="false" />
+          <Property Name="FkZusatzinfo" Type="Int32" Nullable="false" />
+          <Property Name="TeilAufgabeVon" Type="Int32" />
+          <Property Name="FkBezirk" Type="Int32" />
+          <Property Name="FkStandort" Type="Int32" />
+          <NavigationProperty Name="Antwort" Relationship="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" FromRole="Aufgabe" ToRole="Antwort" />
+          <NavigationProperty Name="Bezirk" Relationship="Self.FK_Aufgabe_Bezirk" FromRole="Aufgabe" ToRole="Bezirk" />
+          <NavigationProperty Name="Frage" Relationship="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" FromRole="Aufgabe" ToRole="Frage" />
+          <NavigationProperty Name="Hintergrund" Relationship="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" FromRole="Aufgabe" ToRole="Hintergrund" />
+          <NavigationProperty Name="Standort" Relationship="Self.FK_Aufgabe_Standort" FromRole="Aufgabe" ToRole="Standort" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" FromRole="Aufgabe" ToRole="Station" />
+          <NavigationProperty Name="Stufe" Relationship="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" FromRole="Aufgabe" ToRole="Stufe" />
+          <NavigationProperty Name="Zusatzinfo" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Aufgabe" ToRole="Zusatzinfo" />
+        </EntityType>
+        <EntityType Name="Bild">
+          <Key>
+            <PropertyRef Name="BildID" />
+          </Key>
+          <Property Name="BildID" Type="Int32" Nullable="false" />
+          <Property Name="BildPfad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BildData" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Antwort" Type="Self.Antwort" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Antwort">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id">
+          <End Role="Antwort" Type="Self.Antwort" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort">
+              <PropertyRef Name="AntwortID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkAntwort" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id">
+          <End Role="Antwort_checkbox" Type="Self.Antwort_checkbox" Multiplicity="1" />
+          <End Role="Checkbox" Type="Self.Checkbox" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_checkbox">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Checkbox">
+              <PropertyRef Name="FkAntwortCheckbox" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id">
+          <End Role="Antwort_radiobutton" Type="Self.Antwort_radiobutton" Multiplicity="1" />
+          <End Role="Radiobutton" Type="Self.Radiobutton" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_radiobutton">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Radiobutton">
+              <PropertyRef Name="FkAntwortRadiobuttons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id">
+          <End Role="Antwort_verbinden" Type="Self.Antwort_verbinden" Multiplicity="1" />
+          <End Role="Paar" Type="Self.Paar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Antwort_verbinden">
+              <PropertyRef Name="AntwortContentID" />
+            </Principal>
+            <Dependent Role="Paar">
+              <PropertyRef Name="FkAntwortVerbinden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Aufgabe_Bezirk">
+          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bezirk">
+              <PropertyRef Name="BezirkID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkBezirk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="1" />
+          <End Role="Standort" Type="Self.Standort" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bezirk">
+              <PropertyRef Name="BezirkID" />
+            </Principal>
+            <Dependent Role="Standort">
+              <PropertyRef Name="FkBezirk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id">
+          <End Role="Frage" Type="Self.Frage" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Frage">
+              <PropertyRef Name="FrageID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkFrage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Frage" Type="Self.Frage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Frage">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
+          <End Role="Hintergrund" Type="Self.Hintergrund" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hintergrund">
+              <PropertyRef Name="HintergrundID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkHintergrundbild" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
+          <End Role="Infocontent" Type="Self.Infocontent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zusatzinfo">
+              <PropertyRef Name="ZusatzinfoID" />
+            </Principal>
+            <Dependent Role="Infocontent">
+              <PropertyRef Name="FkZusatzinfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Aufgabe_Standort">
+          <End Role="Standort" Type="Self.Standort" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standort">
+              <PropertyRef Name="StandortID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStandort" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id">
+          <End Role="Stufe" Type="Self.Stufe" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stufe">
+              <PropertyRef Name="StufeID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStufe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Zusatzinfo">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zusatzinfo">
+              <PropertyRef Name="ZusatzinfoID" />
+            </Principal>
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkZusatzinfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WissenstestDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admintabelle" EntityType="Self.Admintabelle" />
+          <EntitySet Name="Antwort" EntityType="Self.Antwort" />
+          <EntitySet Name="Antwort_checkbox" EntityType="Self.Antwort_checkbox" />
+          <EntitySet Name="Antwort_datepicker" EntityType="Self.Antwort_datepicker" />
+          <EntitySet Name="Antwort_radiobutton" EntityType="Self.Antwort_radiobutton" />
+          <EntitySet Name="Antwort_slider" EntityType="Self.Antwort_slider" />
+          <EntitySet Name="Antwort_text" EntityType="Self.Antwort_text" />
+          <EntitySet Name="Antwort_verbinden" EntityType="Self.Antwort_verbinden" />
+          <EntitySet Name="Bezirk" EntityType="Self.Bezirk" />
+          <EntitySet Name="Checkbox" EntityType="Self.Checkbox" />
+          <EntitySet Name="Frage" EntityType="Self.Frage" />
+          <EntitySet Name="Hintergrund" EntityType="Self.Hintergrund" />
+          <EntitySet Name="Infocontent" EntityType="Self.Infocontent" />
+          <EntitySet Name="Paar" EntityType="Self.Paar" />
+          <EntitySet Name="Radiobutton" EntityType="Self.Radiobutton" />
+          <EntitySet Name="Standort" EntityType="Self.Standort" />
+          <EntitySet Name="Station" EntityType="Self.Station" />
+          <EntitySet Name="Stufe" EntityType="Self.Stufe" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Typendefinition" EntityType="Self.Typendefinition" />
+          <EntitySet Name="Zusatzinfo" EntityType="Self.Zusatzinfo" />
+          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" />
+          <EntitySet Name="Bild" EntityType="Self.Bild" />
+          <AssociationSet Name="FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Antwort" EntitySet="Antwort" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" Association="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id">
+            <End Role="Antwort" EntitySet="Antwort" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id" Association="Self.FK_dbo_CheckBoxes_dbo_Antwort_CheckBoxen_Antwort_CheckBox_Inhalt_Id">
+            <End Role="Antwort_checkbox" EntitySet="Antwort_checkbox" />
+            <End Role="Checkbox" EntitySet="Checkbox" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id" Association="Self.FK_dbo_RadioButtons_dbo_Antwort_RadioButtons_Antwort_RadioButton_Inhalt_Id">
+            <End Role="Antwort_radiobutton" EntitySet="Antwort_radiobutton" />
+            <End Role="Radiobutton" EntitySet="Radiobutton" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id" Association="Self.FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id">
+            <End Role="Antwort_verbinden" EntitySet="Antwort_verbinden" />
+            <End Role="Paar" EntitySet="Paar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Aufgabe_Bezirk" Association="Self.FK_Aufgabe_Bezirk">
+            <End Role="Bezirk" EntitySet="Bezirk" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" Association="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+            <End Role="Bezirk" EntitySet="Bezirk" />
+            <End Role="Standort" EntitySet="Standort" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" Association="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id">
+            <End Role="Frage" EntitySet="Frage" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Frage" EntitySet="Frage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" Association="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
+            <End Role="Hintergrund" EntitySet="Hintergrund" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+            <End Role="Infocontent" EntitySet="Infocontent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Aufgabe_Standort" Association="Self.FK_Aufgabe_Standort">
+            <End Role="Standort" EntitySet="Standort" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" Association="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" Association="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id">
+            <End Role="Stufe" EntitySet="Stufe" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WissenstestDBModelStoreContainer" CdmEntityContainer="WissenstestDBEntities">
+          <EntitySetMapping Name="Admintabelle">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Admintabelle">
+              <MappingFragment StoreEntitySet="Admintabelle">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="Benutzer" ColumnName="Benutzer" />
+                <ScalarProperty Name="Passwort" ColumnName="Passwort" />
+                <ScalarProperty Name="CanCreateAcc" ColumnName="CanCreateAcc" />
+                <ScalarProperty Name="CanDeleteAcc" ColumnName="CanDeleteAcc" />
+                <ScalarProperty Name="CanEditAcc" ColumnName="CanEditAcc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort">
+              <MappingFragment StoreEntitySet="Antwort">
+                <ScalarProperty Name="AntwortID" ColumnName="AntwortID" />
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="FkTypendefinition" ColumnName="FkTypendefinition" />
+                <ScalarProperty Name="AntwortName" ColumnName="AntwortName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_checkbox">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_checkbox">
+              <MappingFragment StoreEntitySet="Antwort_checkbox">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="Anzahl" ColumnName="Anzahl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_datepicker">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_datepicker">
+              <MappingFragment StoreEntitySet="Antwort_datepicker">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_radiobutton">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_radiobutton">
+              <MappingFragment StoreEntitySet="Antwort_radiobutton">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="Anzahl" ColumnName="Anzahl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_slider">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_slider">
+              <MappingFragment StoreEntitySet="Antwort_slider">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="MinVal" ColumnName="MinVal" />
+                <ScalarProperty Name="MaxVal" ColumnName="MaxVal" />
+                <ScalarProperty Name="Sprungweite" ColumnName="Sprungweite" />
+                <ScalarProperty Name="ErwartungsWert" ColumnName="ErwartungsWert" />
+                <ScalarProperty Name="SliderText" ColumnName="SliderText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_text">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_text">
+              <MappingFragment StoreEntitySet="Antwort_text">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Antwort_verbinden">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Antwort_verbinden">
+              <MappingFragment StoreEntitySet="Antwort_verbinden">
+                <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
+                <ScalarProperty Name="Anzahl" ColumnName="Anzahl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bezirk">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Bezirk">
+              <MappingFragment StoreEntitySet="Bezirk">
+                <ScalarProperty Name="BezirkID" ColumnName="BezirkID" />
+                <ScalarProperty Name="BezirkName" ColumnName="BezirkName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Checkbox">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Checkbox">
+              <MappingFragment StoreEntitySet="Checkbox">
+                <ScalarProperty Name="CheckboxID" ColumnName="CheckboxID" />
+                <ScalarProperty Name="Inhalt" ColumnName="Inhalt" />
+                <ScalarProperty Name="CheckBoxVal" ColumnName="CheckBoxVal" />
+                <ScalarProperty Name="FkAntwortCheckbox" ColumnName="FkAntwortCheckbox" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Frage">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Frage">
+              <MappingFragment StoreEntitySet="Frage">
+                <ScalarProperty Name="FrageID" ColumnName="FrageID" />
+                <ScalarProperty Name="FrageText" ColumnName="FrageText" />
+                <ScalarProperty Name="FrageBild" ColumnName="FrageBild" />
+                <ScalarProperty Name="FrageVideo" ColumnName="FrageVideo" />
+                <ScalarProperty Name="FkTypendefinition" ColumnName="FkTypendefinition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hintergrund">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Hintergrund">
+              <MappingFragment StoreEntitySet="Hintergrund">
+                <ScalarProperty Name="HintergrundID" ColumnName="HintergrundID" />
+                <ScalarProperty Name="Bild" ColumnName="Bild" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Infocontent">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Infocontent">
+              <MappingFragment StoreEntitySet="Infocontent">
+                <ScalarProperty Name="InfoContentID" ColumnName="InfoContentID" />
+                <ScalarProperty Name="InfoContent1" ColumnName="InfoContent" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="FkZusatzinfo" ColumnName="FkZusatzinfo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Paar">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Paar">
+              <MappingFragment StoreEntitySet="Paar">
+                <ScalarProperty Name="PaarID" ColumnName="PaarID" />
+                <ScalarProperty Name="Teil1" ColumnName="Teil1" />
+                <ScalarProperty Name="Teil2" ColumnName="Teil2" />
+                <ScalarProperty Name="FkAntwortVerbinden" ColumnName="FkAntwortVerbinden" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Radiobutton">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Radiobutton">
+              <MappingFragment StoreEntitySet="Radiobutton">
+                <ScalarProperty Name="RadioButtonsID" ColumnName="RadioButtonsID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ErwartungsWert" ColumnName="ErwartungsWert" />
+                <ScalarProperty Name="FkAntwortRadiobuttons" ColumnName="FkAntwortRadiobuttons" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Standort">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Standort">
+              <MappingFragment StoreEntitySet="Standort">
+                <ScalarProperty Name="StandortID" ColumnName="StandortID" />
+                <ScalarProperty Name="Ortsname" ColumnName="Ortsname" />
+                <ScalarProperty Name="FkBezirk" ColumnName="FkBezirk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Station">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Station">
+              <MappingFragment StoreEntitySet="Station">
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="Stationsname" ColumnName="Stationsname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stufe">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Stufe">
+              <MappingFragment StoreEntitySet="Stufe">
+                <ScalarProperty Name="StufeID" ColumnName="StufeID" />
+                <ScalarProperty Name="Stufenname" ColumnName="Stufenname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="WissenstestDBModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Typendefinition">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Typendefinition">
+              <MappingFragment StoreEntitySet="Typendefinition">
+                <ScalarProperty Name="TypendefinitionID" ColumnName="TypendefinitionID" />
+                <ScalarProperty Name="TypName" ColumnName="TypName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zusatzinfo">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Zusatzinfo">
+              <MappingFragment StoreEntitySet="Zusatzinfo">
+                <ScalarProperty Name="ZusatzinfoID" ColumnName="ZusatzinfoID" />
+                <ScalarProperty Name="FkTypendefinition" ColumnName="FkTypendefinition" />
+                <ScalarProperty Name="InfoName" ColumnName="InfoName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Aufgabe">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Aufgabe">
+              <MappingFragment StoreEntitySet="Aufgabe">
+                <ScalarProperty Name="AufgabeID" ColumnName="AufgabeID" />
+                <ScalarProperty Name="Pflichtaufgabe" ColumnName="Pflichtaufgabe" />
+                <ScalarProperty Name="FkAntwort" ColumnName="FkAntwort" />
+                <ScalarProperty Name="FkFrage" ColumnName="FkFrage" />
+                <ScalarProperty Name="FkHintergrundbild" ColumnName="FkHintergrundbild" />
+                <ScalarProperty Name="FkStation" ColumnName="FkStation" />
+                <ScalarProperty Name="FkStufe" ColumnName="FkStufe" />
+                <ScalarProperty Name="FkZusatzinfo" ColumnName="FkZusatzinfo" />
+                <ScalarProperty Name="TeilAufgabeVon" ColumnName="TeilAufgabeVon" />
+                <ScalarProperty Name="FkBezirk" ColumnName="FkBezirk" />
+                <ScalarProperty Name="FkStandort" ColumnName="FkStandort" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bild">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Bild">
+              <MappingFragment StoreEntitySet="Bild">
+                <ScalarProperty Name="BildID" ColumnName="BildID" />
+                <ScalarProperty Name="BildPfad" ColumnName="BildPfad" />
+                <ScalarProperty Name="BildData" ColumnName="BildData" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

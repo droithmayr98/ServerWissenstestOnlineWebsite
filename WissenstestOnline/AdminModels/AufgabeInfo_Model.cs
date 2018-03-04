@@ -19,21 +19,20 @@ namespace WissenstestOnlineWebseite.AdminModels
         public string Antwort_Name { get; set; }
 
         //Frage
-        public Frage Frage { get; set; }
+        public DB_lib.Frage Frage { get; set; }
 
-        //??? do I need this
-        public List<InfoContent> Info { get; set; }
+        public List<DB_lib.Infocontent> Info { get; set; }
 
         //Antwort
         public string Antworttyp { get; set; }
-        public Antwort_Text Antwort_Text { get; set; }
-        public Antwort_DatePicker Antwort_DatePicker { get; set; }
-        public Antwort_Slider Antwort_Slider { get; set; }
-        public List<CheckBox> Antwort_CheckBoxes { get; set; }
-        public List<RadioButton> Antwort_RadioButtons { get; set; }
+        public DB_lib.Antwort_text Antwort_Text { get; set; }
+        public DB_lib.Antwort_datepicker Antwort_DatePicker { get; set; }
+        public DB_lib.Antwort_slider Antwort_Slider { get; set; }
+        public List<DB_lib.Checkbox> Antwort_CheckBoxes { get; set; }
+        public List<DB_lib.Radiobutton> Antwort_RadioButtons { get; set; }
 
         //Zusatzinfo
-        public Zusatzinfo Zusatzinfo { get; set; }
+        public DB_lib.Zusatzinfo Zusatzinfo { get; set; }
 
 
 
