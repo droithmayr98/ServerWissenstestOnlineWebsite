@@ -9,5 +9,7 @@ namespace WissenstestOnlineWebseite.Models
     public class Start_Model
     {
         public List<SelectListItem> BezikeList { get; set; }
+
+        public List<SelectListItem> StandorteList { get; set; }
     }
 }

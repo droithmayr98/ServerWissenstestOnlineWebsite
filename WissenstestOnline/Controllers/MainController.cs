@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WissenstestOnlineWebseite.Models;
 using System.Data.Entity;
 using DB_lib.Migrations;
+using WissenstestOnlineWebseite.AdminModels;
 
 namespace WissenstestOnline.Controllers
 {
@@ -49,14 +50,24 @@ namespace WissenstestOnline.Controllers
             //Bezirksnamen in SelectListItems umwandeln --> Value: Bezirksname  --> eventuell auf BezirksID umändern
             List<DB_lib.Bezirk> bezirke = main_db.Bezirk.OrderBy(x => x.BezirkName).ToList();
             List<SelectListItem> bezirkeList = new List<SelectListItem>();
+            SelectListItem kein_bezirk = new SelectListItem { Text = "kein Bezirk ausgewählt", Value = "noBezirkSelected" };
+            kein_bezirk.Selected = true;
+            bezirkeList.Add(kein_bezirk);
             foreach (DB_lib.Bezirk b in bezirke) {
                 SelectListItem bezirkItem = new SelectListItem { Text = b.BezirkName, Value = b.BezirkName };
                 bezirkeList.Add(bezirkItem);
             }
 
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            SelectListItem kein_stadort = new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" };
+            kein_stadort.Selected = true;
+            standorteList.Add(kein_stadort);
+
+
             //Datenübergabe an Model / Modelübergabe an View
             var start_Model = new Start_Model();
             start_Model.BezikeList = bezirkeList;
+            start_Model.StandorteList = standorteList;
             return View(start_Model);
         }
 
@@ -148,6 +159,29 @@ namespace WissenstestOnline.Controllers
             }
             //Wenn nein
             return "wrong";
+        }
+
+        public IActionResult SetStandorteBezirkComboBoxStart(string bezirk)
+        {
+            List<Standort> standorte_ff = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).ToList();
+
+            List<SelectListItem> standorteList = new List<SelectListItem>();
+            SelectListItem kein_standort = new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" };
+            kein_standort.Selected = true;
+            standorteList.Add(kein_standort);
+
+            foreach (Standort o in standorte_ff)
+            {
+                SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
+                standorteList.Add(standortItem);
+            }
+
+            Console.WriteLine("Anzahl Standorte: " + standorteList.Count);
+
+            var newComboBoxValues_Model = new NewComboBoxValues_Model();
+            newComboBoxValues_Model.New_values = standorteList;
+
+            return PartialView("NewComboBoxValuesStart", newComboBoxValues_Model);
         }
 
         public string GlobalStationData(List<string> stations, string mode){

@@ -1051,20 +1051,25 @@ namespace WissenstestOnline.Controllers
         int aufgabe_station,
         string aufgabe_stufe,
         bool pflichtaufgabe,
-        int teilaufgabeVon,
+        string teilaufgabeVon,
         string aufgabe_bezirk,
         string aufgabe_ort,
         int aufgabe_frage,
         string aufgabe_antwort,
         string aufgabe_zusatzinfo)
         {
-
             DB_lib.Aufgabe aufgabe_edit = main_db.Aufgabe.Single(x => x.AufgabeID == aufgabe_id);
 
             aufgabe_edit.Station = main_db.Station.Single(x => x.StationID == aufgabe_station);
             aufgabe_edit.Stufe = main_db.Stufe.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
             aufgabe_edit.Pflichtaufgabe = pflichtaufgabe;
-            aufgabe_edit.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == teilaufgabeVon).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            if (teilaufgabeVon != null)
+            {
+                aufgabe_edit.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == Convert.ToInt32(teilaufgabeVon)).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            }
+            else {
+                aufgabe_edit.TeilAufgabeVon = null;
+            }
             aufgabe_edit.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
             aufgabe_edit.Standort = main_db.Standort.SingleOrDefault(x => x.Ortsname.Equals(aufgabe_ort));
             if (aufgabe_frage != -1)
@@ -1095,7 +1100,7 @@ namespace WissenstestOnline.Controllers
         public string CreateAufgabe(int aufgabe_station,
         string aufgabe_stufe,
         bool pflichtaufgabe,
-        int teilaufgabeVon,
+        string teilaufgabeVon,
         string aufgabe_bezirk,
         string aufgabe_ort,
         int aufgabe_frage,
@@ -1112,7 +1117,13 @@ namespace WissenstestOnline.Controllers
             new_aufgabe.Station = main_db.Station.Single(x => x.StationID == aufgabe_station);
             new_aufgabe.Stufe = main_db.Stufe.Single(x => x.Stufenname.StartsWith(aufgabe_stufe));
             new_aufgabe.Pflichtaufgabe = pflichtaufgabe;
-            new_aufgabe.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == teilaufgabeVon).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            if (teilaufgabeVon != null)
+            {
+                new_aufgabe.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == Convert.ToInt32(teilaufgabeVon)).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+            }
+            else {
+                new_aufgabe.TeilAufgabeVon = null;
+            }
             new_aufgabe.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
             new_aufgabe.Standort = main_db.Standort.SingleOrDefault(x => x.Ortsname.Equals(aufgabe_ort));
             new_aufgabe.Frage = main_db.Frage.Single(x => x.FrageID == aufgabe_frage);
@@ -1147,7 +1158,9 @@ namespace WissenstestOnline.Controllers
             List<Standort> standorte_ff = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).ToList();
 
             List<SelectListItem> standorteList = new List<SelectListItem>();
-            standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
+            SelectListItem kein_standort = new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" };
+            kein_standort.Selected = true;
+            standorteList.Add(kein_standort);
 
             foreach (Standort o in standorte_ff)
             {

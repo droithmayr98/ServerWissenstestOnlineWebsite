@@ -13,11 +13,6 @@ $(document).ready(() => {
     console.log('jQuery Testausgabe --> site.js');
 
 
-    //Testwerte
-    $('#bezirkSelect').val('Schärding');
-    $('#FeuerwehrEingabe').val('Eggerding');
-
-
     //CLICK EVENTS
     $('#UserLoginButton').on('click', UserCheck);
     $('#SelectStationButton').on('click', StationInput);
@@ -33,6 +28,8 @@ $(document).ready(() => {
     $('#lastAufgabeLearn').on('click', ZurueckAufgabeLearn);
     $('#lastAufgabePractice').on('click', ZurueckAufgabePractice);
 
+    //Standortbeschränkung
+    $('#bezirkSelect').on('change', SetStandorteBezirkStart);
 
     //Daten von C# Code
     const url = '/Main/GetGlobalData';
@@ -186,6 +183,16 @@ function StationInput() {
         //window.location.replace('AufgabeUmgebungPractise');
     }
 
+
+}
+
+function SetStandorteBezirkStart() {
+    console.log('enter SetStandorteBezirkStart');
+    var bezirk_selected = $('#bezirkSelect').val();
+    console.log(`Selected Bezirk: ${bezirk_selected}`);
+
+    const url = `/Main/SetStandorteBezirkComboBoxStart?bezirk=${bezirk_selected}`;
+    $('#FeuerwehrEingabe').load(url);
 
 }
 
