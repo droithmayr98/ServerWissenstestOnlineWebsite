@@ -38,7 +38,7 @@ namespace WissenstestOnline.Controllers
         public IActionResult AdminOverview()
         {
             //Alle Aufgaben holen und in Model speichern
-            List<DB_lib.Aufgabe> alle_aufgaben = main_db.Aufgabe.Select(x => x).OrderBy(x=>x.Station.StationID).ToList();
+            List<DB_lib.Aufgabe> alle_aufgaben = main_db.Aufgabe.Select(x => x).OrderBy(x => x.Station.StationID).ToList();
             var adminOverwiew_model = new AdminOverview_Model();
             adminOverwiew_model.Aufgaben = alle_aufgaben;
 
@@ -73,6 +73,36 @@ namespace WissenstestOnline.Controllers
             var aufgabe_edit_main_Model = new AufgabeEditMain_Model();
             aufgabe_edit_main_Model.AufgabeInfo_Model = aufgabeInfo_edit_Model;
             aufgabe_edit_main_Model.AufgabeEditView_Model = FillSiteModel();
+
+            foreach (SelectListItem bezirk in aufgabe_edit_main_Model.AufgabeEditView_Model.Bezirke)
+            {
+                if (bezirk.Text.Equals(aufgabe_edit_main_Model.AufgabeInfo_Model.Bezirk))
+                {
+                    bezirk.Selected = true;
+                }
+            }
+
+            foreach (SelectListItem ort in aufgabe_edit_main_Model.AufgabeEditView_Model.Standorte)
+            {
+                if (ort.Text.Equals(aufgabe_edit_main_Model.AufgabeInfo_Model.Ort))
+                {
+                    ort.Selected = true;
+                }
+            }
+
+            foreach (SelectListItem station in aufgabe_edit_main_Model.AufgabeEditView_Model.Stationen)
+            {
+                if (station.Text.Equals(aufgabe_edit_main_Model.AufgabeInfo_Model.Station))
+                {
+                    station.Selected = true;
+                }
+            }
+
+
+            //Problem Logs
+            Console.WriteLine("Aufgabe Bezirk: " + aufgabe_edit_main_Model.AufgabeInfo_Model.Bezirk);
+            Console.WriteLine("Aufgabe Station: " + aufgabe_edit_main_Model.AufgabeInfo_Model.Station);
+
             return View(aufgabe_edit_main_Model);
         }
 
@@ -1065,9 +1095,11 @@ namespace WissenstestOnline.Controllers
             aufgabe_edit.Pflichtaufgabe = pflichtaufgabe;
             if (teilaufgabeVon != null)
             {
-                aufgabe_edit.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == Convert.ToInt32(teilaufgabeVon)).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+                int teilaufgabeVon_int = Convert.ToInt32(teilaufgabeVon);
+                aufgabe_edit.TeilAufgabeVon = teilaufgabeVon_int;//ist int, sollte Aufgabe sein
             }
-            else {
+            else
+            {
                 aufgabe_edit.TeilAufgabeVon = null;
             }
             aufgabe_edit.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
@@ -1119,9 +1151,11 @@ namespace WissenstestOnline.Controllers
             new_aufgabe.Pflichtaufgabe = pflichtaufgabe;
             if (teilaufgabeVon != null)
             {
-                new_aufgabe.TeilAufgabeVon = main_db.Aufgabe.SingleOrDefault(x => x.AufgabeID == Convert.ToInt32(teilaufgabeVon)).TeilAufgabeVon;//ist int, sollte Aufgabe sein
+                int teilaufgabeVon_int = Convert.ToInt32(teilaufgabeVon);
+                new_aufgabe.TeilAufgabeVon = teilaufgabeVon_int;//ist int, sollte Aufgabe sein
             }
-            else {
+            else
+            {
                 new_aufgabe.TeilAufgabeVon = null;
             }
             new_aufgabe.Bezirk = main_db.Bezirk.Single(x => x.BezirkName.Equals(aufgabe_bezirk));
@@ -1186,7 +1220,7 @@ namespace WissenstestOnline.Controllers
             }
         }
 
-             
+
 
         //Fill-Methods
         public AntwortInfo_Model FillAntwortModel(int antwort_id)
@@ -1302,7 +1336,8 @@ namespace WissenstestOnline.Controllers
             }
 
             //FFs_1
-            List<Ort> standorte_ff = new List<Ort>();
+            List<Standort> standorte_ff = new List<Standort>();
+            standorte_ff = main_db.Standort.OrderBy(x => x.Ortsname).ToList();
             List<SelectListItem> standorteList = new List<SelectListItem>();
             standorteList.Add(new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" });
 
@@ -1317,7 +1352,7 @@ namespace WissenstestOnline.Controllers
             }
 
             //FFs_2
-            foreach (Ort o in standorte_ff)
+            foreach (Standort o in standorte_ff)
             {
                 SelectListItem standortItem = new SelectListItem { Text = o.Ortsname, Value = o.Ortsname };
                 standorteList.Add(standortItem);
@@ -1350,7 +1385,7 @@ namespace WissenstestOnline.Controllers
             info_typen_list.Add(new SelectListItem { Text = "keinen ausgewählt", Value = "noItemSelected" });
             foreach (DB_lib.Typendefinition t in info_typen)
             {
-                SelectListItem infoTypItem = new SelectListItem { Text = t.TypName, Value = t.TypName.ToString() };
+                SelectListItem infoTypItem = new SelectListItem { Text = t.TypName, Value = t.TypendefinitionID.ToString() };
                 info_typen_list.Add(infoTypItem);
             }
 
