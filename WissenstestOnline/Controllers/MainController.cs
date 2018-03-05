@@ -17,10 +17,10 @@ namespace WissenstestOnline.Controllers
     public class MainController : Controller
     {
         //private readonly TestDB_Context test_db;
-        private readonly WissenstestDBEntities main_db;
+        private readonly WissenstestDBEntities1 main_db;
         private ILogger<MainController> logger;
 
-        public MainController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities main_db)
+        public MainController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities1 main_db)
         {
             //Testdatenbankinitialisierung --> wenn Datenbank im Hauptordner nicht vorhanden
             // --> auskommentieren und einmal ausführen

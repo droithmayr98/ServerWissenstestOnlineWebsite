@@ -17,8 +17,8 @@ namespace DB_lib
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Zusatzinfo()
         {
-            this.Infocontent = new HashSet<Infocontent>();
             this.Aufgabe = new HashSet<Aufgabe>();
+            this.Infocontent = new HashSet<Infocontent>();
         }
     
         public int ZusatzinfoID { get; set; }
@@ -26,9 +26,9 @@ namespace DB_lib
         public string InfoName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Aufgabe> Aufgabe { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Infocontent> Infocontent { get; set; }
         public virtual Typendefinition Typendefinition { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Aufgabe> Aufgabe { get; set; }
     }
 }

@@ -27,10 +27,12 @@ namespace DB_lib
         public Nullable<int> FkStandort { get; set; }
     
         public virtual Antwort Antwort { get; set; }
+        public virtual Aufgabe Aufgabe1 { get; set; }
+        public virtual Aufgabe Aufgabe2 { get; set; }
         public virtual Bezirk Bezirk { get; set; }
+        public virtual Standort Standort { get; set; }
         public virtual Frage Frage { get; set; }
         public virtual Hintergrund Hintergrund { get; set; }
-        public virtual Standort Standort { get; set; }
         public virtual Station Station { get; set; }
         public virtual Stufe Stufe { get; set; }
         public virtual Zusatzinfo Zusatzinfo { get; set; }

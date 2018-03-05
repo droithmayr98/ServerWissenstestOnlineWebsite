@@ -24,8 +24,8 @@ namespace DB_lib
         public string Ortsname { get; set; }
         public int FkBezirk { get; set; }
     
-        public virtual Bezirk Bezirk { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Aufgabe> Aufgabe { get; set; }
+        public virtual Bezirk Bezirk { get; set; }
     }
 }

@@ -17,10 +17,10 @@ namespace WissenstestOnline.Controllers
     {
 
         /*private TestDB_Context main_db;*/
-        private WissenstestDBEntities main_db;
+        private WissenstestDBEntities1 main_db;
         private ILogger<MainController> logger;
 
-        public AdminController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities main_db)
+        public AdminController(/*TestDB_Context db,*/ ILogger<MainController> logger, WissenstestDBEntities1 main_db)
         {
             /*this.test_db = db;*/
             this.main_db = main_db;

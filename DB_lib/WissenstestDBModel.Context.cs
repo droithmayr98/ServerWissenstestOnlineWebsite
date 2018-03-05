@@ -13,10 +13,10 @@ namespace DB_lib
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WissenstestDBEntities : DbContext
+    public partial class WissenstestDBEntities1 : DbContext
     {
-        public WissenstestDBEntities()
-            : base("name=WissenstestDBEntities")
+        public WissenstestDBEntities1()
+            : base("name=WissenstestDBEntities1")
         {
         }
     
@@ -33,6 +33,7 @@ namespace DB_lib
         public virtual DbSet<Antwort_slider> Antwort_slider { get; set; }
         public virtual DbSet<Antwort_text> Antwort_text { get; set; }
         public virtual DbSet<Antwort_verbinden> Antwort_verbinden { get; set; }
+        public virtual DbSet<Aufgabe> Aufgabe { get; set; }
         public virtual DbSet<Bezirk> Bezirk { get; set; }
         public virtual DbSet<Checkbox> Checkbox { get; set; }
         public virtual DbSet<Frage> Frage { get; set; }
@@ -46,7 +47,6 @@ namespace DB_lib
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Typendefinition> Typendefinition { get; set; }
         public virtual DbSet<Zusatzinfo> Zusatzinfo { get; set; }
-        public virtual DbSet<Aufgabe> Aufgabe { get; set; }
         public virtual DbSet<Bild> Bild { get; set; }
     }
 }

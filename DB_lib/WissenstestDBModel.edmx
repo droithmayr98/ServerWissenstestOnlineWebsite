@@ -71,17 +71,9 @@
           <Property Name="AntwortContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Anzahl" Type="int" Nullable="false" />
         </EntityType>
-        <!--Während der Generierung sind Fehler aufgetreten:
-Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Aufgabe' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="Aufgabe">
           <Key>
             <PropertyRef Name="AufgabeID" />
-            <PropertyRef Name="Pflichtaufgabe" />
-            <PropertyRef Name="FkAntwort" />
-            <PropertyRef Name="FkFrage" />
-            <PropertyRef Name="FkStation" />
-            <PropertyRef Name="FkStufe" />
-            <PropertyRef Name="FkZusatzinfo" />
           </Key>
           <Property Name="AufgabeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Pflichtaufgabe" Type="bit" Nullable="false" />
@@ -212,6 +204,18 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <Property Name="FkTypendefinition" Type="int" Nullable="false" />
           <Property Name="InfoName" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK_Aufgabe_Aufgabe">
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="1" />
+          <End Role="Aufgabe1" Type="Self.Aufgabe" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Aufgabe">
+              <PropertyRef Name="AufgabeID" />
+            </Principal>
+            <Dependent Role="Aufgabe1">
+              <PropertyRef Name="AufgabeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Aufgabe_Bezirk">
           <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="0..1" />
           <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
@@ -413,6 +417,7 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <EntitySet Name="Antwort_slider" EntityType="Self.Antwort_slider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Antwort_text" EntityType="Self.Antwort_text" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Antwort_verbinden" EntityType="Self.Antwort_verbinden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bezirk" EntityType="Self.Bezirk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Checkbox" EntityType="Self.Checkbox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Frage" EntityType="Self.Frage" Schema="dbo" store:Type="Tables" />
@@ -426,21 +431,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Typendefinition" EntityType="Self.Typendefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zusatzinfo" EntityType="Self.Zusatzinfo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Aufgabe].[AufgabeID] AS [AufgabeID], 
-    [Aufgabe].[Pflichtaufgabe] AS [Pflichtaufgabe], 
-    [Aufgabe].[FkAntwort] AS [FkAntwort], 
-    [Aufgabe].[FkFrage] AS [FkFrage], 
-    [Aufgabe].[FkHintergrundbild] AS [FkHintergrundbild], 
-    [Aufgabe].[FkStation] AS [FkStation], 
-    [Aufgabe].[FkStufe] AS [FkStufe], 
-    [Aufgabe].[FkZusatzinfo] AS [FkZusatzinfo], 
-    [Aufgabe].[TeilAufgabeVon] AS [TeilAufgabeVon], 
-    [Aufgabe].[FkBezirk] AS [FkBezirk], 
-    [Aufgabe].[FkStandort] AS [FkStandort]
-    FROM [dbo].[Aufgabe] AS [Aufgabe]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="Bild" EntityType="Self.Bild" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Bild].[BildID] AS [BildID], 
@@ -448,6 +438,10 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
     [Bild].[BildData] AS [BildData]
     FROM [dbo].[Bild] AS [Bild]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_Aufgabe_Aufgabe" Association="Self.FK_Aufgabe_Aufgabe">
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+            <End Role="Aufgabe1" EntitySet="Aufgabe" />
+          </AssociationSet>
           <AssociationSet Name="FK_Aufgabe_Bezirk" Association="Self.FK_Aufgabe_Bezirk">
             <End Role="Bezirk" EntitySet="Bezirk" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
@@ -589,6 +583,32 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <Property Name="Anzahl" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Paar" Relationship="Self.FK_dbo_Paare_dbo_Antwort_VerbindenM_Antwort_Verbinden_Inhalt_id" FromRole="Antwort_verbinden" ToRole="Paar" />
         </EntityType>
+        <EntityType Name="Aufgabe">
+          <Key>
+            <PropertyRef Name="AufgabeID" />
+          </Key>
+          <Property Name="AufgabeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pflichtaufgabe" Type="Boolean" Nullable="false" />
+          <Property Name="FkAntwort" Type="Int32" Nullable="false" />
+          <Property Name="FkFrage" Type="Int32" Nullable="false" />
+          <Property Name="FkHintergrundbild" Type="Int32" />
+          <Property Name="FkStation" Type="Int32" Nullable="false" />
+          <Property Name="FkStufe" Type="Int32" Nullable="false" />
+          <Property Name="FkZusatzinfo" Type="Int32" Nullable="false" />
+          <Property Name="TeilAufgabeVon" Type="Int32" />
+          <Property Name="FkBezirk" Type="Int32" />
+          <Property Name="FkStandort" Type="Int32" />
+          <NavigationProperty Name="Antwort" Relationship="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" FromRole="Aufgabe" ToRole="Antwort" />
+          <NavigationProperty Name="Aufgabe1" Relationship="Self.FK_Aufgabe_Aufgabe" FromRole="Aufgabe" ToRole="Aufgabe1" />
+          <NavigationProperty Name="Aufgabe2" Relationship="Self.FK_Aufgabe_Aufgabe" FromRole="Aufgabe1" ToRole="Aufgabe" />
+          <NavigationProperty Name="Bezirk" Relationship="Self.FK_Aufgabe_Bezirk" FromRole="Aufgabe" ToRole="Bezirk" />
+          <NavigationProperty Name="Standort" Relationship="Self.FK_Aufgabe_Standort" FromRole="Aufgabe" ToRole="Standort" />
+          <NavigationProperty Name="Frage" Relationship="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" FromRole="Aufgabe" ToRole="Frage" />
+          <NavigationProperty Name="Hintergrund" Relationship="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" FromRole="Aufgabe" ToRole="Hintergrund" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" FromRole="Aufgabe" ToRole="Station" />
+          <NavigationProperty Name="Stufe" Relationship="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" FromRole="Aufgabe" ToRole="Stufe" />
+          <NavigationProperty Name="Zusatzinfo" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Aufgabe" ToRole="Zusatzinfo" />
+        </EntityType>
         <EntityType Name="Bezirk">
           <Key>
             <PropertyRef Name="BezirkID" />
@@ -665,8 +685,8 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <Property Name="StandortID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ortsname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="FkBezirk" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Bezirk" Relationship="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" FromRole="Standort" ToRole="Bezirk" />
           <NavigationProperty Name="Aufgabe" Relationship="Self.FK_Aufgabe_Standort" FromRole="Standort" ToRole="Aufgabe" />
+          <NavigationProperty Name="Bezirk" Relationship="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" FromRole="Standort" ToRole="Bezirk" />
         </EntityType>
         <EntityType Name="Station">
           <Key>
@@ -711,39 +731,9 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <Property Name="ZusatzinfoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FkTypendefinition" Type="Int32" Nullable="false" />
           <Property Name="InfoName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Zusatzinfo" ToRole="Aufgabe" />
           <NavigationProperty Name="Infocontent" Relationship="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Zusatzinfo" ToRole="Infocontent" />
           <NavigationProperty Name="Typendefinition" Relationship="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" FromRole="Zusatzinfo" ToRole="Typendefinition" />
-          <NavigationProperty Name="Aufgabe" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Zusatzinfo" ToRole="Aufgabe" />
-        </EntityType>
-        <EntityType Name="Aufgabe">
-          <Key>
-            <PropertyRef Name="AufgabeID" />
-            <PropertyRef Name="Pflichtaufgabe" />
-            <PropertyRef Name="FkAntwort" />
-            <PropertyRef Name="FkFrage" />
-            <PropertyRef Name="FkStation" />
-            <PropertyRef Name="FkStufe" />
-            <PropertyRef Name="FkZusatzinfo" />
-          </Key>
-          <Property Name="AufgabeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Pflichtaufgabe" Type="Boolean" Nullable="false" />
-          <Property Name="FkAntwort" Type="Int32" Nullable="false" />
-          <Property Name="FkFrage" Type="Int32" Nullable="false" />
-          <Property Name="FkHintergrundbild" Type="Int32" />
-          <Property Name="FkStation" Type="Int32" Nullable="false" />
-          <Property Name="FkStufe" Type="Int32" Nullable="false" />
-          <Property Name="FkZusatzinfo" Type="Int32" Nullable="false" />
-          <Property Name="TeilAufgabeVon" Type="Int32" />
-          <Property Name="FkBezirk" Type="Int32" />
-          <Property Name="FkStandort" Type="Int32" />
-          <NavigationProperty Name="Antwort" Relationship="Self.FK_dbo_Aufgaben_dbo_Antworten_Antwort_Antwort_Id" FromRole="Aufgabe" ToRole="Antwort" />
-          <NavigationProperty Name="Bezirk" Relationship="Self.FK_Aufgabe_Bezirk" FromRole="Aufgabe" ToRole="Bezirk" />
-          <NavigationProperty Name="Frage" Relationship="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" FromRole="Aufgabe" ToRole="Frage" />
-          <NavigationProperty Name="Hintergrund" Relationship="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" FromRole="Aufgabe" ToRole="Hintergrund" />
-          <NavigationProperty Name="Standort" Relationship="Self.FK_Aufgabe_Standort" FromRole="Aufgabe" ToRole="Standort" />
-          <NavigationProperty Name="Station" Relationship="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" FromRole="Aufgabe" ToRole="Station" />
-          <NavigationProperty Name="Stufe" Relationship="Self.FK_dbo_Aufgaben_dbo_Stufen_Stufe_Stufe_Id" FromRole="Aufgabe" ToRole="Stufe" />
-          <NavigationProperty Name="Zusatzinfo" Relationship="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" FromRole="Aufgabe" ToRole="Zusatzinfo" />
         </EntityType>
         <EntityType Name="Bild">
           <Key>
@@ -813,6 +803,18 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Aufgabe_Aufgabe">
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="1" />
+          <End Role="Aufgabe1" Type="Self.Aufgabe" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Aufgabe">
+              <PropertyRef Name="AufgabeID" />
+            </Principal>
+            <Dependent Role="Aufgabe1">
+              <PropertyRef Name="AufgabeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Aufgabe_Bezirk">
           <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="0..1" />
           <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
@@ -825,15 +827,15 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
-          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="1" />
-          <End Role="Standort" Type="Self.Standort" Multiplicity="*" />
+        <Association Name="FK_Aufgabe_Standort">
+          <End Role="Standort" Type="Self.Standort" Multiplicity="0..1" />
+          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Bezirk">
-              <PropertyRef Name="BezirkID" />
+            <Principal Role="Standort">
+              <PropertyRef Name="StandortID" />
             </Principal>
-            <Dependent Role="Standort">
-              <PropertyRef Name="FkBezirk" />
+            <Dependent Role="Aufgabe">
+              <PropertyRef Name="FkStandort" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -849,18 +851,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
-          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
-          <End Role="Frage" Type="Self.Frage" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Typendefinition">
-              <PropertyRef Name="TypendefinitionID" />
-            </Principal>
-            <Dependent Role="Frage">
-              <PropertyRef Name="FkTypendefinition" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
           <End Role="Hintergrund" Type="Self.Hintergrund" Multiplicity="0..1" />
           <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
@@ -870,30 +860,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Principal>
             <Dependent Role="Aufgabe">
               <PropertyRef Name="FkHintergrundbild" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
-          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
-          <End Role="Infocontent" Type="Self.Infocontent" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Zusatzinfo">
-              <PropertyRef Name="ZusatzinfoID" />
-            </Principal>
-            <Dependent Role="Infocontent">
-              <PropertyRef Name="FkZusatzinfo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Aufgabe_Standort">
-          <End Role="Standort" Type="Self.Standort" Multiplicity="0..1" />
-          <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Standort">
-              <PropertyRef Name="StandortID" />
-            </Principal>
-            <Dependent Role="Aufgabe">
-              <PropertyRef Name="FkStandort" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -921,18 +887,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
-          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
-          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Typendefinition">
-              <PropertyRef Name="TypendefinitionID" />
-            </Principal>
-            <Dependent Role="Zusatzinfo">
-              <PropertyRef Name="FkTypendefinition" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
           <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
           <End Role="Aufgabe" Type="Self.Aufgabe" Multiplicity="*" />
@@ -945,7 +899,55 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WissenstestDBEntities" annotation:LazyLoadingEnabled="true">
+        <Association Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+          <End Role="Bezirk" Type="Self.Bezirk" Multiplicity="1" />
+          <End Role="Standort" Type="Self.Standort" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bezirk">
+              <PropertyRef Name="BezirkID" />
+            </Principal>
+            <Dependent Role="Standort">
+              <PropertyRef Name="FkBezirk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Frage" Type="Self.Frage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Frage">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="1" />
+          <End Role="Infocontent" Type="Self.Infocontent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zusatzinfo">
+              <PropertyRef Name="ZusatzinfoID" />
+            </Principal>
+            <Dependent Role="Infocontent">
+              <PropertyRef Name="FkZusatzinfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+          <End Role="Typendefinition" Type="Self.Typendefinition" Multiplicity="1" />
+          <End Role="Zusatzinfo" Type="Self.Zusatzinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typendefinition">
+              <PropertyRef Name="TypendefinitionID" />
+            </Principal>
+            <Dependent Role="Zusatzinfo">
+              <PropertyRef Name="FkTypendefinition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WissenstestDBEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admintabelle" EntityType="Self.Admintabelle" />
           <EntitySet Name="Antwort" EntityType="Self.Antwort" />
           <EntitySet Name="Antwort_checkbox" EntityType="Self.Antwort_checkbox" />
@@ -954,6 +956,7 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <EntitySet Name="Antwort_slider" EntityType="Self.Antwort_slider" />
           <EntitySet Name="Antwort_text" EntityType="Self.Antwort_text" />
           <EntitySet Name="Antwort_verbinden" EntityType="Self.Antwort_verbinden" />
+          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" />
           <EntitySet Name="Bezirk" EntityType="Self.Bezirk" />
           <EntitySet Name="Checkbox" EntityType="Self.Checkbox" />
           <EntitySet Name="Frage" EntityType="Self.Frage" />
@@ -967,7 +970,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Typendefinition" EntityType="Self.Typendefinition" />
           <EntitySet Name="Zusatzinfo" EntityType="Self.Zusatzinfo" />
-          <EntitySet Name="Aufgabe" EntityType="Self.Aufgabe" />
           <EntitySet Name="Bild" EntityType="Self.Bild" />
           <AssociationSet Name="FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Antworten_dbo_Typendefinitionen_Typ_Typ_Id">
             <End Role="Typendefinition" EntitySet="Typendefinition" />
@@ -989,32 +991,24 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             <End Role="Antwort_verbinden" EntitySet="Antwort_verbinden" />
             <End Role="Paar" EntitySet="Paar" />
           </AssociationSet>
+          <AssociationSet Name="FK_Aufgabe_Aufgabe" Association="Self.FK_Aufgabe_Aufgabe">
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
+            <End Role="Aufgabe1" EntitySet="Aufgabe" />
+          </AssociationSet>
           <AssociationSet Name="FK_Aufgabe_Bezirk" Association="Self.FK_Aufgabe_Bezirk">
             <End Role="Bezirk" EntitySet="Bezirk" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" Association="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
-            <End Role="Bezirk" EntitySet="Bezirk" />
+          <AssociationSet Name="FK_Aufgabe_Standort" Association="Self.FK_Aufgabe_Standort">
             <End Role="Standort" EntitySet="Standort" />
+            <End Role="Aufgabe" EntitySet="Aufgabe" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id" Association="Self.FK_dbo_Aufgaben_dbo_Fragen_Frage_Frage_Id">
             <End Role="Frage" EntitySet="Frage" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
-            <End Role="Typendefinition" EntitySet="Typendefinition" />
-            <End Role="Frage" EntitySet="Frage" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id" Association="Self.FK_dbo_Aufgaben_dbo_Hintergrundbilder_Hintergrundbild_Hintergrundbild_Id">
             <End Role="Hintergrund" EntitySet="Hintergrund" />
-            <End Role="Aufgabe" EntitySet="Aufgabe" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
-            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
-            <End Role="Infocontent" EntitySet="Infocontent" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Aufgabe_Standort" Association="Self.FK_Aufgabe_Standort">
-            <End Role="Standort" EntitySet="Standort" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id" Association="Self.FK_dbo_Aufgaben_dbo_Stationen_Station_Station_Id">
@@ -1025,13 +1019,25 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
             <End Role="Stufe" EntitySet="Stufe" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
-            <End Role="Typendefinition" EntitySet="Typendefinition" />
-            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_Aufgaben_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
             <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
             <End Role="Aufgabe" EntitySet="Aufgabe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id" Association="Self.FK_dbo_Orte_dbo_Bezirke_Bezirk_Bezirk_Id">
+            <End Role="Bezirk" EntitySet="Bezirk" />
+            <End Role="Standort" EntitySet="Standort" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Fragen_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Frage" EntitySet="Frage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id" Association="Self.FK_dbo_InfoContentM_dbo_Zusatzinfos_Zusatzinfo_Zusatzinfo_Id">
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
+            <End Role="Infocontent" EntitySet="Infocontent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id" Association="Self.FK_dbo_Zusatzinfos_dbo_Typendefinitionen_Typ_Typ_Id">
+            <End Role="Typendefinition" EntitySet="Typendefinition" />
+            <End Role="Zusatzinfo" EntitySet="Zusatzinfo" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -1039,7 +1045,7 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="WissenstestDBModelStoreContainer" CdmEntityContainer="WissenstestDBEntities">
+        <EntityContainerMapping StorageEntityContainer="WissenstestDBModelStoreContainer" CdmEntityContainer="WissenstestDBEntities1">
           <EntitySetMapping Name="Admintabelle">
             <EntityTypeMapping TypeName="WissenstestDBModel.Admintabelle">
               <MappingFragment StoreEntitySet="Admintabelle">
@@ -1111,6 +1117,23 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
               <MappingFragment StoreEntitySet="Antwort_verbinden">
                 <ScalarProperty Name="AntwortContentID" ColumnName="AntwortContentID" />
                 <ScalarProperty Name="Anzahl" ColumnName="Anzahl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Aufgabe">
+            <EntityTypeMapping TypeName="WissenstestDBModel.Aufgabe">
+              <MappingFragment StoreEntitySet="Aufgabe">
+                <ScalarProperty Name="AufgabeID" ColumnName="AufgabeID" />
+                <ScalarProperty Name="Pflichtaufgabe" ColumnName="Pflichtaufgabe" />
+                <ScalarProperty Name="FkAntwort" ColumnName="FkAntwort" />
+                <ScalarProperty Name="FkFrage" ColumnName="FkFrage" />
+                <ScalarProperty Name="FkHintergrundbild" ColumnName="FkHintergrundbild" />
+                <ScalarProperty Name="FkStation" ColumnName="FkStation" />
+                <ScalarProperty Name="FkStufe" ColumnName="FkStufe" />
+                <ScalarProperty Name="FkZusatzinfo" ColumnName="FkZusatzinfo" />
+                <ScalarProperty Name="TeilAufgabeVon" ColumnName="TeilAufgabeVon" />
+                <ScalarProperty Name="FkBezirk" ColumnName="FkBezirk" />
+                <ScalarProperty Name="FkStandort" ColumnName="FkStandort" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1231,23 +1254,6 @@ Warnung 6002: Für Tabelle/Sicht 'WissenstestDB.dbo.Bild' ist kein Primärschlü
                 <ScalarProperty Name="ZusatzinfoID" ColumnName="ZusatzinfoID" />
                 <ScalarProperty Name="FkTypendefinition" ColumnName="FkTypendefinition" />
                 <ScalarProperty Name="InfoName" ColumnName="InfoName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Aufgabe">
-            <EntityTypeMapping TypeName="WissenstestDBModel.Aufgabe">
-              <MappingFragment StoreEntitySet="Aufgabe">
-                <ScalarProperty Name="AufgabeID" ColumnName="AufgabeID" />
-                <ScalarProperty Name="Pflichtaufgabe" ColumnName="Pflichtaufgabe" />
-                <ScalarProperty Name="FkAntwort" ColumnName="FkAntwort" />
-                <ScalarProperty Name="FkFrage" ColumnName="FkFrage" />
-                <ScalarProperty Name="FkHintergrundbild" ColumnName="FkHintergrundbild" />
-                <ScalarProperty Name="FkStation" ColumnName="FkStation" />
-                <ScalarProperty Name="FkStufe" ColumnName="FkStufe" />
-                <ScalarProperty Name="FkZusatzinfo" ColumnName="FkZusatzinfo" />
-                <ScalarProperty Name="TeilAufgabeVon" ColumnName="TeilAufgabeVon" />
-                <ScalarProperty Name="FkBezirk" ColumnName="FkBezirk" />
-                <ScalarProperty Name="FkStandort" ColumnName="FkStandort" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
