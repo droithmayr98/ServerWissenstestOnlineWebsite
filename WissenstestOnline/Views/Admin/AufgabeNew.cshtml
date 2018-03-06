@@ -216,14 +216,14 @@
             </div>
         </div>
 
-    </div> 
-
-    
-    
-   
+    </div>
 
 
-    
+
+
+
+
+
 
     <button class="btn btn-lg btn-success" id="aufgabeNew_create">ERSTELLEN</button>
     <button class="btn btn-lg btn-danger" id="aufgabeEdit_close">CLOSE</button>
@@ -235,10 +235,16 @@
 <div id="loadZusatzInfoModal"></div>
 
 @section scripts{
-
-    <script src="~/js/admin.js"></script>
-    <script src="~/js/otherFunctions.js"></script>
-    <script src="~/js/date.js"></script>
+    <environment names="Development">
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/otherFunctions.js"></script>
+        <script src="~/js/date.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/admin.min.js"></script>
+        <script src="~/js/otherFunctions.min.js"></script>
+        <script src="~/js/date.min.js"></script>
+    </environment>
 }
 
 

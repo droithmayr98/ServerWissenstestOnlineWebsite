@@ -5,7 +5,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-4">    <!-- col-md-offset-4 -->
+        <div class="col-md-4">
+            <!-- col-md-offset-4 -->
             <form id="login" action="index.html" class="well">
                 <div class="form-group">
                     <label>Username</label>
@@ -23,6 +24,10 @@
 </div>
 
 @section scripts{
-
-    <script src="~/js/admin.js"></script>
+    <environment names="Development">
+        <script src="~/js/admin.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/admin.min.js"></script>
+    </environment>
 }

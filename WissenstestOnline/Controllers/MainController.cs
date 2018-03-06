@@ -195,20 +195,26 @@ namespace WissenstestOnline.Controllers
             for (int i = 0; i < stations.Count; i++)
             {
                 int selected_stationId = Convert.ToInt32(stations[i]);
-                //Aufgaben selektieren grob
-                List<DB_lib.Aufgabe> stationsteil = main_db.Aufgabe
-                    .Where(x => x.Station.StationID == selected_stationId)
-                    .ToList();
-                //Aufgaben selektieren genau --> verschiedenen Faktoren beachten
+                //Aufgaben selektieren grob für Tests --> Faktoren: Station
+                //List<DB_lib.Aufgabe> stationsteil = main_db.Aufgabe
+                //    .Where(x => x.Station.StationID == selected_stationId)
+                //    .ToList();
+                //Aufgaben selektieren genau --> Faktoren beachten: Bezirk, Standort, Stufe, Station
+                //Pflichtaufgabe, Teilaufgabe noch nicht berücksichtigt
                 List<DB_lib.Aufgabe> stationsteil_genau = main_db.Aufgabe
-                    .Where(x => x.Station.StationID == selected_stationId && x.Stufe.Stufenname == UserData.Stufe)
+                    .Where(
+                    x => x.Station.StationID == selected_stationId 
+                    && x.Stufe.Stufenname == UserData.Stufe 
+                    && (x.Bezirk.BezirkName == UserData.Bezirk || x.Bezirk == null)
+                    && (x.Standort.Ortsname == UserData.Ort || x.Standort == null)
+                    )
                     .ToList();
                 //Stationsaufgaben an Gesamtliste ranhängen
-                UserData.Aufgaben.AddRange(stationsteil);
+                UserData.Aufgaben.AddRange(stationsteil_genau);
                 //Aktuelle Station setzen
                 if (i == 0)
                 {
-                    UserData.AktuelleStation = stationsteil[0].Station.Stationsname;
+                    UserData.AktuelleStation = stationsteil_genau[0].Station.Stationsname;
                 }
             }
             //Gesamtaufgabenanzahl in Userdata speichern

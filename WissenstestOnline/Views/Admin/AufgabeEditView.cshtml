@@ -35,27 +35,27 @@
 
                                 @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
                                 {
-                                @if (frage.FrageID == Model.AufgabeInfo_Model.Frage.FrageID)
-                {
-                                <li class="list-group-item li_frage" style="background-color: green" id="li_@frage.FrageID">
-                                    <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
-                                    <div class="btn-group" style="float:right">
-                                        <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                        <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                        <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
-                                    </div>
-                                </li>
+                                    @if (frage.FrageID == Model.AufgabeInfo_Model.Frage.FrageID)
+                                    {
+                                        <li class="list-group-item li_frage" style="background-color: green" id="li_@frage.FrageID">
+                                            <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
+                                            <div class="btn-group" style="float:right">
+                                                <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                                <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </li>
                                     }
                                     else
                                     {
-                                <li class="list-group-item li_frage" id="li_@frage.FrageID">
-                                    <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
-                                    <div class="btn-group" style="float:right">
-                                        <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                        <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                        <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
-                                    </div>
-                                </li>
+                                        <li class="list-group-item li_frage" id="li_@frage.FrageID">
+                                            <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
+                                            <div class="btn-group" style="float:right">
+                                                <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                                <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </li>
                                     }
 
 
@@ -106,7 +106,7 @@
                                 @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
                                 {
                                     @if (antwort.AntwortID == Model.AufgabeInfo_Model.Antwort_Id)
-                {
+                                    {
                                         <li class="list-group-item li_antwort" style="background-color: green" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
                                             <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
                                             <div class="btn-group" style="float:right">
@@ -175,27 +175,27 @@
 
                                 @foreach (var info in Model.AufgabeEditView_Model.Infos)
                                 {
-                                @if (info.ZusatzinfoID == Model.AufgabeInfo_Model.Zusatzinfo.ZusatzinfoID)
-                {
-                                <li class="list-group-item li_zusatzInfo" style="background-color: green" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
-                                    <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
-                                    <div class="btn-group" style="float:right">
-                                        <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                        <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                        <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
-                                    </div>
-                                </li>
+                                    @if (info.ZusatzinfoID == Model.AufgabeInfo_Model.Zusatzinfo.ZusatzinfoID)
+                                    {
+                                        <li class="list-group-item li_zusatzInfo" style="background-color: green" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
+                                            <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
+                                            <div class="btn-group" style="float:right">
+                                                <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                                <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </li>
                                     }
                                     else
                                     {
-                                <li class="list-group-item li_zusatzInfo" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
-                                    <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
-                                    <div class="btn-group" style="float:right">
-                                        <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                        <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                        <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
-                                    </div>
-                                </li>
+                                        <li class="list-group-item li_zusatzInfo" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
+                                            <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
+                                            <div class="btn-group" style="float:right">
+                                                <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                                                <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </li>
                                     }
 
 
@@ -234,69 +234,69 @@
 
                         @if (Model.AufgabeInfo_Model.Stufe == "Bronze")
                         {
-                        <div class="btn-group" data-toggle="buttons" id="stufen">
-                            <label class="btn btn-secondary active buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
-                            </label>
-                        </div>
+                            <div class="btn-group" data-toggle="buttons" id="stufen">
+                                <label class="btn btn-secondary active buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="B" checked>Bronze
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="S">Silver
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="G">Gold
+                                </label>
+                            </div>
                         }
                         else if (Model.AufgabeInfo_Model.Stufe == "Silver")
                         {
-                        <div class="btn-group" data-toggle="buttons" id="stufen">
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen active">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber" checked>Silver
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
-                            </label>
-                        </div>
+                            <div class="btn-group" data-toggle="buttons" id="stufen">
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen active">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber" checked>Silver
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold">Gold
+                                </label>
+                            </div>
                         }
                         else
                         {
-                        <div class="btn-group" data-toggle="buttons" id="stufen">
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen active">
-                                <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold" checked>Gold
-                            </label>
-                        </div>
+                            <div class="btn-group" data-toggle="buttons" id="stufen">
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeBronze_AufgabeEdit" value="Bronze">Bronze
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeSilver_AufgabeEdit" value="Silber">Silver
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen active">
+                                    <input type="radio" name="stufe_aufgabeEdit" id="StufeGold_AufgabeEdit" value="Gold" checked>Gold
+                                </label>
+                            </div>
                         }
 
                         <h4>Pflichtaufgabe:</h4>
                         @if (Model.AufgabeInfo_Model.IsPflichtaufgabe)
                         {
-                        <div class="btn-group" data-toggle="buttons" id="stufen">
-                            <label class="btn btn-secondary buttons_stufen active">
-                                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true" checked>Ja
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false">Nein
-                            </label>
-                        </div>
+                            <div class="btn-group" data-toggle="buttons" id="stufen">
+                                <label class="btn btn-secondary buttons_stufen active">
+                                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true" checked>Ja
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false">Nein
+                                </label>
+                            </div>
                         }
                         else
                         {
-                        <div class="btn-group" data-toggle="buttons" id="stufen">
-                            <label class="btn btn-secondary buttons_stufen">
-                                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true">Ja
-                            </label>
-                            <label class="btn btn-secondary buttons_stufen active">
-                                <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false" checked>Nein
-                            </label>
-                        </div>
+                            <div class="btn-group" data-toggle="buttons" id="stufen">
+                                <label class="btn btn-secondary buttons_stufen">
+                                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_true" value="true">Ja
+                                </label>
+                                <label class="btn btn-secondary buttons_stufen active">
+                                    <input type="radio" name="isPflichtaufgabe" id="isPflichtaufgabe_false" value="false" checked>Nein
+                                </label>
+                            </div>
                         }
 
                         <h4>Teilaufgabe von: </h4><input type="text" class="form-control" value="@Model.AufgabeInfo_Model.TeilAufgabeVon" id="aufgabeEdit_teilaufgabe" />
@@ -326,10 +326,16 @@
 <div id="loadZusatzInfoModal"></div>
 
 @section scripts{
-
-    <script src="~/js/admin.js"></script>
-    <script src="~/js/otherFunctions.js"></script>
-    <script src="~/js/date.js"></script>
+    <environment names="Development">
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/otherFunctions.js"></script>
+        <script src="~/js/date.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/admin.min.js"></script>
+        <script src="~/js/otherFunctions.min.js"></script>
+        <script src="~/js/date.min.js"></script>
+    </environment>
 }
 
 

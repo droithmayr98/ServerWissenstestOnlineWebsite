@@ -1,7 +1,5 @@
 @model WissenstestOnlineWebseite.Models.AntwortDatePicker_Model
 
-<script src="~/js/date.js"></script>
-
 <div class="container">
     <h4>Datum:</h4>
 
@@ -31,3 +29,12 @@
 
 
 </div>
+
+@section scripts{
+    <environment names="Development">
+        <script src="~/js/date.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/date.min.js"></script>
+    </environment>
+}

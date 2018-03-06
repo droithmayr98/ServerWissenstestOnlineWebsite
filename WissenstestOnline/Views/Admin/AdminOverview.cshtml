@@ -9,7 +9,7 @@
 <div class="container">
 
     <h1>Willkommen <span style="color: red;">@Model.Username</span><button style="float: right;" id="logout_btn" class="btn btn-lg btn-primary" float: right;">LOGOUT <span class="glyphicon glyphicon-log-out"></span></button></h1>
-    
+
 
     <!--Aufgabenliste-->
     <div class="container well" style="margin-top:20px;">
@@ -51,8 +51,9 @@
     <!--Adminliste-->
     <div class="container well">
         <h3 style="float: left;">Adminübersicht</h3>
-        @if (Model.Can_create_admin) {
-        <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;" id="create_new_admin">+ neuen Admin erstellen</button>
+        @if (Model.Can_create_admin)
+        {
+            <button class="btn btn-success" style="margin-left: 8px; margin-top: 15px; margin-right: 20px; float: right;" id="create_new_admin">+ neuen Admin erstellen</button>
         }
         <!--Suchoptionen-->
         <nav id="adminListAdmins">
@@ -87,9 +88,16 @@
 
 <!--Scripts-->
 @section scripts{
-    <script src="~/js/admin.js"></script>
-    <script src="~/js/otherFunctions.js"></script>
-    <script src="~/js/date.js"></script>
+    <environment names="Development">
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/otherFunctions.js"></script>
+        <script src="~/js/date.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/admin.min.js"></script>
+        <script src="~/js/otherFunctions.min.js"></script>
+        <script src="~/js/date.min.js"></script>
+    </environment>
 }
 
 

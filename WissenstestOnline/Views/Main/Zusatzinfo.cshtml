@@ -7,3 +7,12 @@
 <div><div id="loadZusatzinfo"></div></div>
 
 <a class="btn btn-primary" role="button" aria-pressed="true" id="closeZusatzinfo">Zurück zur Frage</a>
+
+@section scripts{
+    <environment names="Development">
+        <script src="~/js/site.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/site.min.js"></script>
+    </environment>
+}

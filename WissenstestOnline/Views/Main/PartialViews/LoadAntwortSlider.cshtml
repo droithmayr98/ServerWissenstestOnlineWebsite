@@ -1,6 +1,5 @@
 @model WissenstestOnlineWebseite.Models.AntwortSlider_Model
 
-<script src="~/js/otherFunctions.js"></script>
 
 <div class="container">
 
@@ -14,6 +13,16 @@
     </div>
 
 
-    
-    
+
+
 </div>
+
+
+@section scripts{
+    <environment names="Development">
+        <script src="~/js/otherFunctions.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/otherFunctions.min.js"></script>
+    </environment>
+}

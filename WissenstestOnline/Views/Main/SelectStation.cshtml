@@ -47,3 +47,12 @@
 
 
 </div>
+
+@section scripts{
+    <environment names="Development">
+        <script src="~/js/site.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/site.min.js"></script>
+    </environment>
+}
