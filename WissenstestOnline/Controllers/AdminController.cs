@@ -1189,7 +1189,7 @@ namespace WissenstestOnline.Controllers
         //Anderes
         public IActionResult SetStandorteBezirkComboBox(string bezirk)
         {
-            List<Standort> standorte_ff = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).ToList();
+            List<Standort> standorte_ff = main_db.Standort.Where(x => x.Bezirk.BezirkName.Equals(bezirk)).OrderBy(x => x.Ortsname).ToList();
 
             List<SelectListItem> standorteList = new List<SelectListItem>();
             SelectListItem kein_standort = new SelectListItem { Text = "kein Standort ausgewählt", Value = "noStandortSelected" };
