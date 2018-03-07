@@ -517,7 +517,9 @@ namespace WissenstestOnline.Controllers
         {
             Antwort_checkbox antwortCheckBoxObject = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == inhalt_id);
             var antwortCheckBox_Model = new AntwortCheckBox_Model();
-            antwortCheckBox_Model.CheckBoxen = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID).ToList();
+            antwortCheckBox_Model.CheckBoxen = Randomize(main_db.Checkbox
+                .Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID)
+                .ToList());
             antwortCheckBox_Model.CheckBoxen_RightVal = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID && x.CheckBoxVal == true).ToList();
             return antwortCheckBox_Model;
         }
@@ -526,7 +528,9 @@ namespace WissenstestOnline.Controllers
         {
             Antwort_radiobutton antwortRadioButtonObject = main_db.Antwort_radiobutton.Single(x => x.AntwortContentID == inhalt_id);
             var antwortRadioButtons_Model = new AntwortRadioButtons_Model();
-            antwortRadioButtons_Model.RadioButtons = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID).ToList();
+            antwortRadioButtons_Model.RadioButtons = Randomize(main_db.Radiobutton
+                .Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID)
+                .ToList());
             Radiobutton rb_rightVal = main_db.Radiobutton.Where(x => x.Antwort_radiobutton.AntwortContentID == antwortRadioButtonObject.AntwortContentID).Single(x => x.ErwartungsWert);
             antwortRadioButtons_Model.RadioButton_rightVal = rb_rightVal;
             return antwortRadioButtons_Model;
@@ -646,6 +650,20 @@ namespace WissenstestOnline.Controllers
                 return false;
             }
 
+        }
+
+        //zusätzliches
+        public static List<T> Randomize<T>(List<T> list)
+        {
+            List<T> randomizedList = new List<T>();
+            Random rnd = new Random();
+            while (list.Count > 0)
+            {
+                int index = rnd.Next(0, list.Count); //pick a random item from the master list
+                randomizedList.Add(list[index]); //place it at the end of the randomized list
+                list.RemoveAt(index);
+            }
+            return randomizedList;
         }
 
 
