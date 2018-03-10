@@ -34,43 +34,45 @@
                             <ul class="list-group" id="frageliste_aufgabeEditView">
 
                                 @foreach (var frage in Model.AufgabeEditView_Model.Fragen)
-                                {
-                                    @if (frage.FrageID == Model.AufgabeInfo_Model.Frage.FrageID)
-                                    {
-                                        <li class="list-group-item li_frage" style="background-color: green" id="li_@frage.FrageID">
-                                            <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item li_frage" id="li_@frage.FrageID">
-                                            <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
+                {
+                    @if (frage.FrageID == Model.AufgabeInfo_Model.Frage.FrageID)
+    {
+                <li class="list-group-item li_frage" style="background-color: green" id="li_@frage.FrageID">
+                    <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
+else
+{
+                <li class="list-group-item li_frage" id="li_@frage.FrageID">
+                    <span class="frageobject" id="@frage.FrageID">@frage.FrageText</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info frage_Info" id="@frage.FrageID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning frage_warning" id="@frage.FrageID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger frage_danger" id="@frage.FrageID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
 
 
-                                }
+}
 
                             </ul>
                         </nav>
 
 
                     </div>
-                    <div class="alert alert-info">
-                        <strong>Achtung!</strong>
-                        Wird eine Frage erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
-                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
-                    </div>
+                    <!--
+    <div class="alert alert-info">
+        <strong>Achtung!</strong>
+        Wird eine Frage erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+    </div>
+        -->
                 </div>
             </div>
         </div>
@@ -104,43 +106,45 @@
                             <ul class="list-group" id="antwortliste_aufgabeEditView">
 
                                 @foreach (var antwort in Model.AufgabeEditView_Model.Antworten)
-                                {
-                                    @if (antwort.AntwortID == Model.AufgabeInfo_Model.Antwort_Id)
-                                    {
-                                        <li class="list-group-item li_antwort" style="background-color: green" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
-                                            <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info antwort_Info" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning antwort_warning" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger antwort_danger" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item li_antwort" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
-                                            <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info antwort_Info" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning antwort_warning" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger antwort_danger" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
+                {
+                    @if (antwort.AntwortID == Model.AufgabeInfo_Model.Antwort_Id)
+    {
+                <li class="list-group-item li_antwort" style="background-color: green" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
+                    <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info antwort_Info" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning antwort_warning" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger antwort_danger" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
+else
+{
+                <li class="list-group-item li_antwort" id="@antwort.AntwortID-@antwort.Typendefinition.TypendefinitionID">
+                    <span class="antwortobject" id="antwort_@antwort.AntwortID">@antwort.AntwortName</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info antwort_Info" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning antwort_warning" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger antwort_danger" id="antwort_@antwort.AntwortID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
 
 
-                                }
+}
 
                             </ul>
                         </nav>
 
 
                     </div>
-                    <div class="alert alert-info">
-                        <strong>Achtung!</strong>
-                        Wird eine Antwort erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
-                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
-                    </div>
+                    <!--
+    <div class="alert alert-info">
+        <strong>Achtung!</strong>
+        Wird eine Antwort erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+    </div>
+        -->
                 </div>
             </div>
         </div>
@@ -174,42 +178,44 @@
                             <ul class="list-group" id="infoliste_aufgabeEditView">
 
                                 @foreach (var info in Model.AufgabeEditView_Model.Infos)
-                                {
-                                    @if (info.ZusatzinfoID == Model.AufgabeInfo_Model.Zusatzinfo.ZusatzinfoID)
-                                    {
-                                        <li class="list-group-item li_zusatzInfo" style="background-color: green" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
-                                            <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item li_zusatzInfo" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
-                                            <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
-                                            <div class="btn-group" style="float:right">
-                                                <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
-                                                <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </li>
-                                    }
+                {
+                    @if (info.ZusatzinfoID == Model.AufgabeInfo_Model.Zusatzinfo.ZusatzinfoID)
+    {
+                <li class="list-group-item li_zusatzInfo" style="background-color: green" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
+                    <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
+else
+{
+                <li class="list-group-item li_zusatzInfo" id="@info.ZusatzinfoID-@info.Typendefinition.TypendefinitionID">
+                    <span class="infoobject" id="info_@info.ZusatzinfoID">@info.InfoName</span>
+                    <div class="btn-group" style="float:right">
+                        <button class="btn btn-info info_Info" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button class="btn btn-warning info_warning" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-danger info_danger" id="info_@info.ZusatzinfoID"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </li>
+}
 
 
-                                }
+}
 
                             </ul>
                         </nav>
 
                     </div>
-                    <div class="alert alert-info">
-                        <strong>Achtung!</strong>
-                        Wird eine ZusatzInfo erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
-                        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
-                    </div>
+                    <!--
+    <div class="alert alert-info">
+        <strong>Achtung!</strong>
+        Wird eine ZusatzInfo erstellt, bearbeitet oder gelöscht, wird die Webseite neu geladen
+        und die vorgenommenen Aufgabeeinstellungen zurückgesetzt!
+    </div>
+        -->
                 </div>
             </div>
         </div>
