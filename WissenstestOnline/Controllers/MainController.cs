@@ -275,6 +275,9 @@ namespace WissenstestOnline.Controllers
             }
             else if (fragetyp.Equals("F_T+B")){
                 //gehört noch gemacht - Bilder
+                var frageText_model = new FrageText_Model();
+                frageText_model.FrageText = fragetext;
+                return PartialView("PartialViews/LoadFrageText", frageText_model);
             }
             else if (fragetyp.Equals("F_T+V")){
                 //gehört noch gemacht - Videos
@@ -598,42 +601,46 @@ namespace WissenstestOnline.Controllers
 
         public bool CheckAntwortCheckBoxes(string[] cbValue)
         {
-            bool erg = false;
+            //bool erg = false;
 
             int id_antwort = UserData.Aufgabe.Antwort.AntwortContentID;
             Antwort_checkbox antwortCheckBoxObject = main_db.Antwort_checkbox.Single(x => x.AntwortContentID == id_antwort);
             List<Checkbox> cb_List = main_db.Checkbox.Where(x => x.Antwort_checkbox.AntwortContentID == antwortCheckBoxObject.AntwortContentID).ToList();
-
-            for (int i = 0; i < cbValue.Length; i++)
-            {
-                if (cbValue[i] == null)
-                {
-                    Checkbox cb_NOTchecked = cb_List[i];
-                    if (!cb_NOTchecked.CheckBoxVal)
-                    {
-                        erg = true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
+            List<Checkbox> cb_ListTrue = cb_List.Where(x => x.CheckBoxVal == true).ToList();
+            int anzahlHacken = 0;
+            for (int i = 0; i < cbValue.Length; i++) {
+                if (cbValue[i] != null) {
+                    anzahlHacken++;
                 }
-                else
-                {
-                    Checkbox cb_checked = cb_List[i];
-                    if (cb_checked.CheckBoxVal)
+            }
+
+            if (anzahlHacken == cb_ListTrue.Count) {
+                for (int i = 0; i < cbValue.Length; i++) {
+                    if (cbValue[i] != null)
                     {
-                        erg = true;
-                    }
-                    else
-                    {
-                        return false;
+                        bool check = false;
+                        foreach (Checkbox cb_richtig in cb_ListTrue) {
+                            if (cb_richtig.CheckboxID.ToString().Equals(cbValue[i]))
+                            {
+                                check = true;
+                                break;
+                            }
+                            else {
+                                check = false;
+                            }
+                        }
+                        if (check == false) {
+                            return false;
+                        }
                     }
                 }
             }
+            else {
+                return false;
+            }
+
             UserData.lastPracticeAufgabeCorrect = true;
-            return erg;
+            return true;
         }
 
         public bool CheckAntwortDate(DateTime date)

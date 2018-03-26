@@ -48,5 +48,8 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\GetPicture\" />
+  </ItemGroup>
 
 </Project>
