@@ -22,7 +22,5 @@ namespace WissenstestOnlineWebseite.Models
         public static DB_lib.Aufgabe Aufgabe { get; set; } = new DB_lib.Aufgabe();
         public static int PracticePoints { get; set; } = 0;
         public static bool lastPracticeAufgabeCorrect { get; set; } = false;
-
-        //public static List<Antwort> AufgabenInputs { get; set; } = new List<Antwort>();
     }
 }

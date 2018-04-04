@@ -71,8 +71,7 @@ $(document).ready(() => {
             $('#FrageLearn').load(url_frage, () => {
                 const url_antwort = `/Main/LoadAntwortLearn?aufgabenNr=${global_aufgabenNr}`;
                 $('#AntwortLearn').load(url_antwort);
-            }
-            );
+            });
 
             //Zusatzinfo laden
             const url_info = '/Main/LoadZusatzinfo';
